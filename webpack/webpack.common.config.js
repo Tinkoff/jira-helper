@@ -55,7 +55,7 @@ module.exports = {
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
     new CopyWebpackPlugin([
       { from: './src/printcards/img/**/*', to: './img', flatten: true },
-      { from: './src/issue-details/img/**/*', to: './img', flatten: true },
+      { from: './src/issue/img/**/*', to: './img', flatten: true },
       { from: './src/assets/**/*', to: './src', flatten: true },
       { from: './src/options/static/**/*', to: './options_static', flatten: true },
       { from: './src/printcards/cardsRender/fonts/**/*', to: './fonts', flatten: true },

@@ -6,6 +6,8 @@ import { BOARD_PROPERTIES } from '../shared/constants';
 import { mergeSwimlaneSettings } from './utils';
 import { settingsJiraDOM as DOM } from './constants';
 
+const EMPTY_LIMIT_VALUE = ' - ';
+
 export default class extends PageModification {
   async shouldApply() {
     return (await getSettingsTab()) === 'swimlanes';
@@ -75,6 +77,17 @@ export default class extends PageModification {
       try {
         resetBtn.disabled = true;
         await this.deleteBoardProperty(BOARD_PROPERTIES.SWIMLANE_SETTINGS);
+        this.settings = {};
+
+        each(limit => {
+          limit.querySelector('span').textContent = EMPTY_LIMIT_VALUE;
+          limit.querySelector('input').value = EMPTY_LIMIT_VALUE;
+        }, document.querySelectorAll(`.wip-limit-cell`));
+
+        each(ignoreWip => {
+          ignoreWip.querySelector('span').textContent = 'false';
+          ignoreWip.querySelector('input').removeAttribute('checked');
+        }, document.querySelectorAll(`.is-expedite-cell`));
       } finally {
         resetBtn.disabled = false;
       }
@@ -106,10 +119,10 @@ export default class extends PageModification {
     });
   }
 
-  renderLimitCell(swimlineId, swimlineLimit = ' - ') {
+  renderLimitCell(swimlineId, swimlineLimit = EMPTY_LIMIT_VALUE) {
     return `
-    <td class="${style.limitInfo}">
-      <span class="${style.limitValue}" data-swimline-id="${swimlineId}">${swimlineLimit || ' - '}</span>
+    <td class="${style.limitInfo} wip-limit-cell">
+      <span class="${style.limitValue}" data-swimline-id="${swimlineId}">${swimlineLimit || EMPTY_LIMIT_VALUE}</span>
       <input type="text" value="${swimlineLimit}" class="${style.limitInput}"/>
     </td>
   `;
@@ -117,7 +130,7 @@ export default class extends PageModification {
 
   renderIgnoreWIPLimitsCell(swimlineId, ignoreWipInColumns = false) {
     return `
-    <td class="${style.ignoreWIPInColumns}">
+    <td class="${style.ignoreWIPInColumns} is-expedite-cell">
       <span class="${style.ignoreWIPInColumnsValue}"  data-swimline-id="${swimlineId}">${ignoreWipInColumns}</span>
       <input type="checkbox" ${ignoreWipInColumns ? 'checked' : ''} class="${style.ignoreWIPInColumnsInput}"/>
     </td>
@@ -171,7 +184,6 @@ export default class extends PageModification {
     const limit = Number(row.querySelector(`.${style.limitInput}`).value) || null;
     const ignoreWipInColumns = row.querySelector(`.${style.ignoreWIPInColumnsInput}`).checked;
 
-    // eslint-disable-next-line no-param-reassign
     this.settings[swimlaneId] = { limit, ignoreWipInColumns };
 
     this.updateBoardProperty(BOARD_PROPERTIES.SWIMLANE_SETTINGS, this.settings);
