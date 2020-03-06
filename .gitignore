@@ -1,0 +1,8 @@
+auto-update.xml
+dev-utils.crx
+dist.crx
+main.pem
+.DS_Store
+node_modules
+.vscode
+dist

@@ -1,0 +1,34 @@
+:global(#create-issue-dialog .jira-wikifield),
+:global(#issue-create .jira-wikifield) {
+    position: relative;
+}
+
+.buttonJiraAddTemplateForBug {
+    top: 45px;
+    left: -31px;
+    position: absolute;
+    z-index: 10;
+    border-radius: 4px;
+    padding: 5px;
+    width: 30px;
+    word-wrap: break-word;
+    font-size: 11px;
+    color: #707070;
+}
+
+.buttonJiraSaveTemplateForBug {
+    top: 74px;
+    left: -31px;
+    position: absolute;
+    z-index: 10;
+    border-radius: 4px;
+    padding: 5px;
+    width: 30px;
+    word-wrap: break-word;
+    font-size: 11px;
+    color: #707070;
+}
+
+:active, :hover, :focus {
+    outline: 0;
+}

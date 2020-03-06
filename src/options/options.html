@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jira Helper</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <style type="text/css">
+        body {
+            margin: 0;
+            font-size: 14px;
+        }
+        a {
+            color: black;
+            text-decoration: none;
+        }
+
+        /* Header */
+        .header {
+            background-color: #ffdd2d;
+            height: 50px;
+        }
+        .header__title {
+            margin-left: 3rem;
+            font-size: 1.2rem;
+            line-height: 47px;
+        }
+        .container {
+            margin: 1rem 4rem 1rem 4rem;
+            padding: 1rem 2rem;
+            background-color: rgba(202, 203, 204, 0.39);
+            border-radius: 10px;
+        }
+        .print-card {
+            font-size: 1rem;
+        }
+        .print-card__steps {
+            border-left: 0.5rem solid #ffdd2d;
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+        }
+        .print-card__template-link {
+            text-decoration: underline;
+            color: blue;
+        }
+        #print_template_btn {
+            margin: 1rem 0;
+            background-color: #ffdd2d;
+            border: none;
+            border-radius: 5px;
+            padding: 1rem 2rem;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a class="header__title" href="/options.html">
+            Jira Helper
+        </a>
+    </header>
+    <main class="container">
+        <div class="print-card">
+            <a href="#printCard"><h2>Печать карточек</h2></a>
+            <section class="print-card__steps">
+                Для печати кароточек, необходимо сначала распечатать
+                <a class="print-card__template-link" target="_blank" href="/options_static/jira_stickers_template.pdf">шаблон</a>.
+                <br>
+                <button type="button" id="print_template_btn">
+                    Распечатать шаблон
+                </button>
+                <br><br>
+                <strong>Настройки печати для шаблона:</strong>
+                <ul>
+                    <li> Двустороняя печать - ☑</li>
+                    <li>
+                        Дополнительные настройки:
+                        <ul>
+                            <li>Поля - нет</li>
+                            <li>Фон - ☑</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            <section class="print-card__steps">
+                После того, как были распечатаны карточки, наклейте стикеры согласно инструкции на листе.
+            </section>
+            <section class="print-card__steps">
+                Теперь, когда вы наклеили стикеры на лист, используйте форму для ввода JQL-запроса на сайте Jira.<br>
+                И, когда получите необходимый результат, <br>
+                кликайте по кнопке печати справа от строки запроса.
+            </section>
+        </div>
+    </main>
+</body>
+</html>

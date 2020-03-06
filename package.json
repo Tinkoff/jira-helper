@@ -1,0 +1,96 @@
+{
+  "name": "jira-helper",
+  "version": "2.0.0",
+  "description": "jira-helper: Elements for vizualizations, tetris-planing with sprints, button template, swimline-viz",
+  "repository": "https://github.com/TinkoffCreditSystems/jira-helper.git",
+  "license": "ISC",
+  "contributors": [
+    {
+      "name": "Pavel Akhmetchanov",
+      "url": "https://github.com/pavelpower",
+      "email:": "pavel.power@gmail.com"
+    },
+    {
+      "name": "Nataliya Bobrovskaya",
+      "url": "https://github.com/bobrovskayaa",
+      "email:": "nataliya.bobrovskaya@phystech.edu"
+    },
+    {
+      "name": "Elina Denisova",
+      "url": "https://github.com/ElinRin",
+      "email:": "elin.rinnel@gmail.com"
+    },
+    {
+      "name": "Danil Vakhrushev",
+      "url": "https://github.com/davakh",
+      "email:": "da.vakhr@gmail.com"
+    },
+    {
+      "name": "Alexey Sokolov",
+      "url": "https://github.com/Polvista",
+      "email:": "sokol789@yandex.ru"
+    }
+  ],
+  "scripts": {
+    "bootstrap": "npm i --no-save",
+    "build": "cross-env NODE_ENV=production webpack -p --config webpack/webpack.config.prod.js",
+    "clear": "rm -rf dist",
+    "dev": "cross-env NODE_ENV=development webpack -d --config webpack/webpack.config.dev.js",
+    "lint": "lint-staged"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "prepare-commit-msg": "bash ./tools/prepare-commit-msg.sh ${HUSKY_GIT_PARAMS}"
+    }
+  },
+  "lint-staged": {
+    "jira-helper/src/**/*.js": [
+      "eslint src --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@tinkoff/request-core": "^0.8.4",
+    "@tinkoff/request-plugin-cache-deduplicate": "^0.8.3",
+    "@tinkoff/request-plugin-cache-memory": "^0.8.6",
+    "@tinkoff/request-plugin-protocol-http": "^0.10.8",
+    "@tinkoff/request-plugin-transform-url": "^0.8.3",
+    "@tinkoff/utils": "^2.1.2",
+    "core-js": "^3.6.4",
+    "cross-env": "^5.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.1.1",
+    "css-loader": "^3.4.2",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-loader": "^3.0.3",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "3.0.4",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.8",
+    "prettier": "^1.19.1",
+    "raw-loader": "0.5.1",
+    "style-loader": "0.20.3",
+    "terser-webpack-plugin": "^2.3.4",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-merge": "^4.2.2",
+    "webpackbar": "^4.0.0",
+    "ws": "^7.2.1"
+  },
+  "engines": {
+    "npm": ">=5.0.0"
+  }
+}

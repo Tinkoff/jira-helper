@@ -1,0 +1,152 @@
+.root {
+    background-color: #fff;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    margin: 2cm 0.5cm 0;
+    padding: 0.3cm;
+    overflow: hidden;
+    height: 7.6cm;
+    width: 7.6cm;
+    position: relative;
+    float: left;
+
+}
+
+.content {
+    box-sizing: border-box;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.header {
+    top: 0;
+    overflow: hidden;
+    position: absolute;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.epic {
+    float: left;
+    padding: 3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    position: relative;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+.info {
+    margin-top: 35px;
+    position: absolute;
+    font-size: 18px;
+    overflow: hidden;
+    height: 5cm;
+    width: 100%;
+    display: flex;
+}
+
+.summary {
+    overflow: hidden;
+    margin-bottom: 5px;
+    display: table-cell;
+    margin-top: auto;
+    vertical-align: bottom;
+}
+
+.summary span{
+    vertical-align: bottom;
+}
+
+.space {
+    width: 100%;
+    height: 1.8cm;
+    position: absolute;
+    background-color: #fff;
+    top:0;
+}
+.people {
+    position: relative;
+    top: 0;
+    background-color: #fff;
+    float: right;
+}
+
+.name {
+    position: relative;
+    vertical-align: middle;
+}
+
+.footer {
+    bottom: 0;
+    overflow: hidden;
+    position: absolute;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.number {
+    float: left;
+}
+
+.icon, .key {
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.icon img {
+    height: 28px;
+    width: 28px;
+}
+
+.key {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.point {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    margin-right: 2px;
+    vertical-align: middle;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.rootDescription {
+    padding: 1rem;
+    font-size: 1.3rem;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.submitQuestionsCards {
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 15px 30px;
+    background-color: #ffdd2d;
+    font-weight: 500;
+}
+
+.submitQuestionsCards:hover, .submitQuestionsCards:focus {
+    background-color: #FCC521;
+}
+
+.askQuestionsForm {
+    padding: 1rem;
+}
+
+.askQuestionsForm > label {
+   text-transform: lowercase;
+}
+
+.roleName {
+    text-decoration: underline;
+}
