@@ -7,3 +7,4 @@ main.pem
 node_modules
 .vscode
 dist
+.gitconfig
