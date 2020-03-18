@@ -41,11 +41,11 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint",
-      "prepare-commit-msg": "bash ./tools/prepare-commit-msg.sh ${HUSKY_GIT_PARAMS}"
+      "prepare-commit-msg": "bash ./tools/prepare-commit-message.sh ${HUSKY_GIT_PARAMS}"
     }
   },
   "lint-staged": {
-    "jira-helper/src/**/*.js": [
+    "src/**/*.js": [
       "eslint src --fix",
       "prettier --write"
     ]
