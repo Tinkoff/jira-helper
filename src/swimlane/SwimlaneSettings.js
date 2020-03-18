@@ -82,12 +82,12 @@ export default class extends PageModification {
         each(limit => {
           limit.querySelector('span').textContent = EMPTY_LIMIT_VALUE;
           limit.querySelector('input').value = EMPTY_LIMIT_VALUE;
-        }, document.querySelectorAll(`.wip-limit-cell`));
+        }, document.querySelectorAll('.wip-limit-cell'));
 
         each(ignoreWip => {
           ignoreWip.querySelector('span').textContent = 'false';
           ignoreWip.querySelector('input').removeAttribute('checked');
-        }, document.querySelectorAll(`.is-expedite-cell`));
+        }, document.querySelectorAll('.is-expedite-cell'));
       } finally {
         resetBtn.disabled = false;
       }
