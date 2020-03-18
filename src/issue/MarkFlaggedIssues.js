@@ -121,7 +121,8 @@ export default class extends PageModification {
       });
 
       if (!this.newIssueView && issueKey === issueId) {
-        document.querySelector('#priority-val').insertBefore(getFlag(this.newIssueView), null);
+        const mainField = document.querySelector('#priority-val') || document.querySelector('#type-val');
+        mainField.insertBefore(getFlag(this.newIssueView), null);
       }
     });
   }
