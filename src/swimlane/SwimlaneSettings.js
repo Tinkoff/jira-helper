@@ -82,12 +82,12 @@ export default class extends PageModification {
         each(limit => {
           limit.querySelector('span').textContent = EMPTY_LIMIT_VALUE;
           limit.querySelector('input').value = EMPTY_LIMIT_VALUE;
-        }, document.querySelectorAll(`.wip-limit-cell`));
+        }, document.querySelectorAll('.wip-limit-cell'));
 
         each(ignoreWip => {
           ignoreWip.querySelector('span').textContent = 'false';
           ignoreWip.querySelector('input').removeAttribute('checked');
-        }, document.querySelectorAll(`.is-expedite-cell`));
+        }, document.querySelectorAll('.is-expedite-cell'));
       } finally {
         resetBtn.disabled = false;
       }
@@ -122,7 +122,8 @@ export default class extends PageModification {
   renderLimitCell(swimlineId, swimlineLimit = EMPTY_LIMIT_VALUE) {
     return `
     <td class="${style.limitInfo} wip-limit-cell">
-      <span class="${style.limitValue}" data-swimline-id="${swimlineId}">${swimlineLimit || EMPTY_LIMIT_VALUE}</span>
+      <span class="${style.limitValue} ${style.textValue}" data-swimline-id="${swimlineId}">${swimlineLimit ||
+      EMPTY_LIMIT_VALUE}</span>
       <input type="text" value="${swimlineLimit}" class="${style.limitInput}"/>
     </td>
   `;
@@ -131,14 +132,17 @@ export default class extends PageModification {
   renderIgnoreWIPLimitsCell(swimlineId, ignoreWipInColumns = false) {
     return `
     <td class="${style.ignoreWIPInColumns} is-expedite-cell">
-      <span class="${style.ignoreWIPInColumnsValue}"  data-swimline-id="${swimlineId}">${ignoreWipInColumns}</span>
+      <span class="${style.ignoreWIPInColumnsValue}  ${
+      style.textValue
+    }"  data-swimline-id="${swimlineId}">${ignoreWipInColumns}</span>
       <input type="checkbox" ${ignoreWipInColumns ? 'checked' : ''} class="${style.ignoreWIPInColumnsInput}"/>
     </td>
   `;
   }
 
   modifySimpleRows = () => {
-    const swimlaneRows = document.querySelectorAll(`${DOM.table} > ${DOM.sortableTbody} > ${DOM.row}`);
+    const swimlaneSelector = `${DOM.table} > ${DOM.sortableTbody} > ${DOM.row}`;
+    const swimlaneRows = document.querySelectorAll(swimlaneSelector);
     each(row => {
       if (row.classList.contains(DOM.everythingElseRow)) return;
 
@@ -148,12 +152,16 @@ export default class extends PageModification {
       this.showInputBoxLimits(row);
       this.showIgnoreWipInColumns(row);
 
+      row.querySelectorAll(`.${style.textValue}`).forEach(textValue => {
+        this.addEventListener(textValue, 'click', () => row.querySelector('.aui-restfultable-editable').click());
+      });
+
       this.setDataAttr(row, 'modifiedRowType', rowType);
     }, swimlaneRows);
 
     each(button => {
       this.addEventListener(button, 'click', e => this.handleSettingsChange(e));
-    }, document.querySelectorAll(`${DOM.table} > ${DOM.sortableTbody} > ${DOM.row} input[type=submit]`));
+    }, document.querySelectorAll(`${swimlaneSelector} input[type=submit]`));
 
     // переход в редактирование
     this.onDOMChangeOnce(`${DOM.table} > ${DOM.sortableTbody}`, () => this.modifySimpleRows(), {
