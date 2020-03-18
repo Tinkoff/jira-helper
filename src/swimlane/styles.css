@@ -68,6 +68,8 @@
   margin-top: 1rem;
 }
 
+.text-value {}
+
 .loader {
   display: block !important;
   margin: 0;
