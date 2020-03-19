@@ -23,11 +23,11 @@ export default class extends PageModification {
     return this.getBoardEditData();
   }
 
-  apply(boardData) {
+  apply(boardData, element) {
     if (!boardData.canEdit) return;
 
     this.insertHTML(
-      document.querySelector('#ghx-config-estimation'),
+      element,
       'beforeend',
       `
         <div class="ghx-view-section" id="tetris-planing-button-wrapper">
