@@ -82,11 +82,11 @@ export class PageModification {
     return getBoardEstimationData(getSearchParam('rapidView', { abortPromise }));
   }
 
-  searchIssues(jql) {
+  searchIssues(jql, params = {}) {
     const { cancelRequest, abortPromise } = this.createAbortPromise();
     this.sideEffects.push(cancelRequest);
 
-    return searchIssues(jql, { abortPromise });
+    return searchIssues(jql, { ...params, abortPromise });
   }
 
   createAbortPromise() {
@@ -118,8 +118,9 @@ export class PageModification {
     this.sideEffects.push(() => observer.disconnect());
   }
 
-  onDOMChangeOnce(selector, cb, params = { childList: true }) {
-    const element = document.querySelector(selector);
+  onDOMChangeOnce(selectorOrElement, cb, params = { childList: true }) {
+    const element =
+      selectorOrElement instanceof HTMLElement ? selectorOrElement : document.querySelector(selectorOrElement);
     if (!element) return;
 
     const observer = new MutationObserver(() => {
