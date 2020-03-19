@@ -59,7 +59,7 @@ const applyModifications = modificationsMap => {
         }
       }
 
-      if (modificationInstance.shouldApply()) {
+      if (shouldApply) {
         applyModification(Modification, modificationInstance);
       }
     });
