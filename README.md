@@ -2,8 +2,15 @@
 
 ## Функционал расширения "jira-helper"
 
-Функционал [смотрите в этом файле](./src/README.md)
-для текущей подгатавливаемой версии.
+_version 2.0.0_
+
+- [Chart Bar - показывает загрузку колонок на board](./src/README.md#swimline-chart-bar)
+- [Показ флажка на панели задач](./src/README.md#flag-on-issue-panel)
+- [Тетрис-планирование для Scrum backlog](./src/README.md#tetris-planning-for-scrum)
+- [Печать множества стикеров на обычном лазерном принтере](./src/README.md#printing-many-stickers)
+- [WIP-limit для нескольких колонок](./src/README.md#wip-limits-for-several-columns)
+- [WIP-limit для Swimlane](./src/README.md#wip-limits-for-swimlanes)
+- [SLA-линия для Control Chart](./src/README.md#sla-line-for-control-chart)
 
 ## Ведение задач проекта
 
