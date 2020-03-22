@@ -86,7 +86,22 @@ _Версия 2.0.0_
 ![tetris planning](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_tetris_planning.gif)
 
 ## Печать стикеров на принтере
-- [ ] Добавить описание
+
+Используется для печати множества стикеров при помощи офисного лазерного принтера.
+
+![как использозвать печать](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_jql_print.gif)
+
+Для печати стикеров на обычной бумаге формата A4 можно воспользоваться [шаблоном](chrome-extension://egmbomekcmpieccamghfgjgnlllgbgdl/options.html)
+
+![шаблон печати стикеров](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_jql_print_template.gif)
+
+Шаблон для печати использует 
+* шрифты [GOST A](https://ffont.ru/font/gost-type-a) и [GOST B](https://ffont.ru/font/gost-type-b)
+* особую форму отображения номера задачи снизу стикера
+* цветное отображение связанного эпика задачи (в примере ниже Epic Name: "Песни")
+
+Это позволяет удобно использовать напечатанные стикеры на доске таким образом
+![sample position a stickers on a desck](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_jql_print_stiker_position_on_desk_w600.png)
 
 ## Общие WIP-лимиты для колонок
 - [ ] Добавить описание
