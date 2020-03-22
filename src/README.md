@@ -83,6 +83,8 @@ _Версия 2.0.0_
 
 В ином случае тег будет зеленого цвета.
 
+_"Board Settings (Scrum board) -> Estimates"_  Сохранять значение может только Администратор board.
+
 ![tetris planning](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_tetris_planning.gif)
 
 ## Печать стикеров на принтере
@@ -114,6 +116,8 @@ _WIP – work in progress_
 
 Чтобы им воспользоваться, необходимо в настройках доски указать какие колонки будут использовать одно wip-ограничение.
 
+Сохранять значение может только Администратор board.
+
 _"Board Settings -> Columns"_
 
 ![settings wip-limit for column](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_wip_limit_settings_columns.gif)
@@ -137,10 +141,27 @@ _"Board Settings -> Columns"_
 
 При настройке wip-ограничений для swimlane посредством *jira-helper* вы можете указать какие swimlane у вас являются особенными и задачи в них не нужно использовать в подсчете количества задач для общего ограничения на колонках.
 
+Сохранять значение может только Администратор board.
+
 _"Board Settings -> Swimlane"_
 ![swimlane wip-limits](https://github.com/TinkoffCreditSystems/jira-helper/blob/images/features/jirahelper_wip_limit_settings_swim_ex.gif)
 
 Используя комбинацию wip-ограничений колонок и swimlane вы можете визуализировать управление сложной системой с разными типами и классами задач.
 
 ## Наложение сетки измерений на Control Chart
-- [ ] Добавить описание
+
+_Control Chart - это наверное то, за что можно любить JIRA._
+
+[Доклад "Control Chart в JIRA, все ее тайны" с конференции https://kanbaneurasia.com/](https://www.dropbox.com/sh/wkuk3n1xx4yld0w/AADvVyFtucbRpQp0wiiiOUkZa?dl=0&fbclid=IwAR3NIhkRDAGytpuTmmqbjpq7eC-01Ko3KLVM8szZmS3VNsW44qlZq2tzXsQ&preview=%D0%9F%D0%B0%D0%B2%D0%B5%D0%BB+%D0%90%D1%85%D0%BC%D0%B5%D1%82%D1%87%D0%B0%D0%BD%D0%BE%D0%B2+-+Control+Chart+%D0%B2+JIRA%2C+%D0%B2%D1%81%D0%B5+%D0%B5%D0%B5+%D1%82%D0%B0%D0%B9%D0%BD%D1%8B.pdf)
+
+*jira-helper* добавляет специальную линию SLA на график Control Chart.
+
+Используя эту линию вы можете задать желаемый уровень времени обслуживания выполнения задач для вашего сервиса, команды.
+
+Сохранять значение может только Администратор board.
+
+Кроме этого используя эту линию, без использования сохранения, вы можете анализировать время выполнения и граничные условия на графике.
+
+SLA показывает значение в днях.
+
+![sla-line for control chart](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_sla_for_controlchart.gif)
