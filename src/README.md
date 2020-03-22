@@ -103,10 +103,31 @@ _Версия 2.0.0_
 Это позволяет удобно использовать напечатанные стикеры на доске таким образом
 ![sample position a stickers on a desck](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_jql_print_stiker_position_on_desk_w600.png)
 
-## Общие WIP-лимиты для колонок
-- [ ] Добавить описание
+## Общие WIP-ограничения для колонок
+_WIP – work in progress_
 
-## WIP-лимиты для swimlanes
+В JIRA можно добавлять wip-ограничения только отдельно на каждую колонку.
+
+Для визаулизации Kanban-системы необходима возможность сделать [wip-ограничение на несколько колонок](http://kanbanguide.ru/essential-condenced-kanban-guide/).
+
+*jira-helper* добавляет такой функционал.
+
+Чтобы им воспользоваться, необходимо в настройках доски указать какие колонки будут использовать одно wip-ограничение.
+
+_"Board Settings -> Columns"_
+
+![settings wip-limit for column](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_wip_limit_settings_columns.gif)
+
+При этом, можно пользоваться функциональностью ограничений колонок предоставленной JIRA!
+
+На board визаулизация ограничений будет поверх заголовков колонок.
+
+При нарушении wip-limit background колонки подсветиться красным цветом.
+
+![wip-limit of column](https://github.com/TinkoffCreditSystems/jira-helper/blob/images/features/jirahelper_wip_limit_columns.gif)
+
+
+## WIP-ограничения для swimlanes
 - [ ] Добавить описание
 
 ## Наложение сетки измерений на Control Chart
