@@ -36,8 +36,13 @@ _Версия 2.0.0_
 
 ![issue flag jira 7](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_issue_flag_jira7.gif)
 
-## Template задач
-- [ ] Добавить описание
+## Template for Description
+
+При редактировании поля `Description` во время создания задач и их редактирования, рядом с полем появляются две кнопки.
+
+При помощи которых можно сохранить Template для этого типа задач к себе в localStorage браузера (шаблон сохранится к на вашем компьютере).
+
+![description template](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_description_template.gif)
 
 ## Тетрис планирование
 - [ ] Добавить описание
