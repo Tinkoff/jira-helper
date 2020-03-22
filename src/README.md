@@ -25,7 +25,7 @@
 
 Данный флажок не показывается на панели задач (`jira.server.com/browse/PROJECTID-0001`).
 
-Плагин *jira-helper* добавляет отображение флажка на панели задач рядом сo значением поля `priority`
+Плагин **jira-helper** добавляет отображение флажка на панели задач рядом сo значением поля `priority`
 
 Пример JIRA Cloud:
 
@@ -67,7 +67,7 @@
 
 ![sprint head with story points](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_sprinthead_with_storypoints.png)
 
-Плагин *jira-helper* добавляет функционал позволяющий визуализировать оценку сразу по нескольким числовым параметрам.
+Плагин **jira-helper** добавляет функционал позволяющий визуализировать оценку сразу по нескольким числовым параметрам.
 
 Не важно, это будут Story Points, или любой другой численный Estimate.
 
@@ -115,7 +115,7 @@ _WIP – work in progress_
 
 Для визаулизации Kanban-системы необходима возможность сделать [wip-ограничение на несколько колонок](http://kanbanguide.ru/essential-condenced-kanban-guide/).
 
-*jira-helper* добавляет такой функционал.
+**jira-helper** добавляет такой функционал.
 
 Чтобы им воспользоваться, необходимо в настройках доски указать какие колонки будут использовать одно wip-ограничение.
 
@@ -142,7 +142,7 @@ _"Board Settings -> Columns"_
 
 При этом ограничения на колонках не учитывают задачи которые находятся в Expedite колонке.
 
-При настройке wip-ограничений для swimlane посредством *jira-helper* вы можете указать какие swimlane у вас являются особенными и задачи в них не нужно использовать в подсчете количества задач для общего ограничения на колонках.
+При настройке wip-ограничений для swimlane посредством **jira-helper** вы можете указать какие swimlane у вас являются особенными и задачи в них не нужно использовать в подсчете количества задач для общего ограничения на колонках.
 
 Сохранять значение может только Администратор board.
 
@@ -158,7 +158,7 @@ _Control Chart - это наверное то, за что можно любит
 
 [Доклад "Control Chart в JIRA, все ее тайны" с конференции https://kanbaneurasia.com/](https://www.dropbox.com/sh/wkuk3n1xx4yld0w/AADvVyFtucbRpQp0wiiiOUkZa?dl=0&fbclid=IwAR3NIhkRDAGytpuTmmqbjpq7eC-01Ko3KLVM8szZmS3VNsW44qlZq2tzXsQ&preview=%D0%9F%D0%B0%D0%B2%D0%B5%D0%BB+%D0%90%D1%85%D0%BC%D0%B5%D1%82%D1%87%D0%B0%D0%BD%D0%BE%D0%B2+-+Control+Chart+%D0%B2+JIRA%2C+%D0%B2%D1%81%D0%B5+%D0%B5%D0%B5+%D1%82%D0%B0%D0%B9%D0%BD%D1%8B.pdf)
 
-*jira-helper* добавляет специальную линию SLA на график Control Chart.
+**jira-helper** добавляет специальную линию SLA на график Control Chart.
 
 Используя эту линию вы можете задать желаемый уровень времени обслуживания выполнения задач для вашего сервиса, команды.
 
@@ -169,3 +169,20 @@ _Control Chart - это наверное то, за что можно любит
 SLA показывает значение в днях.
 
 ![sla-line for control chart](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_sla_for_controlchart.gif)
+
+
+## Ruler of measuring for control chart
+
+Функция наложения линейки измерений на контрольную карту.
+
+Для возможности проанализировать размерность задач можно использовать линейку измерений.
+
+Чтобы проверить гипотизу о возможности использования различных измерений, например функции Фиббоначи или иных функций для оценки задач вашего проекта, можно воспользоваться данной функциональностью.
+
+Выбирите функцию в выпадающем поле `Ruler`, рядом с полем `SLA`, и укажите исследуемую размерность.
+
+_На картинке использована функция Фиббоначи, размерность "6"_
+![Ruller for Control chart](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_controlchart_rule.png)
+
+Можем видеть как время затраченное на выполнение здач **не** соответсвует размерности, функция Фиббоначи не подходит для оценки задач.
+![Fibonacci distribution](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_controlchart_rule_sp.png)
