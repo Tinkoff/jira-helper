@@ -11,6 +11,8 @@ _version 2.0.0_
 - [WIP-limit для нескольких колонок](./src/README.md#wip-limits-for-several-columns)
 - [WIP-limit для Swimlane](./src/README.md#wip-limits-for-swimlanes)
 - [SLA-линия для Control Chart](./src/README.md#sla-line-for-control-chart)
+
+_version 2.0.1_
 - [Наложение линейки измерений на Control Chart](./src/README.md#ruler-of-measuring-for-control-chart)
 
 ## Ведение задач проекта
