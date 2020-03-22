@@ -1,8 +1,7 @@
 # Функционал расширения "jira-helper"
 
-_Версия 2.0.0_
 
-## Chart Bar - показывает загрузку колонок на board
+## Swimline Chart Bar
 
 - Код функционала [./swimlane/SwimlaneStats.*](./swimlane)
 
@@ -20,7 +19,7 @@ _Версия 2.0.0_
 ![Settings Base swimlane on](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_swimlane_base_swimlanes_on.gif)
 
 
-## Показ флажка на панели задач
+## Flag on Issue panel
 
 На board по клику правой кнопкой мыши можно добавлять красный флажок к задаче.
 
@@ -36,6 +35,7 @@ _Версия 2.0.0_
 
 ![issue flag jira 7](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_issue_flag_jira7.gif)
 
+
 ## Template for Description
 
 При редактировании поля `Description` во время создания задач и их редактирования, рядом с полем появляются две кнопки.
@@ -44,7 +44,8 @@ _Версия 2.0.0_
 
 ![description template](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_description_template.gif)
 
-## Тетрис планирование
+
+## Tetris-planning for Scrum
 
 Тетрис-планирование позволяет для разных специалистов указывать свой параметр размера задачи. 
 
@@ -87,7 +88,8 @@ _"Board Settings (Scrum board) -> Estimates"_  Сохранять значени
 
 ![tetris planning](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_tetris_planning.gif)
 
-## Печать стикеров на принтере
+
+## Printing many stickers
 
 Используется для печати множества стикеров при помощи офисного лазерного принтера.
 
@@ -105,7 +107,8 @@ _"Board Settings (Scrum board) -> Estimates"_  Сохранять значени
 Это позволяет удобно использовать напечатанные стикеры на доске таким образом
 ![sample position a stickers on a desck](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_jql_print_stiker_position_on_desk_w600.png)
 
-## Общие WIP-ограничения для колонок
+
+## WIP-limits for several columns
 _WIP – work in progress_
 
 В JIRA можно добавлять wip-ограничения только отдельно на каждую колонку.
@@ -131,7 +134,7 @@ _"Board Settings -> Columns"_
 ![wip-limit of column](https://github.com/TinkoffCreditSystems/jira-helper/blob/images/features/jirahelper_wip_limit_columns.gif)
 
 
-## WIP-ограничения для swimlanes
+## WIP-limits for Swimlanes
 
 Канбан-система может использовать разные ограничения WIP. В том числе и ограничения на swimlane.
 
@@ -148,7 +151,8 @@ _"Board Settings -> Swimlane"_
 
 Используя комбинацию wip-ограничений колонок и swimlane вы можете визуализировать управление сложной системой с разными типами и классами задач.
 
-## Наложение сетки измерений на Control Chart
+
+## SLA-line for Control Chart
 
 _Control Chart - это наверное то, за что можно любить JIRA._
 
