@@ -1,0 +1,76 @@
+/******** JIRA 7  ************/
+
+/**TOP Menu **/
+
+a.issue-link {
+  color: transparent !important;
+  text-shadow: #172b4d -1px 1px 10px !important;
+}
+
+/* title in right panel */
+.project-title a {
+  color: transparent !important;
+  text-shadow: #172b4d -1px 1px 10px !important;
+}
+
+/* title in backlog */
+.subnav-page-header {
+  color: transparent !important;
+  text-shadow: #172b4d -1px 1px 10px !important;
+}
+
+.scope-filter .aui-scope-filter-spectrum span{
+  color: transparent !important;
+  text-shadow: #172b4d -1px 1px 10px !important;
+}
+
+/** Backlog **/
+
+/* link for issue key */
+.js-key-link {
+  color: transparent !important;
+  text-shadow: #0052cc -1px 1px 10px !important;
+}
+
+.js-epic-key-link {
+  color: transparent !important;
+  text-shadow: #0052cc -1px 1px 10px !important;
+}
+
+/* backlog summory issue */
+.ghx-summary:not(span), .ghx-summary span {
+  color: transparent !important;
+  text-shadow: #172b4d -1px 1px 10px !important;
+}
+
+/* backlog right panel for epic and version */
+.js-epic-name span,
+.js-version-name span {
+  color: transparent !important;
+  text-shadow: #172b4d -1px 1px 10px !important;
+}
+
+/* epic label in baclog issue */
+.ghx-row-version-epic-subtasks span {
+  color: transparent !important;
+  text-shadow: #fff -1px 1px 10px !important;
+}
+
+.ghx-extra-field-content {
+  color: transparent !important;
+  text-shadow: #172b4d -1px 1px 10px !important;
+}
+
+.ghx-extra-field-content h1,
+.ghx-extra-field-content h2,
+.ghx-extra-field-content h3,
+.ghx-extra-field-content h4 {
+  color: transparent !important;
+  text-shadow: #172b4d -1px 1px 10px !important;
+}
+
+.project-shortcut span {
+  color: transparent !important;
+  text-shadow: #172b4d -1px 1px 10px !important;
+}
+

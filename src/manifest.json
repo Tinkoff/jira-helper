@@ -30,7 +30,8 @@
     "content_scripts": [
         {
             "matches": [ "*://*/*" ],
-            "js": [ "content.js" ]
+            "js": [ "content.js" ],
+            "css": [ "src/blureSensitive.css" ]
         }
     ],
     "permissions": [
