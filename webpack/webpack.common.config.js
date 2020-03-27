@@ -63,6 +63,7 @@ module.exports = {
       { from: './src/manifest.json', to: './' },
       { from: './src/tetris-planning/openModal.js', to: './' },
       { from: './src/blur-for-sensitive/blureSensitive.css', to: './src', flatten: true },
+      { from: './src/contextMenu.js', to: './', flatten: true },
     ]),
     new HtmlWebpackPlugin({
       filename: 'index.html',

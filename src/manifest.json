@@ -19,7 +19,7 @@
         "default_icon": "src/jira_helper_128x128.png"
     },
     "background": {
-        "scripts": ["background.js"]
+        "scripts": ["background.js", "contextMenu.js"]
     },
     "web_accessible_resources": [
         "printcards.html",
@@ -37,6 +37,7 @@
     "permissions": [
         "storage",
         "tabs",
+        "contextMenus",
         "http://*/*", "https://*/*"
     ]
 }
