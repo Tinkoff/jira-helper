@@ -1,10 +1,11 @@
-import each from '@tinkoff/utils/array/each';
 import { PageModification } from '../shared/PageModification';
 import style from './styles.css';
 
 import defaultIframeTemplate from './template.html';
 
 const defaultTextareaTemplate = defaultIframeTemplate.replace(/<br \/>/g, '\n');
+const createIssueDialogIdentifiers = ['#create-issue-dialog', '#issue-create'];
+const descriptionInDialogSelector = '.jira-wikifield';
 const parentDivSelectorPopap = '#create-issue-dialog .jira-wikifield';
 const parentDivSelector = '#issue-create .jira-wikifield';
 const buttonAddCls = style.buttonJiraAddTemplateForBug;
@@ -17,38 +18,61 @@ export default class extends PageModification {
     return 'bug-template';
   }
 
+  getTextareaContainer() {
+    for (const dialogId of createIssueDialogIdentifiers) {
+      const container = document.querySelector(`${dialogId} ${descriptionInDialogSelector}`);
+
+      if (container) {
+        return container;
+      }
+    }
+  }
+
   apply() {
     this.applyTemplate();
-    this.onDOMChange('body', this.applyTemplate);
+
+    Promise.race([
+      this.waitForElement('#create-issue-dialog', document.body),
+      this.waitForElement('#issue-create', document.body),
+    ]).then(target => {
+      this.onDOMChange(`#${target.id}`, this.applyTemplate, { childList: true, subtree: true });
+    });
+
+    this.onDOMChange('body', mutationEvents => {
+      mutationEvents.forEach(event => {
+        event.removedNodes.forEach(node => {
+          if (createIssueDialogIdentifiers.includes(`#${node.id}`)) {
+            this.clear();
+            this.apply();
+          }
+        });
+      });
+    });
   }
 
   applyTemplate = () => {
-    if (!document.querySelector(parentDivSelector) && !document.querySelector(parentDivSelectorPopap)) return;
+    if (!this.getTextareaContainer()) return;
 
-    each(el => el.remove(), document.querySelectorAll(`.${buttonAddCls}, .${buttonSaveCls}`));
+    const isButtonsAlreadyAppended = document.querySelectorAll(`.${buttonAddCls}, .${buttonSaveCls}`).length > 0;
+    if (isButtonsAlreadyAppended) return;
 
-    // setTimeout нужен, для того чтобы кнопка не пропадала при обновлении элементов формы
-    this.setTimeout(() => {
-      this.makeButton({
-        text: '&#9998;',
-        title: 'Add template',
-        handleClick: this.addTemplate,
-        cls: buttonAddCls,
-      });
-      this.makeButton({
-        text: '&#128190;',
-        title: 'Save template',
-        handleClick: this.saveTemplate,
-        cls: buttonSaveCls,
-      });
-    }, 100);
+    this.makeButton({
+      text: '&#9998;',
+      title: 'Add template',
+      handleClick: this.addTemplate,
+      cls: buttonAddCls,
+    });
+    this.makeButton({
+      text: '&#128190;',
+      title: 'Save template',
+      handleClick: this.saveTemplate,
+      cls: buttonSaveCls,
+    });
   };
 
   makeButton({ text, title, handleClick, cls }) {
-    const divDescription = document.querySelector(parentDivSelector) || document.querySelector(parentDivSelectorPopap);
-
     const btn = this.insertHTML(
-      divDescription,
+      this.getTextareaContainer(),
       'beforeend',
       `<button class="${cls}" title="${title}">${text}</button>`
     );
@@ -88,4 +112,6 @@ export default class extends PageModification {
 
     localStorage.setItem(localStorageTemplateTextarea, textarea.value);
   };
+
+  onCloseDialog() {}
 }
