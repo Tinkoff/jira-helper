@@ -52,6 +52,7 @@ export default class extends PageModification {
           const el = document.createElement('span');
 
           el.className = prefix + (f.value <= f.max ? 'success' : 'error');
+          el.style.marginRight = '5px';
           el.innerText = `${f.name}: ${f.value}/${f.max}`;
           this.setTimeout(() => issueCountContainer.appendChild(el), 10);
         });

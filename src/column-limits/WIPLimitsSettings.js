@@ -47,6 +47,9 @@ export default class extends PageModification {
 
     this.appendBtnsBeforeColumnTable();
     this.modifyColumns();
+    this.onDOMChange('#columns', () => {
+      this.appendBtnsBeforeColumnTable();
+    });
   }
 
   modifyColumns() {
