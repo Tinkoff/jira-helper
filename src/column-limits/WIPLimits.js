@@ -95,7 +95,9 @@ export default class extends PageModification {
 
       if (groupLimit < amountOfGroupTasks) {
         groupColumns.forEach(columnId => {
-          document.querySelector(`.ghx-column[data-column-id="${columnId}"]`).style.backgroundColor = '#ff5630';
+          document.querySelectorAll(`.ghx-column[data-column-id="${columnId}"]`).forEach(el => {
+            el.style.backgroundColor = '#ff5630';
+          });
         });
       }
 
