@@ -31,7 +31,7 @@
         {
             "matches": [ "*://*/*" ],
             "js": [ "content.js" ],
-            "css": [ "src/blureSensitive.css" ]
+            "css": [ "src/blurSensitive.css" ]
         }
     ],
     "permissions": [

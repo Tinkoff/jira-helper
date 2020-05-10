@@ -1,0 +1,104 @@
+/******** JIRA 7  ************/
+html.blur a.issue-link, /**TOP Menu **/
+html.blur .project-title a, /* title in right panel */
+html.blur .subnav-page-header /* title in backlog */
+html.blur .scope-filter .aui-scope-filter-spectrum span,
+html.blur .ghx-summary:not(span), /* backlog summory issue */
+html.blur .ghx-summary span,
+html.blur .js-epic-name span, /* backlog right panel for epic and version */
+html.blur .js-version-name span,
+html.blur .ghx-extra-field-content, /* epic label in baclog issue */
+html.blur .ghx-extra-field-content h1,
+html.blur .ghx-extra-field-content h2,
+html.blur .ghx-extra-field-content h3,
+html.blur .ghx-extra-field-content h4,
+html.blur .project-shortcut span,
+html.blur .ghx-jql-preview span.field-value, /*** Settings Board ***/
+html.blur #ghx-show-projects-in-board > li > strong,
+html.blur .ghx-project
+{
+  color: transparent !important;
+  text-shadow: #172b4d -1px 1px 10px !important;
+}
+
+
+html.blur .user-hover, /*** Settings Board ***/
+html.blur .item .value a,
+html.blur a.link-title,
+html.blur .user-content-block a,
+html.blur #commentmodule .action-body a,
+html.blur #project-name-val, /*** View Issue ***/
+html.blur .activity-new-val a,
+html.blur .activity-old-val a,
+html.blur .activity-comment a,
+html.blur .activity-item-summary a,
+html.blur .activity-item-description a,
+html.blur .user-content a,
+html.blur div.aui-inline-dialog-contents.contents a, /**Control chart**/
+html.blur .issuerow td a /****SEarch *****/
+{
+  color: transparent !important;
+  text-shadow: #172b4d -1px 1px 8px !important;
+}
+
+html.blur .item .value,
+html.blur #summary-val,
+html.blur .link-summary,
+html.blur .user-content-block,
+html.blur #descriptionmodule h1,
+html.blur #descriptionmodule h2,
+html.blur #descriptionmodule h3,
+html.blur #descriptionmodule h4,
+html.blur #descriptionmodule h5,
+html.blur #descriptionmodule h6,
+html.blur #commentmodule .action-body,
+html.blur .activity-new-val,
+html.blur .activity-old-val,
+html.blur .activity-comment,
+html.blur .activity-item-summary,
+html.blur .activity-item-description,
+html.blur .activity-item-description .user-content,
+html.blur .user-content,
+html.blur .user-content h1,
+html.blur .user-content h2,
+html.blur .user-content h3,
+html.blur .user-content h4,
+html.blur .user-content h5,
+html.blur .user-content h6,
+html.blur div.aui-inline-dialog-contents.contents span,
+html.blur .issuerow td /* search */
+{
+  color: transparent !important;
+  text-shadow: #172b4d -1px 1px 6px !important;
+}
+
+/** Backlog **/
+
+html.blur .js-key-link, /* link for issue key */
+html.blur a.external-link,
+html.blur .js-epic-key-link,
+html.blur .avatar-with-name a, /*** release issues **/
+html.blur a.issue-summary,
+html.blur a.issue-key,
+html.blur #issuekey-val > a, /*** Issu info panel ***/
+html.blur .type-gh-epic-link a
+{
+  color: transparent !important;
+  text-shadow: #0052cc -1px 1px 10px !important;
+}
+
+html.blur .ghx-row-version-epic-subtasks span, /* epic label in baclog issue */
+html.blur span[data-epickey] /*** Board ***/
+{
+  color: transparent !important;
+  text-shadow: #fff -1px 1px 10px !important;
+}
+
+html.blur #descriptionmodule img {
+  filter: blur(5px) !important;
+}
+
+html.blur .code-quote, .code-quote .code-keyword, .code-quote .code-object {
+  color: transparent !important;
+  text-shadow: #009100 -1px 1px 6px !important;
+}

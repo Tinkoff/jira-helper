@@ -1,11 +1,30 @@
 // Blure
-const blureSecretDataJira = (info, tab) => {
-  const code = `document.body.parentNode.classList.${info.checked ? 'add' : 'remove'}('blure')`;
-  chrome.tabs.executeScript(tab.id, { code });
+const blurSecretDataJira = (info, tab) => {
+  chrome.tabs.sendMessage(tab.id, {blurSensitive: info.checked});
 };
 
-const checkboxSecretData = chrome.contextMenus.create({
-  title: 'Blure secret data',
-  type: 'checkbox',
-  onclick: blureSecretDataJira,
+const createContextMenu = tabId => {
+  chrome.contextMenus.removeAll(() => {
+    chrome.tabs.sendMessage(tabId, { getBlurSensitive: true }, response => {
+      if (response && response.hasOwnProperty('blurSensitive')) {
+        const checked = response.blurSensitive;
+        chrome.contextMenus.create({
+          title: 'Blur secret data',
+          type: 'checkbox',
+          checked,
+          onclick: blurSecretDataJira,
+        });
+      }
+    });
+  });
+}
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  if (changeInfo.status === 'complete') {
+    createContextMenu(tabId);
+  }
+});
+
+chrome.tabs.onActivated.addListener(activeInfo => {
+  createContextMenu(activeInfo.tabId);
 });
