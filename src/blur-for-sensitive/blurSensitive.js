@@ -1,4 +1,4 @@
-const blurSensitive = isBlure => {
+const setBlurSensitive = isBlure => {
   const html = document.getElementsByTagName('html')[0];
   if (isBlure) {
     html.classList.add('blur');
@@ -9,12 +9,12 @@ const blurSensitive = isBlure => {
 
 const cnahgeBlureSensitive = isBlure => {
   localStorage.setItem('blurSensitive', isBlure);
-  blurSensitive(isBlure);
+  setBlurSensitive(isBlure);
 };
 
-export const initOnPageBlurSensitive = () => {
+export const setUpBlurSensitiveOnPage = () => {
   const isBlure = localStorage.getItem('blurSensitive') === 'true';
-  blurSensitive(!!isBlure);
+  setBlurSensitive(!!isBlure);
 };
 
 export const initBlurSensitive = () => {
