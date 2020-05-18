@@ -108,7 +108,7 @@ _"Board Settings (Scrum board) -> Estimates"_  Сохранять значени
 ![sample position a stickers on a desck](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_jql_print_stiker_position_on_desk_w600.png)
 
 
-## WIP-limits for several columns
+## WIP-limits for several columns (CONWIP)
 _WIP – work in progress_
 
 В JIRA можно добавлять wip-ограничения только отдельно на каждую колонку.
@@ -132,6 +132,11 @@ _"Board Settings -> Columns"_
 При нарушении wip-limit background колонки подсветиться красным цветом.
 
 ![wip-limit of column](https://github.com/TinkoffCreditSystems/jira-helper/blob/images/features/jirahelper_wip_limit_columns.gif)
+
+С версии [2.1.0](https://github.com/TinkoffCreditSystems/jira-helper/releases/tag/2.1.0) возможно учитывать или не учитывать запросы типа sub-task в CONWIP лимитах.
+
+Для этого нужно выбрать соответствующую настройку "Column Constraint"
+![sub-task & CONWIP](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_CONWIP_with_sub-task.gif)
 
 
 ## WIP-limits for Swimlanes
