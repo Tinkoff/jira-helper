@@ -48,7 +48,11 @@ export default class extends PageModification {
     const columnsInOrder = this.getOrderedColumns();
     // for jira v8 header.
     // One of the parents has overfow: hidden
-    document.querySelector('ul#ghx-column-headers').style.marginTop = '10px';
+    const headerGroup = document.querySelector('#ghx-pool-wrapper');
+
+    if (headerGroup != null) {
+      headerGroup.style.paddingTop = '10px';
+    }
 
     columnsInOrder.forEach((columnId, index) => {
       const { name, value } = findGroupByColumnId(columnId, this.boardGroups);
