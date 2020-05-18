@@ -17,6 +17,7 @@ export const configVersion = 'v1';
 const getPropName = property => `${property}${configVersion}`;
 
 const boardPropertiesUrl = boardId => `agile/1.0/board/${boardId}/properties`;
+const boardConfigurationURL = boardId => `agile/1.0/board/${boardId}/configuration`;
 const boardEditDataURL = 'greenhopper/1.0/rapidviewconfig/editmodel.json?rapidViewId=';
 const boardEstimationDataURL = 'greenhopper/1.0/rapidviewconfig/estimation.json?rapidViewId=';
 
@@ -88,6 +89,14 @@ export const deleteBoardProperty = (boardId, property, params = {}) => {
 export const getBoardEditData = (boardId, params = {}) => {
   return requestJira({
     url: `${boardEditDataURL}${boardId}`,
+    type: 'json',
+    ...params,
+  });
+};
+
+export const getBoardConfiguration = async (boardId, params = {}) => {
+  return requestJira({
+    url: boardConfigurationURL(boardId),
     type: 'json',
     ...params,
   });
