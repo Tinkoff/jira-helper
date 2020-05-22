@@ -21,6 +21,7 @@ export default class extends PageModification {
 
   loadData() {
     return Promise.all([
+      this.getBoardConfiguration(),
       this.getBoardProperty(BOARD_PROPERTIES.WIP_LIMITS_SETTINGS),
       Promise.all([
         this.getBoardProperty(BOARD_PROPERTIES.SWIMLANE_SETTINGS),
@@ -29,9 +30,10 @@ export default class extends PageModification {
     ]);
   }
 
-  apply([boardGroups = {}, swimlanesSettings = {}]) {
+  apply([boardConfig = {}, boardGroups = {}, swimlanesSettings = {}]) {
     this.boardGroups = boardGroups;
     this.swimlanesSettings = swimlanesSettings;
+    this.constraintType = (boardConfig.columnConfig && boardConfig.columnConfig.constraintType) || '';
 
     this.styleColumnHeaders();
     this.styleColumnsWithLimitations();
@@ -46,7 +48,11 @@ export default class extends PageModification {
     const columnsInOrder = this.getOrderedColumns();
     // for jira v8 header.
     // One of the parents has overfow: hidden
-    document.querySelector('ul#ghx-column-headers').style.marginTop = '10px';
+    const headerGroup = document.querySelector('#ghx-pool-wrapper');
+
+    if (headerGroup != null) {
+      headerGroup.style.paddingTop = '10px';
+    }
 
     columnsInOrder.forEach((columnId, index) => {
       const { name, value } = findGroupByColumnId(columnId, this.boardGroups);
@@ -84,10 +90,11 @@ export default class extends PageModification {
       );
 
       const swimlanesFilter = ignoredSwimlanes.map(swimlaneId => `:not([swimlane-id="${swimlaneId}"])`).join('');
+      const notUseSubTask = this.constraintType === 'issueCountExclSubs' ? ':not(.ghx-issue-subtask)' : '';
 
       const amountOfGroupTasks = groupColumns.reduce((acc, columnId) => {
         const amountIssuesOneColumn = document.querySelectorAll(
-          `.ghx-swimlane${swimlanesFilter} .ghx-column[data-column-id="${columnId}"] .ghx-issue:not(.ghx-done):not(.ghx-issue-subtask)`
+          `.ghx-swimlane${swimlanesFilter} .ghx-column[data-column-id="${columnId}"] .ghx-issue:not(.ghx-done)${notUseSubTask}`
         ).length;
 
         return acc + amountIssuesOneColumn;

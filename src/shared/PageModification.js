@@ -5,6 +5,7 @@ import {
   getBoardEditData,
   getBoardEstimationData,
   getBoardProperty,
+  getBoardConfiguration,
   updateBoardProperty,
   searchIssues,
 } from './jiraApi';
@@ -54,6 +55,12 @@ export class PageModification {
     const { cancelRequest, abortPromise } = this.createAbortPromise();
     this.sideEffects.push(cancelRequest);
     return getBoardProperty(getSearchParam('rapidView'), property, { abortPromise });
+  }
+
+  getBoardConfiguration() {
+    const { cancelRequest, abortPromise } = this.createAbortPromise();
+    this.sideEffects.push(cancelRequest);
+    return getBoardConfiguration(getSearchParam('rapidView', { abortPromise }));
   }
 
   updateBoardProperty(property, value) {
