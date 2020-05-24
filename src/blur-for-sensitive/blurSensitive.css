@@ -98,7 +98,64 @@ html.blur #descriptionmodule img {
   filter: blur(5px) !important;
 }
 
-html.blur .code-quote, .code-quote .code-keyword, .code-quote .code-object {
+/*** JIRA 8 ***/
+html.blur .code-quote,
+html.blur .code-quote .code-keyword,
+html.blur .code-quote .code-object {
   color: transparent !important;
   text-shadow: #009100 -1px 1px 6px !important;
+}
+
+html.blur section.ghx-summary,
+html.blur div.ghx-parent-stub span.ghx-summary,
+html.blur div.ghx-parent-stub span.ghx-key {
+ color: transparent !important;
+ text-shadow: #172B4D -1px 1px 6px !important;
+}
+
+html.blur #breadcrumbs-container span,
+html.blur [data-test-id="issue.views.issue-base.foundation.breadcrumbs.breadcrumb-current-issue-container"]
+html.blur [data-test-id="issue.issue-view.views.common.issue-line-card.issue-line-card-view.summary"] div div
+span.css-eaycls {
+ color: transparent !important;
+ text-shadow: #000000 -1px 1px 6px !important;
+}
+
+html.blur [data-test-id="issue.views.issue-base.foundation.summary.heading"],
+html.blur [data-test-id="issue.views.field.user.assignee"] > div,
+html.blur [data-test-id="profilecard-next.ui.profilecard.profilecard-trigger"] > div,
+html.blur span.css-eaycls,
+html.blur [class^="SingleLineTextInput"],
+html.blur .ak-renderer-document > * {
+  color: transparent !important;
+  text-shadow: #000000 -1px 1px 10px !important;
+}
+
+html.blur [data-test-id="issue.views.issue-base.context.context-items.primary-items"] a[color="blueLight"]{
+  color: transparent !important;
+  text-shadow: #0052CC -1px 1px 10px !important;
+}
+
+html.blur a[data-test-id="issue.issue-view.views.common.issue-line-card.issue-line-card-view.key"] {
+  color: transparent !important;
+  text-shadow: rgb(137, 147, 164) -1px 1px 10px !important;
+}
+
+html.blur span[class^="FieldStyles"],
+html.blur div[data-test-id="issue.issue-view.views.common.issue-line-card.issue-line-card-view.summary"] div div,
+html.blur #ghx-field-viewname,
+html.blur .jira-system-avatar ~ span,
+html.blur #ghx-create-permissioninfo li span{
+  color: transparent !important;
+  text-shadow: #172b4d -1px 1px 10px !important;
+}
+
+html.blur div[data-test-id="navigation-apps.project-switcher-v2"] div div div button div[class^="css-"] {
+  color: transparent !important;
+  text-shadow: rgb(66, 82, 110) -1px 1px 10px !important;
+}
+
+html.blur div[class^="BreadcrumbsItem__"] a span span {
+  color: transparent !important;
+  text-shadow: #6B778C -1px 1px 10px !important;
 }
