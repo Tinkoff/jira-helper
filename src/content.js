@@ -12,6 +12,7 @@ import TetrisPlanning from './tetris-planning/TetrisPlanning';
 import BugTemplate from './bug-template/BugTemplate';
 import MarkFlaggedIssues from './issue/MarkFlaggedIssues';
 import PrintCards from './printcards/PrintCards';
+import { setUpBlurSensitiveOnPage, initBlurSensitive } from './blur-for-sensitive/blurSensitive';
 
 const domLoaded = () =>
   new Promise(resolve => {
@@ -23,6 +24,8 @@ async function start() {
   if (!isJira) return;
 
   await domLoaded();
+
+  setUpBlurSensitiveOnPage();
 
   const modificationsMap = {
     [Routes.BOARD]: [WIPLimits, SwimlaneStats, SwimlaneLimits, TetrisPlanning, MarkFlaggedIssues],
@@ -36,4 +39,5 @@ async function start() {
   runModifications(modificationsMap);
 }
 
+initBlurSensitive();
 start();

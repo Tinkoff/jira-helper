@@ -13,6 +13,7 @@ module.exports = {
     options: './src/options/options.js',
     background: './src/background/background.js',
     printcards: './src/printcards/cardsRender/printcards.js',
+    //blureforsensitive: './src/blure-for-sensitive/blurSensitive.js'
   },
   output: {
     filename: '[name].js',
@@ -61,6 +62,8 @@ module.exports = {
       { from: './src/printcards/cardsRender/fonts/**/*', to: './fonts', flatten: true },
       { from: './src/manifest.json', to: './' },
       { from: './src/tetris-planning/openModal.js', to: './' },
+      { from: './src/blur-for-sensitive/blurSensitive.css', to: './src', flatten: true },
+      { from: './src/contextMenu.js', to: './', flatten: true },
     ]),
     new HtmlWebpackPlugin({
       filename: 'index.html',

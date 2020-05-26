@@ -19,7 +19,7 @@
         "default_icon": "src/jira_helper_128x128.png"
     },
     "background": {
-        "scripts": ["background.js"]
+        "scripts": ["background.js", "contextMenu.js"]
     },
     "web_accessible_resources": [
         "printcards.html",
@@ -30,12 +30,14 @@
     "content_scripts": [
         {
             "matches": [ "*://*/*" ],
-            "js": [ "content.js" ]
+            "js": [ "content.js" ],
+            "css": [ "src/blurSensitive.css" ]
         }
     ],
     "permissions": [
         "storage",
         "tabs",
+        "contextMenus",
         "http://*/*", "https://*/*"
     ]
 }
