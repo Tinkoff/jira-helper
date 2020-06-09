@@ -1,9 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
+const pcg = require('../package.json');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const version = process.env.PACKAGE_VERSION || pcg.version;
 
 module.exports = {
   stats: 'errors-only',
@@ -98,16 +101,14 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.PACKAGE_VERSION': JSON.stringify(version),
     }),
     {
       apply(compiler) {
         compiler.hooks.afterEmit.tap('SetVersionPlugin', () => {
-          // eslint-disable-next-line global-require
-          const pcg = require('../package.json');
-          // eslint-disable-next-line global-require
           const manifest = require('../dist/manifest.json');
 
-          manifest.version = pcg.version;
+          manifest.version = version;
 
           fs.promises.writeFile(path.resolve(__dirname, '../dist/manifest.json'), JSON.stringify(manifest, null, 2));
         });

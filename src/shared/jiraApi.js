@@ -11,6 +11,7 @@ import complement from '@tinkoff/utils/function/complement';
 import isNil from '@tinkoff/utils/is/nil';
 import path from '@tinkoff/utils/object/path';
 import pathOr from '@tinkoff/utils/object/pathOr';
+import { defaultHeaders } from './defaultHeaders';
 import { getSearchParam } from '../routing';
 
 export const configVersion = 'v1';
@@ -22,7 +23,11 @@ const boardEditDataURL = 'greenhopper/1.0/rapidviewconfig/editmodel.json?rapidVi
 const boardEstimationDataURL = 'greenhopper/1.0/rapidviewconfig/estimation.json?rapidViewId=';
 
 const invalidatedProperties = {};
+
 const requestJira = request([
+  defaultHeaders({
+    'browser-plugin': `jira-helper/${process.env.PACKAGE_VERSION}`,
+  }),
   transformUrl({
     baseUrl: `${window.location.origin}/rest/`,
   }),
