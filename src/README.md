@@ -175,7 +175,7 @@ SLA показывает значение в днях.
 
 ![sla-line for control chart](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_sla_for_controlchart.gif)
 
-## Identity request from Jira-HelpeIdentify request from Jira-Helper
+## Identity request from Jira-Helper
 
 Your administrators of JIRA can identify requests from jira-helper by the special request header
 "browser-plugin: jira-helper/{version}".
