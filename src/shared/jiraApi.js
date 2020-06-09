@@ -11,6 +11,7 @@ import complement from '@tinkoff/utils/function/complement';
 import isNil from '@tinkoff/utils/is/nil';
 import path from '@tinkoff/utils/object/path';
 import pathOr from '@tinkoff/utils/object/pathOr';
+import { defaultHeaders } from './defaultHeaders';
 import { getSearchParam } from '../routing';
 
 export const configVersion = 'v1';
@@ -22,11 +23,11 @@ const boardEditDataURL = 'greenhopper/1.0/rapidviewconfig/editmodel.json?rapidVi
 const boardEstimationDataURL = 'greenhopper/1.0/rapidviewconfig/estimation.json?rapidViewId=';
 
 const invalidatedProperties = {};
-const headers = {
-  headers: { 'chrome-plugin': `jira-helper/${process.env.PACKAGE_VERSION}` },
-};
 
 const requestJira = request([
+  defaultHeaders({
+    'chrome-plugin': `jira-helper/${process.env.PACKAGE_VERSION}`,
+  }),
   transformUrl({
     baseUrl: `${window.location.origin}/rest/`,
   }),
@@ -44,7 +45,6 @@ const getBoardProperties = boardId => {
     url: boardPropertiesUrl(getSearchParam('rapidView')),
     memoryCacheForce,
     type: 'json',
-    ...headers,
   });
 };
 
@@ -61,7 +61,6 @@ export const getBoardProperty = async (boardId, property, params = {}) => {
     memoryCacheForce,
     type: 'json',
     ...params,
-    ...headers,
   }).then(result => result.value);
 };
 
@@ -76,7 +75,6 @@ export const updateBoardProperty = (boardId, property, value, params = {}) => {
     type: 'json',
     payload: value,
     ...params,
-    ...headers,
   });
 };
 
@@ -90,7 +88,6 @@ export const deleteBoardProperty = (boardId, property, params = {}) => {
     httpMethod: 'DELETE',
     type: 'json',
     ...params,
-    ...headers,
   });
 };
 
@@ -99,7 +96,6 @@ export const getBoardEditData = (boardId, params = {}) => {
     url: `${boardEditDataURL}${boardId}`,
     type: 'json',
     ...params,
-    ...headers,
   });
 };
 
@@ -108,7 +104,6 @@ export const getBoardConfiguration = async (boardId, params = {}) => {
     url: boardConfigurationURL(boardId),
     type: 'json',
     ...params,
-    ...headers,
   });
 };
 
@@ -117,7 +112,6 @@ export const getBoardEstimationData = (boardId, params = {}) => {
     url: `${boardEstimationDataURL}${boardId}`,
     type: 'json',
     ...params,
-    ...headers,
   });
 };
 
@@ -126,7 +120,6 @@ export const searchIssues = (jql, params = {}) =>
     url: `api/2/search?jql=${jql}`,
     type: 'json',
     ...params,
-    ...headers,
   });
 
 export const loadNewIssueViewEnabled = (params = {}) =>
@@ -134,7 +127,6 @@ export const loadNewIssueViewEnabled = (params = {}) =>
     url: 'greenhopper/1.0/profile/labs-panel/issue-details-popup',
     type: 'json',
     ...params,
-    ...headers,
   }).then(
     res => res.isEnabled,
     () => false
@@ -144,7 +136,6 @@ export const getAllFields = () =>
   requestJira({
     url: 'api/2/field',
     type: 'json',
-    ...headers,
   });
 
 export const getFlaggedField = async () =>
