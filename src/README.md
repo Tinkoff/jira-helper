@@ -175,6 +175,12 @@ SLA показывает значение в днях.
 
 ![sla-line for control chart](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_sla_for_controlchart.gif)
 
+## Identity request from Jira-HelpeIdentify request from Jira-Helper
+
+Your administrators of JIRA can identify requests from jira-helper by the special request header
+"chrome-plugin: jira-helper/{version}".
+
+![jira-helper-reques](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jira-helper-request_300px.png)
 
 ## Ruler of measuring for control chart
 
