@@ -26,7 +26,7 @@ const invalidatedProperties = {};
 
 const requestJira = request([
   defaultHeaders({
-    'chrome-plugin': `jira-helper/${process.env.PACKAGE_VERSION}`,
+    'browser-plugin': `jira-helper/${process.env.PACKAGE_VERSION}`,
   }),
   transformUrl({
     baseUrl: `${window.location.origin}/rest/`,

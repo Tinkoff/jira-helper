@@ -178,7 +178,7 @@ SLA показывает значение в днях.
 ## Identity request from Jira-HelpeIdentify request from Jira-Helper
 
 Your administrators of JIRA can identify requests from jira-helper by the special request header
-"chrome-plugin: jira-helper/{version}".
+"browser-plugin: jira-helper/{version}".
 
 ![jira-helper-reques](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jira-helper-request_300px.png)
 
