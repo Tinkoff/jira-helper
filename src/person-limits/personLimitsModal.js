@@ -10,8 +10,8 @@ const renderRow = ({ id, person, limit, columns, swimlanes }, deleteLimit) => {
     <tr id="row-${id}">
       <td>${person.displayName}</td>
       <td>${limit}</td>
-      <td>${columns.join(', ')}</td>
-      <td>${swimlanes.join(', ')}</td>
+      <td>${columns.map(c => c.name).join(', ')}</td>
+      <td>${swimlanes.map(s => s.name).join(', ')}</td>
       <td><button class="aui-button" id="delete-${id}">Delete</button></td>
     </tr>
   `
@@ -32,19 +32,19 @@ export const openPersonLimitsModal = async (modification, boardData, personLimit
   const modal = modification.insertHTML(document.body, 'beforeend', personLimitsModal);
 
   const columnsSelect = modal.querySelector('.columns select');
-  boardData.rapidListConfig.mappedColumns.forEach(({ name }) => {
+  boardData.rapidListConfig.mappedColumns.forEach(({ id, name }) => {
     const option = document.createElement('option');
     option.text = name;
-    option.value = name;
+    option.value = id;
     option.selected = true;
     columnsSelect.appendChild(option);
   });
 
   const swimlanesSelect = modal.querySelector('.swimlanes select');
-  boardData.swimlanesConfig.swimlanes.forEach(({ name }) => {
+  boardData.swimlanesConfig.swimlanes.forEach(({ id, name }) => {
     const option = document.createElement('option');
     option.text = name;
-    option.value = name;
+    option.value = id;
     option.selected = true;
     swimlanesSelect.appendChild(option);
   });
@@ -54,8 +54,8 @@ export const openPersonLimitsModal = async (modification, boardData, personLimit
 
     const person = modal.querySelector('#person-name').value;
     const limit = modal.querySelector('#limit').valueAsNumber;
-    const columns = [...columnsSelect.selectedOptions].map(option => option.value);
-    const swimlanes = [...swimlanesSelect.selectedOptions].map(option => option.value);
+    const columns = [...columnsSelect.selectedOptions].map(option => ({ id: option.value, name: option.text }));
+    const swimlanes = [...swimlanesSelect.selectedOptions].map(option => ({ id: option.value, name: option.text }));
 
     const fullPerson = await getUser(person);
 
@@ -65,7 +65,7 @@ export const openPersonLimitsModal = async (modification, boardData, personLimit
         name: fullPerson.name ?? fullPerson.displayName,
         displayName: fullPerson.displayName,
         self: fullPerson.self,
-        avatar: fullPerson.avatarUrls['16x16'],
+        avatar: fullPerson.avatarUrls['32x32'],
       },
       limit,
       columns,
