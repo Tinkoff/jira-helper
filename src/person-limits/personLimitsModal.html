@@ -1,0 +1,52 @@
+<section id="person-limits-dialog" class="aui-dialog2 aui-dialog2-medium" role="dialog">
+  <header class="aui-dialog2-header" class="aui-dialog2-header">
+    <h2 class="aui-dialog2-header-main">Person limits</h2>
+  </header>
+
+  <div class="aui-dialog2-content">
+    <form class="aui">
+      <fieldset>
+        <div class="field-group">
+          <label for="person-name">Person JIRA name</label>
+          <input class="text medium-field" type="text" id="person-name" name="person-name" placeholder="">
+        </div>
+
+        <div class="field-group">
+          <label for="limit">Max issues at work</label>
+          <input class="text medium-field" type="number" id="limit" name="limit" placeholder="">
+        </div>
+
+        <div class="field-group columns">
+          <label>Columns</label>
+          <select class="select2" multiple></select>
+        </div>
+
+        <div class="field-group swimlanes">
+          <label>Swimlanes</label>
+          <select class="select2" multiple></select>
+        </div>
+      </fieldset>
+
+      <div class="buttons-container">
+        <div class="buttons">
+          <button class="aui-button aui-button-primary" type="submit" id="person-limit-save-button">Add limit</button>
+        </div>
+      </div>
+    </form>
+
+    <table class="aui">
+      <thead>
+      <tr>
+        <th id="person">Person</th>
+        <th id="limits">Limit</th>
+        <th id="columns">Columns</th>
+        <th id="swimlanes">Swimlanes</th>
+        <th id="delete">Delete</th>
+      </tr>
+      </thead>
+      <tbody id="persons-limit-body"></tbody>
+    </table>
+  </div>
+
+
+</section>

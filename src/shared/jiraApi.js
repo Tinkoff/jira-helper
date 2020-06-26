@@ -149,3 +149,20 @@ export const loadFlaggedIssues = keys => {
     searchIssues(`key in (${keys.join(',')})&fields=${flagField}`).then(getFlaggedIssues(flagField))
   );
 };
+
+export const getUser = query =>
+  Promise.allSettled([
+    requestJira({
+      url: 'api/2/user/search',
+      query: { query },
+      type: 'json',
+    }),
+    requestJira({
+      url: 'api/2/user/search',
+      query: { username: query },
+      type: 'json',
+    }),
+  ]).then(([res1, res2]) => {
+    if (res1.status === 'fulfilled') return res1.value[0];
+    if (res2.status === 'fulfilled') return res2.value[0];
+  });
