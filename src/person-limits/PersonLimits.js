@@ -10,6 +10,18 @@ const isPersonLimitAppliedToIssue = (personLimit, assignee, columnId, swimlaneId
   );
 };
 
+const getAssignee = avatar => {
+  if (!avatar) return null;
+
+  const label = avatar.alt ?? avatar.dataset.tooltip;
+  if (!label) return null;
+
+  return label
+    .split(':')[1]
+    .split('[')[0]
+    .trim(); // Assignee: Pavel [x]
+};
+
 export default class extends PageModification {
   shouldApply() {
     const view = this.getSearchParam('view');
@@ -129,10 +141,9 @@ export default class extends PageModification {
 
         column.querySelectorAll('.ghx-issue').forEach(issue => {
           const avatar = issue.querySelector('.ghx-avatar-img');
+          const assignee = getAssignee(avatar);
 
-          if (avatar) {
-            const assignee = avatar.alt.split(':')[1].trim();
-
+          if (assignee) {
             stats.forEach(personLimit => {
               if (isPersonLimitAppliedToIssue(personLimit, assignee, columnId, swimlaneId)) {
                 personLimit.issues.push(issue);
