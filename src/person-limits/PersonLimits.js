@@ -51,6 +51,7 @@ export default class extends PageModification {
         #avatars-limits .person-avatar img {
             width: 32px;
             height: 32px;
+            border-radius: 10px;
         }
 
         #avatars-limits .person-avatar .limit-stats {
