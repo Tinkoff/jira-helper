@@ -1,6 +1,6 @@
 {
   "name": "jira-helper",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "jira-helper: Elements for vizualizations, tetris-planing with sprints, button template, swimline-viz",
   "repository": "https://github.com/TinkoffCreditSystems/jira-helper.git",
   "license": "ISC",
