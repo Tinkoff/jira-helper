@@ -156,6 +156,16 @@ _"Board Settings -> Swimlane"_
 
 Используя комбинацию wip-ограничений колонок и swimlane вы можете визуализировать управление сложной системой с разными типами и классами задач.
 
+## WIP-limit for Person
+
+Использование ограничение на человека используется в прото-Канбан системе.
+
+Вы можете установить WIP-limit на человека если войдете в настройки колонок на доске.
+
+При этом, вы можете указать в каких колонках и swimline учитывать какой вам нужно WIP-лимит на человека.
+
+![swimlane wip-limits](https://github.com/TinkoffCreditSystems/jira-helper/blob/images/features/WIP-limit-personal.gif)
+
 
 ## SLA-line for Control Chart
 
