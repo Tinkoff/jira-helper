@@ -175,4 +175,8 @@ export class PageModification {
   getSearchParam(param) {
     return getSearchParam(param);
   }
+
+  getBoardId() {
+    return this.getSearchParam('rapidView');
+  }
 }

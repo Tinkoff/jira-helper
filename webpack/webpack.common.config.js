@@ -65,6 +65,7 @@ module.exports = {
       { from: './src/printcards/cardsRender/fonts/**/*', to: './fonts', flatten: true },
       { from: './src/manifest.json', to: './' },
       { from: './src/tetris-planning/openModal.js', to: './' },
+      { from: './src/person-limits/nativeModalScript.js', to: './' },
       { from: './src/blur-for-sensitive/blurSensitive.css', to: './src', flatten: true },
       { from: './src/contextMenu.js', to: './', flatten: true },
     ]),

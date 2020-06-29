@@ -13,6 +13,8 @@ import BugTemplate from './bug-template/BugTemplate';
 import MarkFlaggedIssues from './issue/MarkFlaggedIssues';
 import PrintCards from './printcards/PrintCards';
 import { setUpBlurSensitiveOnPage, initBlurSensitive } from './blur-for-sensitive/blurSensitive';
+import PersonLimitsSettings from './person-limits/PersonLimitsSettings';
+import PersonLimits from './person-limits/PersonLimits';
 
 const domLoaded = () =>
   new Promise(resolve => {
@@ -28,8 +30,8 @@ async function start() {
   setUpBlurSensitiveOnPage();
 
   const modificationsMap = {
-    [Routes.BOARD]: [WIPLimits, SwimlaneStats, SwimlaneLimits, TetrisPlanning, MarkFlaggedIssues],
-    [Routes.SETTINGS]: [SwimlaneSettings, WIPLimitsSettings, TetrisPlanningButton],
+    [Routes.BOARD]: [WIPLimits, SwimlaneStats, SwimlaneLimits, TetrisPlanning, MarkFlaggedIssues, PersonLimits],
+    [Routes.SETTINGS]: [SwimlaneSettings, WIPLimitsSettings, PersonLimitsSettings, TetrisPlanningButton],
     [Routes.ISSUE]: [MarkFlaggedIssues],
     [Routes.SEARCH]: [MarkFlaggedIssues, PrintCards],
     [Routes.REPORTS]: [AddSlaLine],

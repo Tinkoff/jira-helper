@@ -4,4 +4,5 @@ export const BOARD_PROPERTIES = {
   OLD_SWIMLANE_SETTINGS: 'jiraHelperWIPLimits',
   SLA_CONFIG: 'slaConfig3',
   TETRIS_PLANNING: 'settingTetrisPlaning',
+  PERSON_LIMITS: 'personLimitsSettings',
 };
