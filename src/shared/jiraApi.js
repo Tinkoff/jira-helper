@@ -162,7 +162,11 @@ export const getUser = query =>
       query: { username: query },
       type: 'json',
     }),
-  ]).then(([res1, res2]) => {
-    if (res1.status === 'fulfilled') return res1.value[0];
-    if (res2.status === 'fulfilled') return res2.value[0];
-  });
+  ])
+    .then(([res1, res2]) => {
+      if (res1.status === 'fulfilled') return res1.value;
+      if (res2.status === 'fulfilled') return res2.value;
+    })
+    .then(users => {
+      return users.find(user => user.name?.includes(query) || user.displayName?.includes(query)) ?? users[0];
+    });

@@ -105,7 +105,7 @@ export default class extends PageModification {
         .map(
           personLimit => `
         <div class="person-avatar">
-            <img src="${personLimit.person.avatar}" />
+            <img src="${personLimit.person.avatar}" title="${personLimit.person.displayName}" class="jira-tooltip" />
             <div class="limit-stats">
                 <span class="stats-current"></span>/<span>${personLimit.limit}</span>
             </div>
