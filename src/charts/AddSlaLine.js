@@ -2,6 +2,7 @@ import { PageModification } from '../shared/PageModification';
 import { BOARD_PROPERTIES } from '../shared/constants';
 
 const SLA_COLOR = 'green';
+const CHANGING_SLA_COLOR = '#91cd53';
 
 const getSlaLinePosition = (ticksVals, sla) => {
   let prevTick = ticksVals[0];
@@ -27,17 +28,17 @@ const getSlaLinePosition = (ticksVals, sla) => {
   return prevTick.position - percentDistance * (prevTick.position - nextTick.position);
 };
 
-const getSlaPath = chartElement => {
-  if (document.getElementById('jira-helper-sla-path')) {
-    return document.getElementById('jira-helper-sla-path');
+const getBasicSlaPath = (chartElement, slaPathElementIdentifier, strokeColor) => {
+  if (document.getElementById(slaPathElementIdentifier)) {
+    return document.getElementById(slaPathElementIdentifier);
   }
 
   const namespace = chartElement.namespaceURI;
 
   const slaPath = document.createElementNS(namespace, 'path');
-  slaPath.id = 'jira-helper-sla-path';
+  slaPath.id = slaPathElementIdentifier;
   slaPath.setAttributeNS(null, 'fill', 'none');
-  slaPath.setAttributeNS(null, 'stroke', SLA_COLOR);
+  slaPath.setAttributeNS(null, 'stroke', strokeColor || SLA_COLOR);
   slaPath.setAttributeNS(null, 'stroke-width', '3');
 
   chartElement.querySelector('.layer.mean').appendChild(slaPath);
@@ -45,7 +46,7 @@ const getSlaPath = chartElement => {
   return slaPath;
 };
 
-const renderSlaLine = (sla, chartElement) => {
+const renderSlaLine = (sla, chartElement, changingSlaValue = sla) => {
   const ticks = [...chartElement.querySelectorAll('.tick')].filter(
     elem => elem.lastChild.attributes.y.value === '0' && elem.lastChild.textContent
   );
@@ -61,9 +62,29 @@ const renderSlaLine = (sla, chartElement) => {
   const [, rightPoint] = meanLine.getAttribute('d').split('L');
   const [lineLength] = rightPoint.split(',');
 
-  const slaPath = getSlaPath(chartElement);
-  const slaPosition = getSlaLinePosition(ticsVals, sla);
-  slaPath.setAttributeNS(null, 'd', `M0,${slaPosition} L${lineLength},${slaPosition}`);
+  const renderSvgLine = ({ value, pathId, strokeColor }) => {
+    const slaPath = getBasicSlaPath(chartElement, pathId, strokeColor);
+    const slaPosition = getSlaLinePosition(ticsVals, value);
+    slaPath.setAttributeNS(null, 'd', `M0,${slaPosition} L${lineLength},${slaPosition}`);
+  };
+
+  renderSvgLine({
+    value: sla,
+    pathId: 'jira-helper-sla-path',
+    strokeColor: SLA_COLOR,
+  });
+
+  const changingSlaPathId = 'jira-helper-sla-path-changing';
+  if (sla !== changingSlaValue) {
+    renderSvgLine({
+      value: changingSlaValue,
+      pathId: changingSlaPathId,
+      strokeColor: CHANGING_SLA_COLOR,
+    });
+  } else {
+    const el = document.getElementById(changingSlaPathId);
+    if (el) el.remove();
+  }
 };
 
 const renderSlaLegend = () => {
@@ -87,9 +108,7 @@ const renderSlaInput = (initialValue, canEdit, addEventListener, { onChange, onS
         <div class="field-group">
             <label>SLA</label>
             <div style="display: flex">
-                <input ${
-                  !canEdit ? 'disabled' : ''
-                } id="jira-helper-sla-input" type="number" class="text" style="width: 50px; margin-right: 4px;">
+                <input id="jira-helper-sla-input" type="number" class="text" style="width: 50px; margin-right: 4px;">
                 ${
                   canEdit
                     ? '<input type="submit" class="aui-button aui-button-primary" id="jira-helper-sla-save" value="Save" disabled>'
@@ -105,12 +124,17 @@ const renderSlaInput = (initialValue, canEdit, addEventListener, { onChange, onS
   const slaInput = document.getElementById('jira-helper-sla-input');
   slaInput.value = initialValue;
 
-  if (canEdit) {
-    const saveButton = document.getElementById('jira-helper-sla-save');
-    addEventListener(slaInput, 'input', e => {
-      onChange(Number(e.target.value) || 0);
+  const saveButton = document.getElementById('jira-helper-sla-save');
+
+  addEventListener(slaInput, 'input', e => {
+    onChange(Number(e.target.value) || 0);
+
+    if (saveButton) {
       saveButton.disabled = false;
-    });
+    }
+  });
+
+  if (canEdit) {
     addEventListener(saveButton, 'click', () => {
       onSave();
       saveButton.disabled = true;
@@ -139,15 +163,20 @@ export default class extends PageModification {
     await this.waitForElement('.tick', chartElement);
 
     let slaValue = Number(value);
+    let changingValue = slaValue;
 
-    renderSlaLine(slaValue, chartElement);
+    renderSlaLine(slaValue, chartElement, changingValue);
     renderSlaLegend();
     renderSlaInput(slaValue, canEdit, this.addEventListener, {
       onChange(newValue) {
-        slaValue = newValue;
-        renderSlaLine(slaValue, chartElement);
+        changingValue = newValue;
+        renderSlaLine(slaValue, chartElement, changingValue);
       },
-      onSave: () => this.updateBoardProperty(BOARD_PROPERTIES.SLA_CONFIG, { value: slaValue }),
+      onSave: () => {
+        slaValue = changingValue;
+        this.updateBoardProperty(BOARD_PROPERTIES.SLA_CONFIG, { value: slaValue });
+        renderSlaLine(slaValue, chartElement, changingValue);
+      },
     });
   }
 }
