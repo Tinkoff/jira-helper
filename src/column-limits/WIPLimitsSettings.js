@@ -1,5 +1,9 @@
 import map from '@tinkoff/utils/array/map';
 import each from '@tinkoff/utils/array/each';
+import mapObj from '@tinkoff/utils/object/map';
+import isEmpty from '@tinkoff/utils/is/empty';
+import filterObj from '@tinkoff/utils/object/filter';
+import compose from '@tinkoff/utils/function/compose';
 import { PageModification } from '../shared/PageModification';
 import { getSettingsTab } from '../routing';
 import { settingsDOM } from './constants';
@@ -66,9 +70,9 @@ export default class extends PageModification {
 
     let resultedStyles = '';
     columns.forEach(dataColumnId => {
-      resultedStyles += ` [data-column-id="${dataColumnId}"] { background-color: ${generateColorByFirstChars(
+      resultedStyles += ` #columns .ghx-mapped[data-column-id="${dataColumnId}"] { background-color: ${generateColorByFirstChars(
         groupId
-      )} !important; }`;
+      )}; }`;
     });
 
     this.insertHTML(
@@ -170,6 +174,16 @@ export default class extends PageModification {
 
         if (inProgressGroup.indexOf(columnId) < 0) {
           column.style.backgroundColor = '#ff5630';
+
+          // removes from other groups
+          this.wipLimits = compose(
+            filterObj(columnLimits => !isEmpty(columnLimits.columns)),
+            mapObj(columnLimits => ({
+              ...columnLimits,
+              columns: columnLimits.columns.filter(id => columnId !== id),
+            }))
+          )(this.wipLimits);
+
           inProgressGroup.push(columnId);
         } else {
           column.style.backgroundColor = null;
