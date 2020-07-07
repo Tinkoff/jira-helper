@@ -66,9 +66,11 @@ export class PrintCardButton {
 
   render() {
     const { printCardsBtnId } = this.identifiers;
-    const isPageAlreadyContainsBtn =
-      this.isExistJqElem(`#${printCardsBtnId}`) && !this.isExistJqElem('.search-options-container');
+    const isPageAlreadyContainsBtn = this.isExistJqElem(`#${printCardsBtnId}`);
+    const isOptionsContainerExist = this.isExistJqElem('.search-options-container');
+
     if (isPageAlreadyContainsBtn) return;
+    if (!isOptionsContainerExist) return;
 
     document.querySelector('.search-container').insertAdjacentHTML('beforeend', this.getBtnTemplate());
     this.$printCardBtn = document.querySelector(`#${printCardsBtnId}`);
