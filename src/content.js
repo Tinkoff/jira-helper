@@ -1,6 +1,7 @@
 import { Routes } from './routing';
 import { isJira } from './shared/utils';
 import AddSlaLine from './charts/AddSlaLine';
+import AddChartGrid from './charts/AddChartGrid';
 import runModifications from './shared/runModifications';
 import SwimlaneStats from './swimlane/SwimlaneStats';
 import SwimlaneLimits from './swimlane/SwimlaneLimits';
@@ -34,7 +35,7 @@ async function start() {
     [Routes.SETTINGS]: [SwimlaneSettings, WIPLimitsSettings, PersonLimitsSettings, TetrisPlanningButton],
     [Routes.ISSUE]: [MarkFlaggedIssues],
     [Routes.SEARCH]: [MarkFlaggedIssues, PrintCards],
-    [Routes.REPORTS]: [AddSlaLine],
+    [Routes.REPORTS]: [AddSlaLine, AddChartGrid],
     [Routes.ALL]: [BugTemplate],
   };
 
