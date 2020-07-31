@@ -4,7 +4,7 @@ import { TweenLite, gsap } from 'gsap';
 import { PageModification } from '../shared/PageModification';
 
 function clamp(value, min, max) {
-  return value < min ? min : value > max ? max : value; // eslint-disable-line
+  return Math.min(Math.max(min, value), max);
 }
 
 class ResizableDraggableGrid {
@@ -27,7 +27,7 @@ class ResizableDraggableGrid {
     })(3, 10),
   };
 
-  static usedIdentifiers = {
+  static ids = {
     gridContainer: 'jira-helper-grid-container',
     gridDraggable: 'jira-helper-grid-draggable',
     gridDragResizer: 'jira-helper-grid-drag-resizer',
@@ -58,7 +58,7 @@ class ResizableDraggableGrid {
 
   addManipulationAbilities() {
     const resizer = document.createElement('div');
-    resizer.id = `${ResizableDraggableGrid.usedIdentifiers.gridDragResizer}`;
+    resizer.id = `${ResizableDraggableGrid.ids.gridDragResizer}`;
     this.gridDraggable.appendChild(resizer);
 
     const rect1 = this.gridDraggable.getBoundingClientRect();
@@ -116,9 +116,9 @@ class ResizableDraggableGrid {
             <label>Grid</label>
             <div style="display: flex; align-items: center">
                 <input type="checkbox" style="margin-right: 8px" checked id="${
-                  ResizableDraggableGrid.usedIdentifiers.gridFormCheckbox
+                  ResizableDraggableGrid.ids.gridFormCheckbox
                 }" alt="Toggle Grid Visibility"/>
-                <select class="select" id="${ResizableDraggableGrid.usedIdentifiers.gridFormSelect}">
+                <select class="select" id="${ResizableDraggableGrid.ids.gridFormSelect}">
                     ${fibonacci.map((arr, i) => `<option value="fibonacci_${i}">Fibonacci - ${arr.join()}</option>`)}
                     ${linear.map((arr, i) => `<option value="linear_${i}">Linear - ${arr.join()}</option>`)}
                 </select>
@@ -128,37 +128,26 @@ class ResizableDraggableGrid {
   `;
     optionsColumn.appendChild(gridOptionsForm);
 
-    const gridSelect = document.getElementById(ResizableDraggableGrid.usedIdentifiers.gridFormSelect);
+    const gridSelect = document.getElementById(ResizableDraggableGrid.ids.gridFormSelect);
     gridSelect.value = 'linear_0';
-    this.addEventListener(gridSelect, 'change', e => {
-      this.handleChangeOption(e.target.value);
-    });
+    this.addEventListener(gridSelect, 'change', e => this.handleChangeOption(e.target.value));
 
-    const gridCheckBox = document.getElementById(ResizableDraggableGrid.usedIdentifiers.gridFormCheckbox);
+    const gridCheckBox = document.getElementById(ResizableDraggableGrid.ids.gridFormCheckbox);
     this.addEventListener(gridCheckBox, 'change', e => {
-      if (e.target.checked) {
-        this.gridDraggable.style.display = 'block';
-      } else {
-        this.gridDraggable.style.display = 'none';
-      }
+      this.gridDraggable.style.display = e.target.checked ? 'block' : 'none';
     });
   }
 
-  renderLines(arrOfNumbers) {
-    const oldLines = document.getElementById(ResizableDraggableGrid.usedIdentifiers.gridLines);
+  renderLines(linesStops) {
+    const oldLines = document.getElementById(ResizableDraggableGrid.ids.gridLines);
     if (oldLines) oldLines.remove();
 
-    const linesStops = arrOfNumbers;
     const maxLineHeight = Math.max(...linesStops);
     const getPositionOfLine = num => num / (maxLineHeight / 100);
 
     const lines = document.createElement('div');
-    lines.id = ResizableDraggableGrid.usedIdentifiers.gridLines;
-    lines.innerHTML = linesStops
-      .map(number => {
-        return `<div style="bottom: ${getPositionOfLine(number)}%"></div>`;
-      })
-      .join('');
+    lines.id = ResizableDraggableGrid.ids.gridLines;
+    lines.innerHTML = linesStops.map(number => `<div style="bottom: ${getPositionOfLine(number)}%"></div>`).join('');
     this.gridDraggable.append(lines);
   }
 
@@ -168,14 +157,14 @@ class ResizableDraggableGrid {
     const layerGridBoundingClientRect = layerGrid.getBoundingClientRect();
 
     const gridContainer = document.createElement('div');
-    gridContainer.id = ResizableDraggableGrid.usedIdentifiers.gridContainer;
+    gridContainer.id = ResizableDraggableGrid.ids.gridContainer;
 
     const gridDraggable = document.createElement('div');
-    gridDraggable.id = ResizableDraggableGrid.usedIdentifiers.gridDraggable;
+    gridDraggable.id = ResizableDraggableGrid.ids.gridDraggable;
 
     const styles = document.createElement('style');
     styles.innerHTML = `
-      #${ResizableDraggableGrid.usedIdentifiers.gridContainer} {
+      #${ResizableDraggableGrid.ids.gridContainer} {
         width: ${layerGridBoundingClientRect.width}px;
         height: ${layerGridBoundingClientRect.height}px;
         top: 11px;
@@ -183,7 +172,7 @@ class ResizableDraggableGrid {
         position: absolute;
       }
 
-      #${ResizableDraggableGrid.usedIdentifiers.gridDragResizer} {
+      #${ResizableDraggableGrid.ids.gridDragResizer} {
         position: absolute;
         width: 0px;
         height: 0px;
@@ -196,7 +185,7 @@ class ResizableDraggableGrid {
         pointer-events: all !important;
       }
 
-      #${ResizableDraggableGrid.usedIdentifiers.gridDraggable} {
+      #${ResizableDraggableGrid.ids.gridDraggable} {
         position: absolute;
         border: 1px solid #aaa;
         top: 0;
@@ -207,11 +196,11 @@ class ResizableDraggableGrid {
         transform: translate3d(0px, 0px, 0px);
       }
 
-      #${ResizableDraggableGrid.usedIdentifiers.gridDraggable} svg {
+      #${ResizableDraggableGrid.ids.gridDraggable} svg {
         width: 100%; height: 100%;
       }
 
-      #${ResizableDraggableGrid.usedIdentifiers.gridLines} > div {
+      #${ResizableDraggableGrid.ids.gridLines} > div {
         position: absolute;
         bottom: 0;
         height: 1px;
@@ -220,7 +209,7 @@ class ResizableDraggableGrid {
         pointer-events: none;
       }
 
-      #${ResizableDraggableGrid.usedIdentifiers.gridLines} {
+      #${ResizableDraggableGrid.ids.gridLines} {
         width: 100%;
         height:100%;
         pointer-events: none;
