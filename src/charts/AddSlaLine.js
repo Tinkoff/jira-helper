@@ -1,32 +1,9 @@
 import { PageModification } from '../shared/PageModification';
 import { BOARD_PROPERTIES } from '../shared/constants';
+import { getChartLinePosition, getChartTics } from './utils';
 
 const SLA_COLOR = 'green';
 const CHANGING_SLA_COLOR = '#91cd53';
-
-const getSlaLinePosition = (ticksVals, sla) => {
-  let prevTick = ticksVals[0];
-  for (let i = ticksVals.length - 1; i >= 0; i--) {
-    if (ticksVals[i].value <= sla) {
-      prevTick = ticksVals[i];
-      break;
-    }
-  }
-
-  let nextTick = ticksVals[ticksVals.length - 1];
-  for (let i = 0; i < ticksVals.length; i++) {
-    if (ticksVals[i].value >= sla) {
-      nextTick = ticksVals[i];
-      break;
-    }
-  }
-
-  if (!prevTick || !nextTick) return 0;
-
-  const percentDistance =
-    nextTick.value === prevTick.value ? 0 : (sla - prevTick.value) / (nextTick.value - prevTick.value);
-  return prevTick.position - percentDistance * (prevTick.position - nextTick.position);
-};
 
 const getBasicSlaPath = (chartElement, slaPathElementIdentifier, strokeColor) => {
   if (document.getElementById(slaPathElementIdentifier)) {
@@ -47,16 +24,7 @@ const getBasicSlaPath = (chartElement, slaPathElementIdentifier, strokeColor) =>
 };
 
 const renderSlaLine = (sla, chartElement, changingSlaValue = sla) => {
-  const ticks = [...chartElement.querySelectorAll('.tick')].filter(
-    elem => elem.lastChild.attributes.y.value === '0' && elem.lastChild.textContent
-  );
-  const ticsVals = ticks.map(elem => {
-    const [, transform] = elem.attributes.transform.value.split(',');
-    return {
-      position: Number(transform.slice(0, -1)),
-      value: Number(elem.lastChild.textContent),
-    };
-  });
+  const ticsVals = getChartTics(chartElement);
 
   const meanLine = chartElement.querySelector('.control-chart-mean');
   const [, rightPoint] = meanLine.getAttribute('d').split('L');
@@ -64,7 +32,7 @@ const renderSlaLine = (sla, chartElement, changingSlaValue = sla) => {
 
   const renderSvgLine = ({ value, pathId, strokeColor }) => {
     const slaPath = getBasicSlaPath(chartElement, pathId, strokeColor);
-    const slaPosition = getSlaLinePosition(ticsVals, value);
+    const slaPosition = getChartLinePosition(ticsVals, value);
     slaPath.setAttributeNS(null, 'd', `M0,${slaPosition} L${lineLength},${slaPosition}`);
   };
 
