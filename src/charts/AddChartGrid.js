@@ -92,7 +92,7 @@ class ResizableDraggableGrid {
         <div class="field-group">
             <label>Grid</label>
             <div style="display: flex; align-items: center">
-                <input type="checkbox" style="margin-right: 8px" checked id="${
+                <input type="checkbox" style="margin-right: 8px" id="${
                   ResizableDraggableGrid.ids.gridFormCheckbox
                 }" alt="Toggle Grid Visibility"/>
                 <select class="select" id="${ResizableDraggableGrid.ids.gridFormSelect}">
@@ -111,9 +111,12 @@ class ResizableDraggableGrid {
 
     const gridCheckBox = document.getElementById(ResizableDraggableGrid.ids.gridFormCheckbox);
     this.addEventListener(gridCheckBox, 'change', e => {
-      this.gridContainer.style.display = e.target.checked ? 'block' : 'none';
-
-      if (e.target.checked) this.renderLines(this.numberArrayBySelectedOption);
+      if (this.gridContainer) {
+        this.gridContainer.style.display = e.target.checked ? 'block' : 'none';
+        if (e.target.checked) this.renderLines(this.numberArrayBySelectedOption);
+      } else {
+        this.renderGrid();
+      }
     });
   }
 
@@ -225,7 +228,6 @@ class ResizableDraggableGrid {
 
   init() {
     gsap.registerPlugin(Draggable);
-    this.renderGrid();
     this.renderOptionsForm();
   }
 
