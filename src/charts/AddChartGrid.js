@@ -3,10 +3,6 @@ import Draggable from 'gsap/Draggable';
 import { TweenLite, gsap } from 'gsap';
 import { PageModification } from '../shared/PageModification';
 
-function clamp(value, min, max) {
-  return Math.min(Math.max(min, value), max);
-}
-
 class ResizableDraggableGrid {
   static gridOptions = {
     fibonacci: [
@@ -62,20 +58,12 @@ class ResizableDraggableGrid {
     this.gridDraggable.appendChild(resizer);
 
     const rect1 = this.gridDraggable.getBoundingClientRect();
-    TweenLite.set(resizer, { x: rect1.width, y: rect1.height });
-
-    const rect2 = resizer.getBoundingClientRect();
-    const offset = {
-      x1: rect2.left - rect1.right,
-      y1: rect2.top - rect1.bottom,
-      x2: rect2.right - rect1.right,
-      y2: rect2.bottom - rect1.bottom,
-    };
+    TweenLite.set(resizer, { x: rect1.width, y: 0 });
 
     const onResize = (x, y) => {
       TweenLite.set(this.gridDraggable, {
         width: x + 0,
-        height: y + 0,
+        height: rect1.height - y,
       });
     };
 
@@ -93,14 +81,6 @@ class ResizableDraggableGrid {
       onDrag() {
         // "this" points to special gsap object event
         onResize(this.x, this.y);
-      },
-      liveSnap: {
-        x(x) {
-          return clamp(x, -offset.x1, x + offset.x2);
-        },
-        y(y) {
-          return clamp(y, -offset.y1, y + offset.y2);
-        },
       },
     });
   }
@@ -134,7 +114,7 @@ class ResizableDraggableGrid {
 
     const gridCheckBox = document.getElementById(ResizableDraggableGrid.ids.gridFormCheckbox);
     this.addEventListener(gridCheckBox, 'change', e => {
-      this.gridDraggable.style.display = e.target.checked ? 'block' : 'none';
+      this.gridContainer.style.display = e.target.checked ? 'block' : 'none';
     });
   }
 
@@ -174,21 +154,21 @@ class ResizableDraggableGrid {
 
       #${ResizableDraggableGrid.ids.gridDragResizer} {
         position: absolute;
+        bottom: 110px;
         width: 0px;
         height: 0px;
-        margin-top: -17px;
         margin-left: -17px;
         border-style: solid;
-        border-width: 0 0 16px 16px;
-        border-color: transparent transparent #aaa transparent;
-        cursor: nw-resize !important;
+        border-width: 16px 0 0 16px;
+        border-color: #aaa transparent transparent transparent;
+        cursor: ne-resize !important;
         pointer-events: all !important;
       }
 
       #${ResizableDraggableGrid.ids.gridDraggable} {
         position: absolute;
         border: 1px solid #aaa;
-        top: 0;
+        bottom: 0;
         left: 0;
         width: 300px;
         height: 125px;
