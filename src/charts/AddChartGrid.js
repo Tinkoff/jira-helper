@@ -2,6 +2,7 @@
 import Draggable from 'gsap/Draggable';
 import { TweenLite, gsap } from 'gsap';
 import { PageModification } from '../shared/PageModification';
+import { getChartLinePosition, getChartTics, getChartValueByPosition } from './utils';
 
 class ResizableDraggableGrid {
   static gridOptions = {
@@ -65,12 +66,8 @@ class ResizableDraggableGrid {
         width: x + 0,
         height: rect1.height - y,
       });
+      this.renderLines(this.numberArrayBySelectedOption);
     };
-
-    Draggable.create(this.gridDraggable, {
-      bounds: this.gridContainer,
-      autoScroll: 1,
-    });
 
     Draggable.create(resizer, {
       bounds: this.gridContainer,
@@ -115,6 +112,8 @@ class ResizableDraggableGrid {
     const gridCheckBox = document.getElementById(ResizableDraggableGrid.ids.gridFormCheckbox);
     this.addEventListener(gridCheckBox, 'change', e => {
       this.gridContainer.style.display = e.target.checked ? 'block' : 'none';
+
+      if (e.target.checked) this.renderLines(this.numberArrayBySelectedOption);
     });
   }
 
@@ -122,12 +121,22 @@ class ResizableDraggableGrid {
     const oldLines = document.getElementById(ResizableDraggableGrid.ids.gridLines);
     if (oldLines) oldLines.remove();
 
-    const maxLineHeight = Math.max(...linesStops);
-    const getPositionOfLine = num => num / (maxLineHeight / 100);
+    const ticsVals = getChartTics(this.chartElement);
+
+    const maxNumber = Math.max(...linesStops);
+    const chartHeight = this.gridContainer.getBoundingClientRect().height;
+
+    const gridHeight = this.gridDraggable.getBoundingClientRect().height;
+    const gridTopPosition = chartHeight - gridHeight;
+    const gridTopValue = getChartValueByPosition(ticsVals, gridTopPosition);
+
+    const getPositionOfLine = num => chartHeight - getChartLinePosition(ticsVals, (num / maxNumber) * gridTopValue);
 
     const lines = document.createElement('div');
     lines.id = ResizableDraggableGrid.ids.gridLines;
-    lines.innerHTML = linesStops.map(number => `<div style="bottom: ${getPositionOfLine(number)}%"></div>`).join('');
+    lines.innerHTML = linesStops
+      .map(number => `<div style="bottom: ${getPositionOfLine(number)}px">${number} SP</div>`)
+      .join('');
     this.gridDraggable.append(lines);
   }
 
@@ -187,6 +196,10 @@ class ResizableDraggableGrid {
         background: gray;
         width: 100%;
         pointer-events: none;
+      }
+
+      #${ResizableDraggableGrid.ids.gridLines} > div:last-child {
+        background: none;
       }
 
       #${ResizableDraggableGrid.ids.gridLines} {
