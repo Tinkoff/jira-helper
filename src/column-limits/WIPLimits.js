@@ -21,7 +21,7 @@ export default class extends PageModification {
 
   loadData() {
     return Promise.all([
-      this.getBoardConfiguration(),
+      this.getBoardEditData(),
       this.getBoardProperty(BOARD_PROPERTIES.WIP_LIMITS_SETTINGS),
       Promise.all([
         this.getBoardProperty(BOARD_PROPERTIES.SWIMLANE_SETTINGS),
@@ -30,10 +30,11 @@ export default class extends PageModification {
     ]);
   }
 
-  apply([boardConfig = {}, boardGroups = {}, swimlanesSettings = {}]) {
+  apply([editData = {}, boardGroups = {}, swimlanesSettings = {}]) {
     this.boardGroups = boardGroups;
     this.swimlanesSettings = swimlanesSettings;
-    this.constraintType = (boardConfig.columnConfig && boardConfig.columnConfig.constraintType) || '';
+    this.constraintType = editData.rapidListConfig.currentStatisticsField?.typeId ?? '';
+    this.mappedColumns = editData.rapidListConfig.mappedColumns;
 
     this.styleColumnHeaders();
     this.styleColumnsWithLimitations();
@@ -77,34 +78,40 @@ export default class extends PageModification {
     });
   }
 
+  getIssuesInColumn(columnId, ignoredSwimlanes) {
+    const swimlanesFilter = ignoredSwimlanes.map(swimlaneId => `:not([swimlane-id="${swimlaneId}"])`).join('');
+    const notUseSubTask = this.constraintType === 'issueCountExclSubs' ? ':not(.ghx-issue-subtask)' : '';
+
+    return document.querySelectorAll(
+      `.ghx-swimlane${swimlanesFilter} .ghx-column[data-column-id="${columnId}"] .ghx-issue:not(.ghx-done)${notUseSubTask}`
+    ).length;
+  }
+
   styleColumnsWithLimitations() {
     const columnsInOrder = this.getOrderedColumns();
     if (!columnsInOrder.length) return;
+
+    const ignoredSwimlanes = Object.keys(this.swimlanesSettings).filter(
+      swimlaneId => this.swimlanesSettings[swimlaneId].ignoreWipInColumns
+    );
+    const swimlanesFilter = ignoredSwimlanes.map(swimlaneId => `:not([swimlane-id="${swimlaneId}"])`).join('');
 
     Object.values(this.boardGroups).forEach(group => {
       const { columns: groupColumns, max: groupLimit } = group;
       if (!groupColumns || !groupLimit) return;
 
-      const ignoredSwimlanes = Object.keys(this.swimlanesSettings).filter(
-        swimlaneId => this.swimlanesSettings[swimlaneId].ignoreWipInColumns
+      const amountOfGroupTasks = groupColumns.reduce(
+        (acc, columnId) => acc + this.getIssuesInColumn(columnId, ignoredSwimlanes),
+        0
       );
-
-      const swimlanesFilter = ignoredSwimlanes.map(swimlaneId => `:not([swimlane-id="${swimlaneId}"])`).join('');
-      const notUseSubTask = this.constraintType === 'issueCountExclSubs' ? ':not(.ghx-issue-subtask)' : '';
-
-      const amountOfGroupTasks = groupColumns.reduce((acc, columnId) => {
-        const amountIssuesOneColumn = document.querySelectorAll(
-          `.ghx-swimlane${swimlanesFilter} .ghx-column[data-column-id="${columnId}"] .ghx-issue:not(.ghx-done)${notUseSubTask}`
-        ).length;
-
-        return acc + amountIssuesOneColumn;
-      }, 0);
 
       if (groupLimit < amountOfGroupTasks) {
         groupColumns.forEach(columnId => {
-          document.querySelectorAll(`.ghx-column[data-column-id="${columnId}"]`).forEach(el => {
-            el.style.backgroundColor = '#ff5630';
-          });
+          document
+            .querySelectorAll(`.ghx-swimlane${swimlanesFilter} .ghx-column[data-column-id="${columnId}"]`)
+            .forEach(el => {
+              el.style.backgroundColor = '#ff5630';
+            });
         });
       }
 
@@ -122,6 +129,23 @@ export default class extends PageModification {
           </span>`
       );
     });
+
+    this.mappedColumns
+      .filter(column => column.max)
+      .forEach(column => {
+        const totalIssues = this.getIssuesInColumn(column.id, []);
+        const filteredIssues = this.getIssuesInColumn(column.id, ignoredSwimlanes);
+
+        if (column.max && totalIssues > Number(column.max) && filteredIssues <= Number(column.max)) {
+          const columnHeaderElement = document.querySelector(`.ghx-column[data-id="${column.id}"]`);
+          columnHeaderElement.classList.remove('ghx-busted', 'ghx-busted-max');
+
+          // задачи в облачной джире
+          document.querySelectorAll(`.ghx-column[data-column-id="${column.id}"]`).forEach(issue => {
+            issue.classList.remove('ghx-busted', 'ghx-busted-max');
+          });
+        }
+      });
   }
 
   getOrderedColumns() {
