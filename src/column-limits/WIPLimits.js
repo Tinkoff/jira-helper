@@ -94,6 +94,7 @@ export default class extends PageModification {
     const ignoredSwimlanes = Object.keys(this.swimlanesSettings).filter(
       swimlaneId => this.swimlanesSettings[swimlaneId].ignoreWipInColumns
     );
+    const swimlanesFilter = ignoredSwimlanes.map(swimlaneId => `:not([swimlane-id="${swimlaneId}"])`).join('');
 
     Object.values(this.boardGroups).forEach(group => {
       const { columns: groupColumns, max: groupLimit } = group;
@@ -106,9 +107,11 @@ export default class extends PageModification {
 
       if (groupLimit < amountOfGroupTasks) {
         groupColumns.forEach(columnId => {
-          document.querySelectorAll(`.ghx-column[data-column-id="${columnId}"]`).forEach(el => {
-            el.style.backgroundColor = '#ff5630';
-          });
+          document
+            .querySelectorAll(`.ghx-swimlane${swimlanesFilter} .ghx-column[data-column-id="${columnId}"]`)
+            .forEach(el => {
+              el.style.backgroundColor = '#ff5630';
+            });
         });
       }
 
