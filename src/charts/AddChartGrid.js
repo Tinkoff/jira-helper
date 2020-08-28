@@ -21,7 +21,7 @@ class ResizableDraggableGrid {
         }
       }
       return result;
-    })(3, 10),
+    })(2, 10),
   };
 
   static ids = {
@@ -133,12 +133,17 @@ class ResizableDraggableGrid {
     const gridTopPosition = chartHeight - gridHeight;
     const gridTopValue = getChartValueByPosition(ticsVals, gridTopPosition);
 
-    const getPositionOfLine = num => chartHeight - getChartLinePosition(ticsVals, (num / maxNumber) * gridTopValue);
+    const getLineValue = num => (num / maxNumber) * gridTopValue;
+    const getPositionOfLine = num => chartHeight - getChartLinePosition(ticsVals, getLineValue(num));
 
     const lines = document.createElement('div');
     lines.id = ResizableDraggableGrid.ids.gridLines;
     lines.innerHTML = linesStops
-      .map(number => `<div style="bottom: ${getPositionOfLine(number)}px">${number} SP</div>`)
+      .map(
+        number =>
+          `<div style="bottom: ${getPositionOfLine(number)}px">${number} SP, ${Math.round(getLineValue(number) * 10) /
+            10} days</div>`
+      )
       .join('');
     this.gridDraggable.append(lines);
   }
