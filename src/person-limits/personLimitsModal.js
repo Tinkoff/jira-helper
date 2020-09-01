@@ -7,7 +7,8 @@ const renderRow = ({ id, person, limit, columns, swimlanes }, deleteLimit) => {
   document.querySelector('#persons-limit-body').insertAdjacentHTML(
     'beforeend',
     `
-    <tr id="row-${id}">
+    <tr id="row-${id}" class="person-row">
+      <td><input type="checkbox" class="checkbox select-user-chb" data-id="${id}"></td>
       <td>${person.displayName}</td>
       <td>${limit}</td>
       <td>${columns.map(c => c.name).join(', ')}</td>
@@ -77,6 +78,48 @@ export const openPersonLimitsModal = async (modification, boardData, personLimit
     await modification.updateBoardProperty(BOARD_PROPERTIES.PERSON_LIMITS, personLimits);
 
     renderRow(personLimit, deleteLimit);
+  });
+
+  modal.querySelector('#apply-columns').addEventListener('click', async e => {
+    e.preventDefault();
+
+    const columns = [...columnsSelect.selectedOptions].map(option => ({ id: option.value, name: option.text }));
+    const persons = [...modal.querySelectorAll('.select-user-chb:checked')].map(elem => Number(elem.dataset.id));
+
+    personLimits.limits = personLimits.limits.map(limit =>
+      persons.includes(limit.id)
+        ? {
+            ...limit,
+            columns,
+          }
+        : limit
+    );
+
+    await modification.updateBoardProperty(BOARD_PROPERTIES.PERSON_LIMITS, personLimits);
+
+    modal.querySelectorAll('.person-row').forEach(row => row.remove());
+    personLimits.limits.forEach(personLimit => renderRow(personLimit, deleteLimit));
+  });
+
+  modal.querySelector('#apply-swimlanes').addEventListener('click', async e => {
+    e.preventDefault();
+
+    const swimlanes = [...swimlanesSelect.selectedOptions].map(option => ({ id: option.value, name: option.text }));
+    const persons = [...modal.querySelectorAll('.select-user-chb:checked')].map(elem => Number(elem.dataset.id));
+
+    personLimits.limits = personLimits.limits.map(limit =>
+      persons.includes(limit.id)
+        ? {
+            ...limit,
+            swimlanes,
+          }
+        : limit
+    );
+
+    await modification.updateBoardProperty(BOARD_PROPERTIES.PERSON_LIMITS, personLimits);
+
+    modal.querySelectorAll('.person-row').forEach(row => row.remove());
+    personLimits.limits.forEach(personLimit => renderRow(personLimit, deleteLimit));
   });
 
   personLimits.limits.forEach(personLimit => renderRow(personLimit, deleteLimit));
