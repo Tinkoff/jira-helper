@@ -24,7 +24,10 @@ export default class extends PageModification {
   }
 
   calcSwimlaneStatsAndRender = () => {
-    const headers = map(i => i.innerText, document.querySelectorAll('#ghx-column-headers .ghx-column h2'));
+    const headers = map(
+      i => i.innerText,
+      document.querySelectorAll('.ghx-column-title, #ghx-column-headers .ghx-column h2')
+    );
 
     const swimlanesStats = {};
 
