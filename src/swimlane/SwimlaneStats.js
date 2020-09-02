@@ -18,7 +18,14 @@ export default class extends PageModification {
     return this.waitForElement('.ghx-swimlane');
   }
 
-  apply() {
+  loadData() {
+    return this.getBoardEditData();
+  }
+
+  apply(editData) {
+    const constraintType = editData.rapidListConfig.currentStatisticsField?.typeId ?? '';
+    this.cssTasks = constraintType === 'issueCountExclSubs' ? '.ghx-issue:not(.ghx-issue-subtask)' : '.ghx-issue';
+
     this.calcSwimlaneStatsAndRender();
     this.onDOMChange('#ghx-pool', this.calcSwimlaneStatsAndRender);
   }
@@ -41,7 +48,7 @@ export default class extends PageModification {
       const arrNumberIssues = [];
 
       list.forEach(column => {
-        const tasks = column.querySelectorAll('.ghx-issue:not(.ghx-issue-subtask)');
+        const tasks = column.querySelectorAll(this.cssTasks);
         arrNumberIssues.push(tasks.length);
         numberIssues += tasks.length;
       });
