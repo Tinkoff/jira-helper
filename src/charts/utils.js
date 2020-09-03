@@ -64,7 +64,7 @@ export const getChartValueByPosition = (ticksVals, position) => {
     if (!firstTick || !nextTick) return 0;
 
     return (
-      (firstTick.position - position) / ((firstTick.position - nextTick.position) / nextTick.value ** (1 / 3)) ** 3
+      ((firstTick.position - position) / ((firstTick.position - nextTick.position) / nextTick.value ** (1 / 3))) ** 3
     );
   }
 
