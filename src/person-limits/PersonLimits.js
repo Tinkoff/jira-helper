@@ -81,7 +81,7 @@ export default class extends PageModification {
   apply([editData = {}, personLimits]) {
     if (!personLimits || !personLimits.limits.length) return;
 
-    this.constraintType = editData.rapidListConfig.currentStatisticsField?.typeId ?? '';
+    this.cssSelectorOfIssues = this.getCssSelectorOfIssues(editData);
     this.applyLimits(personLimits);
     this.onDOMChange('#ghx-pool', () => this.applyLimits(personLimits), { childList: true, subtree: true });
   }
@@ -130,8 +130,6 @@ export default class extends PageModification {
   }
 
   getLimitsStats(personLimits) {
-    const issueCssSelector =
-      this.constraintType === 'issueCountExclSubs' ? '.ghx-issue:not(.ghx-issue-subtask)' : '.ghx-issue';
     const stats = personLimits.limits.map(personLimit => ({
       ...personLimit,
       issues: [],
@@ -143,7 +141,7 @@ export default class extends PageModification {
       swimlane.querySelectorAll('.ghx-column').forEach(column => {
         const { columnId } = column.dataset;
 
-        column.querySelectorAll(issueCssSelector).forEach(issue => {
+        column.querySelectorAll(this.cssSelectorOfIssues).forEach(issue => {
           const avatar = issue.querySelector('.ghx-avatar-img');
           const assignee = getAssignee(avatar);
 

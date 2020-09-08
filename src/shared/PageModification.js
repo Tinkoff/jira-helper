@@ -171,6 +171,15 @@ export class PageModification {
   }
 
   // helpers
+  getCssSelectorNotIssueSubTask(editData) {
+    const constraintType = editData.rapidListConfig.currentStatisticsField?.typeId ?? '';
+    return constraintType === 'issueCountExclSubs' ? ':not(.ghx-issue-subtask)' : '';
+  }
+
+  getCssSelectorOfIssues(editData) {
+    const cssNotIssueSubTask = this.getCssSelectorNotIssueSubTask(editData);
+    return `.ghx-issue${cssNotIssueSubTask}`;
+  }
 
   getSearchParam(param) {
     return getSearchParam(param);
