@@ -33,8 +33,8 @@ export default class extends PageModification {
   apply([editData = {}, boardGroups = {}, swimlanesSettings = {}]) {
     this.boardGroups = boardGroups;
     this.swimlanesSettings = swimlanesSettings;
-    this.constraintType = editData.rapidListConfig.currentStatisticsField?.typeId ?? '';
     this.mappedColumns = editData.rapidListConfig.mappedColumns;
+    this.cssNotIssueSubTask = this.getCssSelectorNotIssueSubTask(editData);
 
     this.styleColumnHeaders();
     this.styleColumnsWithLimitations();
@@ -80,10 +80,9 @@ export default class extends PageModification {
 
   getIssuesInColumn(columnId, ignoredSwimlanes) {
     const swimlanesFilter = ignoredSwimlanes.map(swimlaneId => `:not([swimlane-id="${swimlaneId}"])`).join('');
-    const notUseSubTask = this.constraintType === 'issueCountExclSubs' ? ':not(.ghx-issue-subtask)' : '';
 
     return document.querySelectorAll(
-      `.ghx-swimlane${swimlanesFilter} .ghx-column[data-column-id="${columnId}"] .ghx-issue:not(.ghx-done)${notUseSubTask}`
+      `.ghx-swimlane${swimlanesFilter} .ghx-column[data-column-id="${columnId}"] .ghx-issue:not(.ghx-done)${this.cssNotIssueSubTask}`
     ).length;
   }
 

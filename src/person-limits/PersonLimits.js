@@ -75,12 +75,13 @@ export default class extends PageModification {
   }
 
   loadData() {
-    return this.getBoardProperty(BOARD_PROPERTIES.PERSON_LIMITS);
+    return Promise.all([this.getBoardEditData(), this.getBoardProperty(BOARD_PROPERTIES.PERSON_LIMITS)]);
   }
 
-  apply(personLimits) {
+  apply([editData = {}, personLimits]) {
     if (!personLimits || !personLimits.limits.length) return;
 
+    this.cssSelectorOfIssues = this.getCssSelectorOfIssues(editData);
     this.applyLimits(personLimits);
     this.onDOMChange('#ghx-pool', () => this.applyLimits(personLimits), { childList: true, subtree: true });
   }
@@ -140,7 +141,7 @@ export default class extends PageModification {
       swimlane.querySelectorAll('.ghx-column').forEach(column => {
         const { columnId } = column.dataset;
 
-        column.querySelectorAll('.ghx-issue').forEach(issue => {
+        column.querySelectorAll(this.cssSelectorOfIssues).forEach(issue => {
           const avatar = issue.querySelector('.ghx-avatar-img');
           const assignee = getAssignee(avatar);
 
