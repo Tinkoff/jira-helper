@@ -5,6 +5,12 @@ import { getChartLinePosition, getChartTics } from './utils';
 const SLA_COLOR = 'green';
 const CHANGING_SLA_COLOR = '#91cd53';
 
+const MIN_ISSUE_CLUSTER_COUNT = 2;
+const MIN_ISSUE_CLUSTER_RADIUS = 6;
+const ISSUE_CLUSTER_RADIUS_FACTOR = 9;
+
+const log10 = x => Math.log(x) / Math.log(10);
+
 const getBasicSlaPath = (chartElement, slaPathElementIdentifier, strokeColor) => {
   if (document.getElementById(slaPathElementIdentifier)) {
     return document.getElementById(slaPathElementIdentifier);
@@ -23,6 +29,56 @@ const getBasicSlaPath = (chartElement, slaPathElementIdentifier, strokeColor) =>
   return slaPath;
 };
 
+const getSlaLabel = (chartElement, slaPathElementIdentifier, fillColor) => {
+  const slaLabelElementIdentifier = `${slaPathElementIdentifier}-label`;
+  if (document.getElementById(slaLabelElementIdentifier)) {
+    return document.getElementById(slaLabelElementIdentifier);
+  }
+
+  const namespace = chartElement.namespaceURI;
+
+  const slaLabelText = document.createElementNS(namespace, 'text');
+  slaLabelText.id = slaLabelElementIdentifier;
+  slaLabelText.setAttributeNS(null, 'style', `fill: ${fillColor || SLA_COLOR};`);
+  slaLabelText.setAttributeNS(null, 'x', '10');
+
+  const textNode = document.createTextNode('');
+  slaLabelText.appendChild(textNode);
+
+  chartElement.querySelector('.layer.mean').appendChild(slaLabelText);
+
+  return slaLabelText;
+};
+
+const renderSlaPercentageLabel = (chartElement, slaPosition, slaPathElementIdentifier, fillColor) => {
+  const singleIssuesUnderSlaCount = [...chartElement.querySelectorAll('g.layer.issues circle.issue')].filter(
+    issue => issue.attributes.cy.value >= slaPosition
+  ).length;
+  const issuesInClustersUnderSlaCount = [...chartElement.querySelectorAll('g.layer.issue-clusters circle.cluster')]
+    .filter(issue => issue.attributes.cy.value >= slaPosition)
+    .map(cluster =>
+      Math.round(
+        Math.exp(
+          (((cluster.attributes.r.value - MIN_ISSUE_CLUSTER_RADIUS) *
+            (MIN_ISSUE_CLUSTER_COUNT - log10(MIN_ISSUE_CLUSTER_COUNT))) /
+            ISSUE_CLUSTER_RADIUS_FACTOR +
+            log10(MIN_ISSUE_CLUSTER_COUNT)) *
+            Math.log(10)
+        )
+      )
+    )
+    .reduce((a, b) => a + b, 0);
+  const totalIssuesCount = document.querySelector('.js-chart-snapshot-issue-count').innerText.replace(',', '');
+  const percentUnderSla = Math.round(
+    ((singleIssuesUnderSlaCount + issuesInClustersUnderSlaCount) / totalIssuesCount) * 100
+  );
+
+  const slaLabel = getSlaLabel(chartElement, slaPathElementIdentifier, fillColor);
+
+  slaLabel.innerHTML = `${percentUnderSla}%`;
+  slaLabel.setAttributeNS(null, 'y', slaPosition + 12);
+};
+
 const renderSlaLine = (sla, chartElement, changingSlaValue = sla) => {
   const ticsVals = getChartTics(chartElement);
 
@@ -34,6 +90,7 @@ const renderSlaLine = (sla, chartElement, changingSlaValue = sla) => {
     const slaPath = getBasicSlaPath(chartElement, pathId, strokeColor);
     const slaPosition = getChartLinePosition(ticsVals, value);
     slaPath.setAttributeNS(null, 'd', `M0,${slaPosition} L${lineLength},${slaPosition}`);
+    renderSlaPercentageLabel(chartElement, slaPosition, pathId, strokeColor);
   };
 
   renderSvgLine({
@@ -50,8 +107,11 @@ const renderSlaLine = (sla, chartElement, changingSlaValue = sla) => {
       strokeColor: CHANGING_SLA_COLOR,
     });
   } else {
-    const el = document.getElementById(changingSlaPathId);
-    if (el) el.remove();
+    const path = document.getElementById(changingSlaPathId);
+    if (path) path.remove();
+
+    const text = document.getElementById(`${changingSlaPathId}-label`);
+    if (text) text.remove();
   }
 };
 
