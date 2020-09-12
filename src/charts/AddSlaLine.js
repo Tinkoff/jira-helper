@@ -9,6 +9,10 @@ const MIN_ISSUE_CLUSTER_COUNT = 2;
 const MIN_ISSUE_CLUSTER_RADIUS = 6;
 const ISSUE_CLUSTER_RADIUS_FACTOR = 9;
 
+const SLA_QUERY_PARAMETER = 'sla';
+
+const SLA_INPUT_FIELD_ID = 'jira-helper-sla-input';
+
 const log10 = x => Math.log(x) / Math.log(10);
 
 const getBasicSlaPath = (chartElement, slaPathElementIdentifier, strokeColor) => {
@@ -136,7 +140,7 @@ const renderSlaInput = (initialValue, canEdit, addEventListener, { onChange, onS
         <div class="field-group">
             <label>SLA</label>
             <div style="display: flex">
-                <input id="jira-helper-sla-input" type="number" class="text" style="width: 50px; margin-right: 4px;">
+                <input id="${SLA_INPUT_FIELD_ID}" type="number" class="text" style="width: 50px; margin-right: 4px;">
                 ${
                   canEdit
                     ? '<input type="submit" class="aui-button aui-button-primary" id="jira-helper-sla-save" value="Save" disabled>'
@@ -149,7 +153,7 @@ const renderSlaInput = (initialValue, canEdit, addEventListener, { onChange, onS
 
   optionsColumn.appendChild(slaInputWrapper);
 
-  const slaInput = document.getElementById('jira-helper-sla-input');
+  const slaInput = document.getElementById(SLA_INPUT_FIELD_ID);
   slaInput.value = initialValue;
 
   const saveButton = document.getElementById('jira-helper-sla-save');
@@ -191,13 +195,26 @@ export default class extends PageModification {
     await this.waitForElement('.tick', chartElement);
 
     let slaValue = Number(value);
-    let changingValue = slaValue;
+
+    window.onpopstate = () => {
+      const slaQueryParam = this.getSearchParam(SLA_QUERY_PARAMETER);
+      if (slaQueryParam !== null) {
+        document.getElementById(SLA_INPUT_FIELD_ID).value = slaQueryParam;
+        renderSlaLine(slaValue, chartElement, Number(slaQueryParam));
+      }
+    };
+
+    const slaQueryParam = this.getSearchParam(SLA_QUERY_PARAMETER);
+    let changingValue = slaQueryParam !== null ? Number(slaQueryParam) : slaValue;
 
     renderSlaLine(slaValue, chartElement, changingValue);
     renderSlaLegend();
-    renderSlaInput(slaValue, canEdit, this.addEventListener, {
+    renderSlaInput(changingValue, canEdit, this.addEventListener, {
       onChange(newValue) {
         changingValue = newValue;
+        const queryParams = new URLSearchParams(window.location.search);
+        queryParams.set(SLA_QUERY_PARAMETER, newValue);
+        window.history.pushState(window.history.state, null, `?${queryParams.toString()}`);
         renderSlaLine(slaValue, chartElement, changingValue);
       },
       onSave: () => {
