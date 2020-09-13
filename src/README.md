@@ -18,18 +18,16 @@ Convenient when you have lots of swimlanes, i.e. when you have swimlanes based o
 
 ## Flag on Issue panel
 
-На board по клику правой кнопкой мыши можно добавлять красный флажок к задаче.
+When in board view, right click on an issue to flag it.
 
-Данный флажок не показывается на панели задач (`jira.server.com/browse/PROJECTID-0001`).
+By default, this flag won’t be shown in issue view (`jira.server.com/browse/PROJECTID-0001`)
 
-Плагин **jira-helper** добавляет отображение флажка на панели задач рядом сo значением поля `priority`
+Jira-helper extension adds flag display for issue view, right next to `priority` field.
 
-Пример JIRA Cloud:
-
+JIRA Cloud example:
 ![issue flag jira cloud](https://github.com/TinkoffCreditSystems/jira-helper/raw/images/features/jirahelper_issue_flag.gif)
 
-Пример JIRA v7.\*.\*:
-
+JIRA v7.*.* example:
 ![issue flag jira 7](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_issue_flag_jira7.gif)
 
 
