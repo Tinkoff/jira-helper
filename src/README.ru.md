@@ -181,9 +181,12 @@ _Control Chart - это наверное то, за что можно любит
 
 Кроме этого используя эту линию, без использования сохранения, вы можете анализировать время выполнения и граничные условия на графике.
 
-SLA показывает значение в днях.
+Значение SLA указано в днях.
 
 ![sla-line for control chart](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_sla_for_controlchart.gif)
+
+А возле линии SLA вы видите процентиль, рассчитанный по количеству событий на контрольной диаграмме.
+![sla-line for control chart](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/control_chart_sla_with_percentile.png)
 
 ## Identity request from Jira-Helper
 
@@ -203,10 +206,16 @@ Your administrators of JIRA can identify requests from jira-helper by the specia
 Выбирите функцию в выпадающем поле `Ruler`, рядом с полем `SLA`, и укажите исследуемую размерность.
 
 _На картинке использована функция Фиббоначи, размерность "6"_
-![Ruller for Control chart](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_controlchart_rule.png)
+![Fibonacci distribution](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/control_chart_ruler_selected_type.png)
 
 Можем видеть как время затраченное на выполнение здач **не** соответсвует размерности, функция Фиббоначи не подходит для оценки задач.
-![Fibonacci distribution](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_controlchart_rule_sp.png)
+![Fibonacci distribution](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/control_chart_ruler_switch_on.png)
 
 ## Blurring of secret data
 
+Если вам необходимо скрыть данные о ваших задачах, но показать модель вашей визуализации коллегам,
+то вы можете размыть эти данные через контекстное меню включив функцию "blur secret data"
+
+![the blurring of secret data](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/call_context_menu_use_blurre_secret_data.png)
+
+![secret data is blurred](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/blurred_secret_data.png)
