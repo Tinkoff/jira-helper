@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/TinkoffCreditSystems/jira-helper.svg?branch=master)](https://travis-ci.com/TinkoffCreditSystems/jira-helper)
+
 # Расширение для Google Chrome
 
 ## Функционал расширения "jira-helper"

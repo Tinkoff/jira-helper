@@ -1,4 +1,4 @@
-# Extension for Google Chrome
+[![Build Status](https://travis-ci.com/TinkoffCreditSystems/jira-helper.svg?branch=master)](https://travis-ci.com/TinkoffCreditSystems/jira-helper)
 
 ## “jira-helper” features
 
