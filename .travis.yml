@@ -1,7 +1,14 @@
 language: node_js
 node_js:
   - "node"
-script:
-  - npm run lint
-  - npm run build
-  - npm run test
+jobs:
+  include:
+    - stage: "Compile"
+      name: "Compile Packages and Dependencies"
+      script: npm run build
+    - stage: "Tests"
+      name: "Unit Tests"
+      script: npm run test
+    - stage: "Code Quality"
+      name: "Code Quality Analysis"
+      script: npm run lint
