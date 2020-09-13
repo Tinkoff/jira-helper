@@ -1,20 +1,17 @@
-# Функционал расширения "jira-helper"
+# “jira-helper” features
 
 
-## Swimline Chart Bar
+## Swimlane Chart Bar
 
-- Код функционала [./swimlane/SwimlaneStats.*](./swimlane)
+Source code [./swimlane/SwimlaneStats.*](./swimlane)
 
-Работает в заголовках Swimlane.
+Found in Swimlane titles
 
-При наведении курсора мыши на bar всплывает подсказка (title) в которой показывается название
-ассоциированной колонки доски с bar и количество задач в этой колонке для этого swimline.
+Shows column name and task count on bar hover. Title and count are shown for this swimlane only.
 
 ![Chart Bar](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_ChartBar.gif)
 
-Удобно использовать при большом количестве swimlane.
-
-Например, когда swimlane используются для отображения задач по Epic или Stories или Assigne.
+Convenient when you have lots of swimlanes, i.e. when you have swimlanes based on Epics, Stories or Assignees.
 
 ![Settings Base swimlane on](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_swimlane_base_swimlanes_on.gif)
 
