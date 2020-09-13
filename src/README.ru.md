@@ -185,15 +185,9 @@ _Control Chart - это наверное то, за что можно любит
 
 ![sla-line for control chart](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_sla_for_controlchart.gif)
 
-А возле линии SLA вы видите процентиль, рассчитанный по количеству событий на контрольной диаграмме.
+А возле линии SLA, начиная с версии [2.6.0](https://github.com/TinkoffCreditSystems/jira-helper/releases/tag/2.6.0)
+вы можете видите процентиль, рассчитанный по количеству событий на контрольной диаграмме.
 ![sla-line for control chart](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/control_chart_sla_with_percentile.png)
-
-## Identity request from Jira-Helper
-
-Your administrators of JIRA can identify requests from jira-helper by the special request header
-"browser-plugin: jira-helper/{version}".
-
-![jira-helper-reques](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jira-helper-request_300px.png)
 
 ## Ruler of measuring for control chart
 
@@ -218,4 +212,13 @@ _На картинке использована функция Фиббонач�
 
 ![the blurring of secret data](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/call_context_menu_use_blurre_secret_data.png)
 
+Результат
 ![secret data is blurred](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/blurred_secret_data.png)
+
+
+## Identity request from Jira-Helper
+
+Your administrators of JIRA can identify requests from jira-helper by the special request header
+"browser-plugin: jira-helper/{version}".
+
+![jira-helper-reques](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jira-helper-request_300px.png)

@@ -180,15 +180,10 @@ And near the SLA line, you see percentile counted by number of event on Control 
 
 ![sla-line for control chart](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_sla_for_controlchart.gif)
 
-And near the SLA line, you see percentile counted by number of event on Control Chart.
+And From version [2.6.0](https://github.com/TinkoffCreditSystems/jira-helper/releases/tag/2.6.0)
+you can see near the SLA line the percentile, counted by number of events on the Control Chart
 ![sla-line with percentile for control chart](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/control_chart_sla_with_percentile.png)
 
-## How to identify jira-helper requests
-
-Your JIRA administrators can identify jira-helper requests
-by the special request header "browser-plugin: jira-helper/{version}".
-
-![jira-helper-reques](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jira-helper-request_300px.png)
 
 ## Control Chart Ruler
 
@@ -211,4 +206,13 @@ If you need to hide data about your tasks, but show the model of your visualizat
 
 ![the blurring of secret data](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/call_context_menu_use_blurre_secret_data.png)
 
+Result
 ![secret data is blurred](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/blurred_secret_data.png)
+
+
+## How to identify jira-helper requests
+
+Your JIRA administrators can identify jira-helper requests
+by the special request header "browser-plugin: jira-helper/{version}".
+
+![jira-helper-reques](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jira-helper-request_300px.png)
