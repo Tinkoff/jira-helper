@@ -53,7 +53,7 @@ Tetris-planning allows you to specify separate size measures for different speci
 >
 >The approach itself was popularised by Max Dorofeev in [one of his speeches](https://www.youtube.com/watch?v=fsqXlW_m0Bo&t=1365s)
 >
->However, there are critics of this approach [here](https://filipyev.ru/2020/01/04/planirovanie-v-agile/)
+>However, there are critics of this approach [here](https://www.youtube.com/watch?v=NPIKAvjuJXc)
 
 When using JIRA Scrum-boards you have a feature to add issues to Sprint backlogs.
 
