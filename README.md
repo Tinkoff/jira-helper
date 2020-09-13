@@ -12,7 +12,7 @@ _version 2.6.0_
 - [WIP-limit for Swimlane](./src/README.md#wip-limits-for-swimlanes)
 - [Personal WIP-limit](./src/README.md#wip-limit-for-person)
 - [SLA-line for Control Chart with percentile](./src/README.md#sla-line-for-control-chart)
-- [Overlay Measurement Ruler on the Control Chart](./src/README.md#ruler-of-measuring-for-control-chart)
+- [Overlay Measurement Ruler on the Control Chart](./src/README.md#control-chart-ruler)
 - [The blurring of secret data](./src/README.md#blurring-of-secret-data)
 
 ## Ведение задач проекта
