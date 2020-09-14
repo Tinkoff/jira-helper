@@ -44,17 +44,21 @@ const getSlaLabel = (chartElement, slaPathElementIdentifier, fillColor) => {
   const slaLabelText = document.createElementNS(namespace, 'text');
   slaLabelText.id = slaLabelElementIdentifier;
   slaLabelText.setAttributeNS(null, 'style', `fill: ${fillColor || SLA_COLOR};`);
-  slaLabelText.setAttributeNS(null, 'x', '10');
 
-  const textNode = document.createTextNode('');
-  slaLabelText.appendChild(textNode);
+  ['-1.25em', '1.25em'].forEach(dy => {
+    const tspan = document.createElementNS(namespace, 'tspan');
+    tspan.setAttributeNS(null, 'x', '10');
+    tspan.setAttributeNS(null, 'dy', dy);
+    tspan.appendChild(document.createTextNode(''));
+    slaLabelText.appendChild(tspan);
+  });
 
   chartElement.querySelector('.layer.mean').appendChild(slaLabelText);
 
   return slaLabelText;
 };
 
-const renderSlaPercentageLabel = (chartElement, slaPosition, slaPathElementIdentifier, fillColor) => {
+const renderSlaPercentageLabel = (chartElement, value, slaPosition, slaPathElementIdentifier, fillColor) => {
   const singleIssuesUnderSlaCount = [...chartElement.querySelectorAll('g.layer.issues circle.issue')].filter(
     issue => issue.attributes.cy.value >= slaPosition
   ).length;
@@ -79,7 +83,8 @@ const renderSlaPercentageLabel = (chartElement, slaPosition, slaPathElementIdent
 
   const slaLabel = getSlaLabel(chartElement, slaPathElementIdentifier, fillColor);
 
-  slaLabel.innerHTML = `${percentUnderSla}%`;
+  slaLabel.firstChild.innerHTML = `${value}d`;
+  slaLabel.lastChild.innerHTML = `${percentUnderSla}%`;
   slaLabel.setAttributeNS(null, 'y', slaPosition + 12);
 };
 
@@ -94,7 +99,7 @@ const renderSlaLine = (sla, chartElement, changingSlaValue = sla) => {
     const slaPath = getBasicSlaPath(chartElement, pathId, strokeColor);
     const slaPosition = getChartLinePosition(ticsVals, value);
     slaPath.setAttributeNS(null, 'd', `M0,${slaPosition} L${lineLength},${slaPosition}`);
-    renderSlaPercentageLabel(chartElement, slaPosition, pathId, strokeColor);
+    renderSlaPercentageLabel(chartElement, value, slaPosition, pathId, strokeColor);
   };
 
   renderSvgLine({
