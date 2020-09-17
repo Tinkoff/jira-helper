@@ -1,209 +1,210 @@
-# Функционал расширения "jira-helper"
+# “jira-helper” features
 
 
-## Swimline Chart Bar
+## Swimlane Chart Bar
 
-- Код функционала [./swimlane/SwimlaneStats.*](./swimlane)
+Source code [./swimlane/SwimlaneStats.*](./swimlane)
 
-Работает в заголовках Swimlane.
-
-При наведении курсора мыши на bar всплывает подсказка (title) в которой показывается название
-ассоциированной колонки доски с bar и количество задач в этой колонке для этого swimline.
+Displays the number of tickets in every cell of the row on the swimlane bar hover.
 
 ![Chart Bar](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_ChartBar.gif)
 
-Удобно использовать при большом количестве swimlane.
-
-Например, когда swimlane используются для отображения задач по Epic или Stories или Assigne.
+Can be used to overview swimlane state when you have lots of swimlanes, i.e. when you have swimlanes based on Epics, Stories, or Assignees.
 
 ![Settings Base swimlane on](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_swimlane_base_swimlanes_on.gif)
 
 
 ## Flag on Issue panel
 
-На board по клику правой кнопкой мыши можно добавлять красный флажок к задаче.
+When in board view, right click on an issue to flag it.
 
-Данный флажок не показывается на панели задач (`jira.server.com/browse/PROJECTID-0001`).
+By default, this flag won’t be shown in issue view (`jira.server.com/browse/PROJECTID-0001`)
 
-Плагин **jira-helper** добавляет отображение флажка на панели задач рядом сo значением поля `priority`
+Jira-helper extension adds flag display for issue view, right next to `priority` field.
 
-Пример JIRA Cloud:
-
+JIRA Cloud example:
 ![issue flag jira cloud](https://github.com/TinkoffCreditSystems/jira-helper/raw/images/features/jirahelper_issue_flag.gif)
 
-Пример JIRA v7.\*.\*:
-
+JIRA v7.*.* example:
 ![issue flag jira 7](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_issue_flag_jira7.gif)
 
 
-## Template for Description
+## Task Description Template
 
-При редактировании поля `Description` во время создания задач и их редактирования, рядом с полем появляются две кнопки.
+Two buttons are added near the `Description` field in issue create/edit mode.
 
-При помощи которых можно сохранить Template для этого типа задач к себе в localStorage браузера (шаблон сохранится к на вашем компьютере).
+Use them to create a Template for this issue type. It’s stored locally in your browser so it isn’t shared with anyone.[More about localStorage](https://developers.google.com/web/tools/chrome-devtools/storage/localstorage)
 
 ![description template](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_description_template.gif)
 
 
-## Tetris-planning for Scrum
+## Scrum Tetris-planning
 
-Тетрис-планирование позволяет для разных специалистов указывать свой параметр размера задачи. 
+Tetris-planning allows you to specify separate size measures for different specialists on your team.
 
->Если в вашей команде есть специалисты программисты и специалисты по тестированию, и они работают только в рамках своего >специализированного колодца, то общая оценка по задаче будет затруднительна.
+>When your team has programmers and testers doing work strictly according to their job titles, maintaining a joint estimation might get tricky.
 >
->Это происходит потому, что специалисты из разных колодцев плохо понимают контекст друг друга.
+>This happens, because different specialists don’t usually understand each other that well.
 >
->Для решения этой проблемы можно воспользоваться техникой Тетрис-планирования.
+>Tetris-planning approach can be used to overcome that.
 >
->Такой подход был популяризирован Максимом Дорофеевым на [этом докладе](https://www.youtube.com/watch?v=fsqXlW_m0Bo&t=1365s)
+>The approach itself was popularised by Max Dorofeev in [one of his speeches](https://www.youtube.com/watch?v=fsqXlW_m0Bo&t=1365s)
 >
->Однако, есть и критика такого подхода: ["Как сейчас «неправильно планируют» в Agile"](https://filipyev.ru/2020/01/04/planirovanie-v-agile/)
+>However, there are critics of this approach [here](https://www.youtube.com/watch?v=NPIKAvjuJXc)
 
-При использовании Scrum-доскок в JIRA, у вас появляется возможность использовать объединение задач в Sprint.
+When using JIRA Scrum-boards you can add issues to the Sprint backlog.
 
-Стандартно JIRA предоставляет оценку только по одному выбранному значению, например по Story Points.
+By default, JIRA only allows you to use one estimation value, i.e. Story Points.
 
-Тогда, в заголовке Sprint будут видны суммы по Story Points от задач, которые еще не взяты в работу (_серые_), в работе (_синие_) и выполненные (_зеленые_).
+This way, the Sprint header will show three sums: not started issues (_gray_), in progress issues (_blue_), done issues (_green_).
 
 ![sprint head with story points](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_sprinthead_with_storypoints.png)
 
-Плагин **jira-helper** добавляет функционал позволяющий визуализировать оценку сразу по нескольким числовым параметрам.
+**Jira-helper** adds a feature to use several values to visualize estimations.
 
-Не важно, это будут Story Points, или любой другой численный Estimate.
+It doesn’t matter, whether they are Story Points or any other integer value.
 
-В бэклоге Scrum доски, для каждого Sprint в его заголовке появятся выбранные значения по нескольким выбранным параметрам.
+Now, Scrum Sprint backlog headers will display chosen values for the chosen parameters.
 
-В виде: `param name: (the sum of estimate in sprint)/(max sum of estimate)`
+They are displayed like this: `param name: (sum of this parameter estimations in the sprint)/(max sum of this estimate)`
 
-Где
-- `param name` - название параметра по которому считаеться оценка
-- `the sum of estimate in sprint` - сумма оценки по этому параметру для всех оценненных задач попавших в этот Sprint
-- `max sum of estimate` – максимально возомжная сумма для этого Sprint
+Where:
+- `param name` is the name of the parameter used for estimation
+- `sum of this parameter estimations in the sprint` is all this Sprint’s estimates by this parameter summed up
+- `max sum of this estimate` is the maximum possible value for this parameter for this Sprint
 
-В случае если `the sum of estimate in sprint` будет превышать `max sum of estimate` тег будет красного цвета - сигнализируя о том, что для данного Sprint по этому параметру больше нельзя добавлять задач.
+If `sum of this estimate in the sprint` is greater than `max sum of this estimate`, the tag will appear red to show that you shouldn’t add more tasks for this estimation parameter.
 
-В ином случае тег будет зеленого цвета.
+Otherwise, the tag will appear green.
 
-_"Board Settings (Scrum board) -> Estimates"_  Сохранять значение может только Администратор board.
+_"Board Settings (Scrum board) -> Estimates"_ Only the Board Administrator can save this setting.
 
 ![tetris planning](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_tetris_planning.gif)
 
 
-## Printing many stickers
+## Printing Multiple Stickers
 
-Используется для печати множества стикеров при помощи офисного лазерного принтера.
+This feature allows you to print lots of stickers using your office printer.
 
-![как использозвать печать](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_jql_print.gif)
+![how to use printing](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_jql_print.gif)
 
-Для печати стикеров на обычной бумаге формата A4 можно воспользоваться [шаблоном](chrome-extension://egmbomekcmpieccamghfgjgnlllgbgdl/options.html)
+Use the [template](chrome-extension://egmbomekcmpieccamghfgjgnlllgbgdl/options.html) to print post-its on an ordinary A4 paper sheet.
 
-![шаблон печати стикеров](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_jql_print_template.gif)
+![template for stickers](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_jql_print_template.gif)
 
-Шаблон для печати использует 
-* шрифты [GOST A](https://ffont.ru/font/gost-type-a) и [GOST B](https://ffont.ru/font/gost-type-b)
-* особую форму отображения номера задачи снизу стикера
-* цветное отображение связанного эпика задачи (в примере ниже Epic Name: "Песни")
+The print template uses
+* [GOST A](https://ffont.ru/font/gost-type-a) and [GOST B](https://ffont.ru/font/gost-type-b) fonts
+* a specific way of displaying the issue number at the bottom of the post-it
+* color coding of the associated Epic (in the example below, the Epic name is “Песни”)
 
-Это позволяет удобно использовать напечатанные стикеры на доске таким образом
+This lets you conveniently use the post-its like this
 ![sample position a stickers on a desck](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_jql_print_stiker_position_on_desk_w600.png)
 
 
 ## WIP-limits for several columns (CONWIP)
 _WIP – work in progress_
 
-В JIRA можно добавлять wip-ограничения только отдельно на каждую колонку.
+By default, JIRA allows you to set a limit for a column but doesn’t allow you to combine columns under a shared limit.
 
-Для визаулизации Kanban-системы необходима возможность сделать [wip-ограничение на несколько колонок](http://kanbanguide.ru/essential-condenced-kanban-guide/).
+However, to visualize a Kanban system, we often need [combined WIP-limit constraints](https://www.youtube.com/watch?v=TvPzFIs-ycQ).
 
-**jira-helper** добавляет такой функционал.
+**Jira-helper** enables you to do this.
 
-Чтобы им воспользоваться, необходимо в настройках доски указать какие колонки будут использовать одно wip-ограничение.
+Set it up in the board settings by choosing columns which will share the constraint.
 
-Сохранять значение может только Администратор board.
-
-_"Board Settings -> Columns"_
+_"Board Settings -> Columns"_ Only the Board Administrator can save this setting.
 
 ![settings wip-limit for column](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_wip_limit_settings_columns.gif)
 
-При этом, можно пользоваться функциональностью ограничений колонок предоставленной JIRA!
+You are still able to use the default JIRA WIP-limits, while using the combined WIP-limits.
 
-На board визаулизация ограничений будет поверх заголовков колонок.
+Combined constraint will be displayed above the column titles.
 
-При нарушении wip-limit background колонки подсветиться красным цветом.
+If the limit is violated, the column background will turn red.
 
 ![wip-limit of column](https://github.com/TinkoffCreditSystems/jira-helper/blob/images/features/jirahelper_wip_limit_columns.gif)
 
-С версии [2.1.0](https://github.com/TinkoffCreditSystems/jira-helper/releases/tag/2.1.0) возможно учитывать или не учитывать запросы типа sub-task в CONWIP лимитах.
+Versions [2.1.0](https://github.com/TinkoffCreditSystems/jira-helper/releases/tag/2.1.0)
+und above let you choose whether sub-tasks are counted in the combined WIP-limits.
 
-Для этого нужно выбрать соответствующую настройку "Column Constraint"
+Use the “Column constraint” setting to select if sub-tasks are counted.
 ![sub-task & CONWIP](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_CONWIP_with_sub-task.gif)
 
 
 ## WIP-limits for Swimlanes
 
-Канбан-система может использовать разные ограничения WIP. В том числе и ограничения на swimlane.
+Kanban-systems may use different types of WIP-limits, including swimlane limits.
 
-Существуют swimlane особого типа, например Expedite, для которых WIP-ограничение действует только то, которое указано на swimlane.
+There are certain types of swimlanes which are bound only by their own WIP-constraints (i.e. Expedite).
 
-При этом ограничения на колонках не учитывают задачи которые находятся в Expedite колонке.
+This way, tickets in an expedite swimlane are not accounted for in column WIP.
 
-При настройке wip-ограничений для swimlane посредством **jira-helper** вы можете указать какие swimlane у вас являются особенными и задачи в них не нужно использовать в подсчете количества задач для общего ограничения на колонках.
+When setting up WIP-limits using **jira-helper**, you can specify which swimlanes are not subject to the column constraints.
 
-Сохранять значение может только Администратор board.
-
-_"Board Settings -> Swimlane"_
+_"Board Settings -> Swimlane"_ Only the Board Administrator can save this setting
 ![swimlane wip-limits](https://github.com/TinkoffCreditSystems/jira-helper/blob/images/features/jirahelper_wip_limit_settings_swim_ex.gif)
 
-Используя комбинацию wip-ограничений колонок и swimlane вы можете визуализировать управление сложной системой с разными типами и классами задач.
+Using a combination of different types of WIP-constraints, you can visualize a very complex delivery system.
 
-## WIP-limit for Person
+## WIP-limits for Individual Team Members
 
-Использование ограничение на человека используется в прото-Канбан системе.
+Per pesrson WIP-limits are used in proto-Kanban systems.
 
-Вы можете установить WIP-limit на человека если войдете в настройки колонок на доске.
+You can set per person WIP-limits in Column settings of the board.
 
-При этом, вы можете указать в каких колонках и swimline учитывать какой вам нужно WIP-лимит на человека.
+You can also set specific columns and swimlanes, which will be subject to this person’s WIP-limit.
 
 ![swimlane wip-limits](https://github.com/TinkoffCreditSystems/jira-helper/blob/images/features/WIP-limit-personal.gif)
 
 
 ## SLA-line for Control Chart
 
-_Control Chart - это наверное то, за что можно любить JIRA._
+_Control Chart might just be the reason to love JIRA._
 
-[Доклад "Control Chart в JIRA, все ее тайны" с конференции https://kanbaneurasia.com/](https://www.dropbox.com/sh/wkuk3n1xx4yld0w/AADvVyFtucbRpQp0wiiiOUkZa?dl=0&fbclid=IwAR3NIhkRDAGytpuTmmqbjpq7eC-01Ko3KLVM8szZmS3VNsW44qlZq2tzXsQ&preview=%D0%9F%D0%B0%D0%B2%D0%B5%D0%BB+%D0%90%D1%85%D0%BC%D0%B5%D1%82%D1%87%D0%B0%D0%BD%D0%BE%D0%B2+-+Control+Chart+%D0%B2+JIRA%2C+%D0%B2%D1%81%D0%B5+%D0%B5%D0%B5+%D1%82%D0%B0%D0%B9%D0%BD%D1%8B.pdf)
+[”JIRA Control Chart and it’s mysteries” speech (rus. lang) at https://kanbaneurasia.com/](https://www.dropbox.com/sh/wkuk3n1xx4yld0w/AADvVyFtucbRpQp0wiiiOUkZa?dl=0&fbclid=IwAR3NIhkRDAGytpuTmmqbjpq7eC-01Ko3KLVM8szZmS3VNsW44qlZq2tzXsQ&preview=%D0%9F%D0%B0%D0%B2%D0%B5%D0%BB+%D0%90%D1%85%D0%BC%D0%B5%D1%82%D1%87%D0%B0%D0%BD%D0%BE%D0%B2+-+Control+Chart+%D0%B2+JIRA%2C+%D0%B2%D1%81%D0%B5+%D0%B5%D0%B5+%D1%82%D0%B0%D0%B9%D0%BD%D1%8B.pdf)
 
-**jira-helper** добавляет специальную линию SLA на график Control Chart.
+**jira-helper** introduces a Service Level Agreement (SLA) line to your Control Chart.
 
-Используя эту линию вы можете задать желаемый уровень времени обслуживания выполнения задач для вашего сервиса, команды.
+This line allows you to specify the desired terms for your team’s Service Level Agreement.
 
-Сохранять значение может только Администратор board.
+Only the Board Administrator can save this setting.
 
-Кроме этого используя эту линию, без использования сохранения, вы можете анализировать время выполнения и граничные условия на графике.
+Use this line without saving to analyze lead times of your system on the fly.
 
-SLA показывает значение в днях.
+SLA value is displayed in days.
 
 ![sla-line for control chart](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_sla_for_controlchart.gif)
 
-## Identity request from Jira-Helper
+And from version [2.6.0](https://github.com/TinkoffCreditSystems/jira-helper/releases/tag/2.6.0), percentile of issues is displayed near the SLA-line. It is counted by the number of events on the Control Chart.
+![sla-line with percentile for control chart](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/control_chart_sla_with_percentile.png)
 
-Your administrators of JIRA can identify requests from jira-helper by the special request header
-"browser-plugin: jira-helper/{version}".
+
+## Control Chart Scale
+
+You can analyze issue sizes using the control chart estimations scale. For example, you can check whether you can use different measurement scales (i.e. Fibonacci)
+
+Use the dropdown list near the SLA field to choose the scale you want to check.
+
+_The picture shows the Fibonacci scale with a size value of "6"._
+![Fibonacci distribution](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/control_chart_ruler_selected_type.png)
+
+We can see that the leadtimes do **not** correspond to the chosen scale.
+This way we can say that Fibonacci scale doesn't fit to estimate the work in this system.
+![Fibonacci distribution](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/control_chart_ruler_switch_on.png)
+
+## Secret data blurring
+
+Sometimes you need to hide data about your tasks, still showing your visualization to colleagues. To do this, you can blur this data through the context menu by enabling the "blur secret data" function
+
+![the blurring of secret data](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/call_context_menu_use_blurre_secret_data.png)
+
+Result
+![secret data is blurred](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/blurred_secret_data.png)
+
+
+## How to identify jira-helper requests
+
+Your JIRA administrators can identify **jira-helper** requests
+by the special request header "browser-plugin: jira-helper/{version}".
 
 ![jira-helper-reques](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jira-helper-request_300px.png)
-
-## Ruler of measuring for control chart
-
-Функция наложения линейки измерений на контрольную карту.
-
-Для возможности проанализировать размерность задач можно использовать линейку измерений.
-
-Чтобы проверить гипотизу о возможности использования различных измерений, например функции Фиббоначи или иных функций для оценки задач вашего проекта, можно воспользоваться данной функциональностью.
-
-Выбирите функцию в выпадающем поле `Ruler`, рядом с полем `SLA`, и укажите исследуемую размерность.
-
-_На картинке использована функция Фиббоначи, размерность "6"_
-![Ruller for Control chart](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_controlchart_rule.png)
-
-Можем видеть как время затраченное на выполнение здач **не** соответсвует размерности, функция Фиббоначи не подходит для оценки задач.
-![Fibonacci distribution](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_controlchart_rule_sp.png)
