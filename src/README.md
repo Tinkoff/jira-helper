@@ -192,7 +192,7 @@ We can see that the leadtimes do **not** correspond to the chosen scale.
 This way we can say that Fibonacci scale doesn't fit to estimate the work in this system.
 ![Fibonacci distribution](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/control_chart_ruler_switch_on.png)
 
-## The blurring of secret data
+## Secret data blurring
 
 Sometimes you need to hide data about your tasks, still showing your visualization to colleagues. To do this, you can blur this data through the context menu by enabling the "blur secret data" function
 

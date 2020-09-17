@@ -13,113 +13,102 @@ _version 2.6.0_
 - [Personal WIP-limit](./src/README.md#wip-limit-for-person)
 - [SLA-line for Control Chart with percentile](./src/README.md#sla-line-for-control-chart)
 - [Overlay Measurement Ruler on the Control Chart](./src/README.md#control-chart-ruler)
-- [The blurring of secret data](./src/README.md#the-blurring-of-secret-data)
+- [Secret data blurring](./src/README.md#the-blurring-of-secret-data)
 
-## Ведение задач проекта
+## Issuing project tasks
 
-Все задачи заводятся на [github issues](https://github.com/TinkoffCreditSystems/jira-helper/issues)
+All tasks are created at [github issues](https://github.com/TinkoffCreditSystems/jira-helper/issues)
 
-Перед добавлением задачи убедитесь, что подобной задачи еще не добавляли.
-Обязательно проверьте закрытые задачи, возможно к готовящейся версии такая задача уже добавлена.
+Before creating a task, please make sure that a similar task was not created earlier. Please be sure to check closed tasks - there is a chance that your request has already been fulfilled and will be released soon.
 
 
-### Для добавления нового функционала
+### Requesting a feature
 
-[Создайте новую задачу](https://github.com/TinkoffCreditSystems/jira-helper/issues/new)
+[Create a new task](https://github.com/TinkoffCreditSystems/jira-helper/issues/new)
 
-После описание задачи, добавьте только такие атрибуты:
+After adding description, please specify the following attributes only:
 
 - Labels: `feature`
 - Project: `jira-helper`
 
 
-### Если необходимо добавить исправление
+### Requesting a fix
 
-_Когда функционал работает не так, как ожидаете._
+_In case some feature doesn’t operate as expected._
 
-[Создайте новую задачу](https://github.com/TinkoffCreditSystems/jira-helper/issues/new)
+[Create a new task](https://github.com/TinkoffCreditSystems/jira-helper/issues/new)
 
-После описание задачи, добавьте только такие атрибуты:
+After adding description, please specify the following attributes only:
 
-- Labels: `invalid`, [`cloud jira`, `jira 7`, `jira 8`] – укажите в каких версиях JIRA воспроизводится проблема.
+- Labels: `invalid`, [`cloud jira`, `jira 7`, `jira 8`] – specify in which JIRA version the problem is reproduced.
 - Project: `jira-helper`
 
 
 ### Добавить описание проблемы (бага)
 
-[Создайте новую задачу](https://github.com/TinkoffCreditSystems/jira-helper/issues/new)
+[Create a new task](https://github.com/TinkoffCreditSystems/jira-helper/issues/new)
 
-После описание задачи, добавьте только такие аттрибуты:
+After adding description, please specify the following attributes only:
 
-- Labels: `bug`, [`cloud jira`, `jira 7`, `jira 8`] – укажите в каких версиях JIRA воспроизводится проблема.
+- Labels: `bug`, [`cloud jira`, `jira 7`, `jira 8`] – specify in which JIRA version the problem is reproduced.
 - Project: `jira-helper`
 
 
-### Labels общий список используемых labels
+### List of most often used labels
 
-|   labels     |    Значение                                                               |
+|   labels     |    Meaning                                                               |
 |--------------|:--------------------------------------------------------------------------|
-| `feature`    | новый функционал                                                          |
-| `invalid`    | функционал работает не так как ожидается                                  |
-| `bug`        | проблема, ошибка - обязательно указывать label версии где воспроивзодится |
-| `jira 7`     | воспроизводится в версии JIRA 7.x.x                                       |
-| `jira 8`     | воспроизводится в версии JIRA 8.x.x                                       |
-| `cliud jira` | воспроизводится в версии Cloud JIRA                                       |
+| `feature`    | new feature                                                          |
+| `invalid`    | a feature doesn’t work as expected                                  |
+| `bug`        | a problem/error, please be sure to specify a JIRA version label, where one could reproduce it |
+| `jira 7`     | reproducible in JIRA 7.x.x                                       |
+| `jira 8`     | reproducible in JIRA 8.x.x                                       |
+| `cloud jira` | reproducible in JIRA Cloud                                       |
 
 
-## Установка расширения для разработки
+## Installing the extension for development purposes
 
-Выполнить:
+Execute:
 
 ```
 npm run bootstrap
 npm run dev
 ```
 
-В Chrome:
+In Chrome:
 
-Открыть меню, выбрать "Дополнительные инструменты",
-и в подменю выбрать ["Расширения"](chrome://extensions/)
+Open the menu, choose “More tools”, then ["Extensions"](chrome://extensions/)
 
-На панели ["Расширения"](chrome://extensions/) включить "Режим разработчика"
+On the ["Extensions"](chrome://extensions/) page toggle “Developer mode”, press “Load unpacked” in the appeared menu.
 
-После появления дополнительного меню, выбрать в нём
-"Загрузить распакованное расширение"
-
-Выбрать папку куда была произведена сборка `~/jira-helper/dist`.
-
-После этого добавиться плагин в Chrome.
+Choose the folder where the extension was built, `~/jira-helper/dist`.
 
 
-### Во время разработки
+### During development
 
-После изменения кода, webpack автоматически производит замену кода в папке `dist`.
+When code changes Webpack will automatically update the codebase in the `dist` folder.
 
-Поэтому на панели ["Расширения"](chrome://extensions/) нужно нажать
-на кнопку "Обновление" (в виде круглой стрелки).
+Press “Update” in the ["Extensions"](chrome://extensions/) developer menu  and then reload the page, where the extension is being tested.
 
-И перезагрузить web-страницу, на которой идет проверка, нажав `F5`.
 
-### Ведение ветки и commit-ов
+### Maintaining a git branch and git commits
 
-Название ветки должно начинаться с номера задачи с которой она связана
+The branch name should start with an associated task number.
 
-Пример: `2-title-issue`, где префикс `2` – это номер задачи, обязателен.
+Example: `2-title-issue`, where `2` is the mandatory task number.
 
-В каждом `commit` обязательно добавляйте номер задачи с которым он связан
+Every `commit` should have a task number associated with it.
 
-Пример: `[#15] rename *.feature to *.ru.feaute`
+Example: `[#15] rename *.feature to *.ru.feature`
 
-Названия веток и commit-ы пишем на `english` языке.
+Please use `english` language only to name branches and commits.
 
-## Публикация расширения
+## Publishing information
 
-Официальное расширение публикуется в ["Chrome WebStore"](https://chrome.google.com/webstore/detail/jira-helper/egmbomekcmpieccamghfgjgnlllgbgdl)
+The official version of the extension is published in ["Chrome WebStore"](https://chrome.google.com/webstore/detail/jira-helper/egmbomekcmpieccamghfgjgnlllgbgdl)
 
-Публикация происходит после [сборки релиза на github](https://github.com/TinkoffCreditSystems/jira-helper/releases)
+The extension is published after the release [is assembled at github](https://github.com/TinkoffCreditSystems/jira-helper/releases)
 
-Версия релиза совпадает с версией приложения в [package.json](./package.json)
+Release version is the same as the application version in package.json  [package.json](./package.json) and the version published in ["Chrome WebStore"](https://chrome.google.com/webstore/detail/jira-helper/egmbomekcmpieccamghfgjgnlllgbgdl)
 
-Этот же номер версии будет соответсвовать номеру пубикуемого в ["Chrome WebStore"](https://chrome.google.com/webstore/detail/jira-helper/egmbomekcmpieccamghfgjgnlllgbgdl)
-
-_Может использоватся в Chrome [version >= 55](./src/manifest.json)_
+_Minimum required Chrome [version is <= 55](./src/manifest.json)_
