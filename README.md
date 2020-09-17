@@ -44,7 +44,7 @@ After adding description, please specify the following attributes only:
 - Project: `jira-helper`
 
 
-### Добавить описание проблемы (бага)
+### Adding a description for a bug/problem
 
 [Create a new task](https://github.com/TinkoffCreditSystems/jira-helper/issues/new)
 
