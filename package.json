@@ -34,6 +34,7 @@
   "scripts": {
     "bootstrap": "npm i --no-save",
     "build": "cross-env NODE_ENV=production webpack -p --config webpack/webpack.config.prod.js",
+    "prod": "npm run build && zip -r dist.zip ./dist",
     "clear": "rm -rf dist",
     "dev": "cross-env NODE_ENV=development webpack -d --config webpack/webpack.config.dev.js",
     "lint": "lint-staged"
