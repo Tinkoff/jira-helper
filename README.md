@@ -111,4 +111,4 @@ The extension is published after the release [is assembled at github](https://gi
 
 Release version is the same as the application version in package.json  [package.json](./package.json) and the version published in ["Chrome WebStore"](https://chrome.google.com/webstore/detail/jira-helper/egmbomekcmpieccamghfgjgnlllgbgdl)
 
-_Minimum required Chrome [version is <= 55](./src/manifest.json)_
+_Minimum required Chrome [version is >= 55](./src/manifest.json)_
