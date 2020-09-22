@@ -1,8 +1,8 @@
 import map from '@tinkoff/utils/array/map';
 import each from '@tinkoff/utils/array/each';
 import mapObj from '@tinkoff/utils/object/map';
-import isEmpty from '@tinkoff/utils/is/empty';
 import filterObj from '@tinkoff/utils/object/filter';
+import isEmpty from '@tinkoff/utils/is/empty';
 import compose from '@tinkoff/utils/function/compose';
 import { PageModification } from '../shared/PageModification';
 import { getSettingsTab } from '../routing';
@@ -11,6 +11,8 @@ import { BOARD_PROPERTIES } from '../shared/constants';
 import style from './style.css';
 import { getRandomString } from '../shared/utils';
 import { generateColorByFirstChars } from './utils';
+
+const ACTIVE_GROUP_COLUMN_COLOR = '#ff5630';
 
 export default class extends PageModification {
   async shouldApply() {
@@ -50,15 +52,18 @@ export default class extends PageModification {
     this.wipLimits = wipLimits;
 
     this.appendBtnsBeforeColumnTable();
-    this.modifyColumns();
     this.onDOMChange('#columns', () => {
       this.appendBtnsBeforeColumnTable();
     });
+
+    this.modifyColumns();
   }
 
   modifyColumns() {
     Object.entries(this.wipLimits || {}).forEach(([groupId, groupData]) => {
       const { columns = [], max } = groupData;
+
+      if (isEmpty(columns)) return;
 
       this.appendMaxOnColumn(columns, groupId, max);
       this.colorizeColumns(columns, groupId);
@@ -164,6 +169,10 @@ export default class extends PageModification {
 
     const allColumnIds = map(column => column.dataset.columnId, allColumns);
 
+    const setColumnBgColor = bgColor => column => {
+      if (column) column.style.backgroundColor = bgColor;
+    };
+
     each(column => {
       this.addEventListener(column, 'click', event => {
         event.preventDefault();
@@ -173,7 +182,7 @@ export default class extends PageModification {
         if (!this.isClickableColumn(columnId, inProgressGroup, allColumnIds)) return;
 
         if (inProgressGroup.indexOf(columnId) < 0) {
-          column.style.backgroundColor = '#ff5630';
+          setColumnBgColor(ACTIVE_GROUP_COLUMN_COLOR)(column);
 
           // removes from other groups
           this.wipLimits = compose(
@@ -186,29 +195,28 @@ export default class extends PageModification {
 
           inProgressGroup.push(columnId);
         } else {
-          column.style.backgroundColor = null;
+          setColumnBgColor(null)(column);
           inProgressGroup = inProgressGroup.filter(id => id !== columnId);
         }
       });
     }, allColumns);
 
     const saveGroupBtn = document.querySelector(`#${settingsDOM.saveGroupBtn}`);
-    this.addEventListener(saveGroupBtn, 'click', () => {
-      this.wipLimits[getRandomString(7)] = {
-        columns: [...inProgressGroup],
-        max: 100,
-      };
 
+    this.addEventListener(saveGroupBtn, 'click', () => {
       document.querySelector(`#${settingsDOM.addGroupBtn}`).disabled = false;
       saveGroupBtn.remove();
       document.querySelector(`#${settingsDOM.hintForPickGroups}`).remove();
 
-      each(column => {
-        column.style.backgroundColor = null;
-      }, allColumns);
+      if (isEmpty(inProgressGroup)) return;
 
+      this.wipLimits[getRandomString(7)] = {
+        columns: [...inProgressGroup],
+        max: 100,
+      };
       this.updateBoardProperty(BOARD_PROPERTIES.WIP_LIMITS_SETTINGS, this.wipLimits);
 
+      each(setColumnBgColor(null), allColumns);
       this.clearColumns();
       this.modifyColumns();
     });
