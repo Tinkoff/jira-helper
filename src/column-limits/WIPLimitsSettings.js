@@ -23,6 +23,20 @@ export default class extends PageModification {
     return `add-wip-settings-${this.getSearchParam('rapidView')}`;
   }
 
+  getColumns() {
+    let allColumns = document.querySelector('ul.ghx-column-wrapper:not(.ghx-fixed-column)')
+      ? document.querySelectorAll('.ghx-column-wrapper:not(.ghx-fixed-column).ghx-mapped')
+      : document.querySelectorAll('.ghx-column-wrapper:not(.ghx-fixed-column) > .ghx-mapped');
+
+    // for JIRA 7.1.x
+    // JIRA 7.1.x not have the "ul.ghx-column-wrapper"
+    if (!allColumns || allColumns.length === 0) {
+      allColumns = document.querySelectorAll('.ghx-mapped.ui-droppable[data-column-id]');
+    }
+
+    return allColumns;
+  }
+
   appendStyles() {
     return `
       <style type="text/css">
@@ -88,9 +102,8 @@ export default class extends PageModification {
   }
 
   appendMaxOnColumn(columns, groupId, max) {
-    const allColumns = document.querySelector('ul.ghx-column-wrapper:not(.ghx-fixed-column)')
-      ? document.querySelectorAll('.ghx-column-wrapper:not(.ghx-fixed-column).ghx-mapped')
-      : document.querySelectorAll('.ghx-column-wrapper:not(.ghx-fixed-column) > .ghx-mapped');
+    const allColumns = this.getColumns();
+
     const allColumnIds = map(column => column.dataset.columnId, allColumns);
 
     const leftTailColumnIndex = Math.min(
@@ -163,9 +176,7 @@ export default class extends PageModification {
 
   addHandlersForModificationInProgress() {
     let inProgressGroup = [];
-    const allColumns = document.querySelector('ul.ghx-column-wrapper:not(.ghx-fixed-column)')
-      ? document.querySelectorAll('.ghx-column-wrapper:not(.ghx-fixed-column).ghx-mapped')
-      : document.querySelectorAll('.ghx-column-wrapper:not(.ghx-fixed-column) > .ghx-mapped');
+    const allColumns = this.getColumns();
 
     const allColumnIds = map(column => column.dataset.columnId, allColumns);
 
