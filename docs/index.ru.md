@@ -1,5 +1,6 @@
 # Функционал расширения "jira-helper"
 
+[eng](./index.md)
 
 ## Swimline Chart Bar
 
