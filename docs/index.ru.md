@@ -4,8 +4,6 @@
 
 ## Swimline Chart Bar
 
-- Код функционала [./swimlane/SwimlaneStats.*](./swimlane)
-
 Работает в заголовках Swimlane.
 
 При наведении курсора мыши на bar всплывает подсказка (title) в которой показывается название

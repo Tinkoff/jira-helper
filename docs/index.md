@@ -4,8 +4,6 @@
 
 ## Swimlane Chart Bar
 
-Source code [./swimlane/SwimlaneStats.*](./swimlane)
-
 Displays the number of tickets in every cell of the row on the swimlane bar hover.
 
 ![Chart Bar](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_ChartBar.gif)
