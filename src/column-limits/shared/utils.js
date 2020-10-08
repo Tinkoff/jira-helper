@@ -1,3 +1,5 @@
+import keys from '@tinkoff/utils/object/keys';
+
 export function findGroupByColumnId(columnId, groupsFromAPI) {
   let result = {};
 
@@ -52,4 +54,24 @@ export const generateColorByFirstChars = str => {
   const generatedColorIndex = sumOfIntegers % colors.length;
 
   return colors[generatedColorIndex];
+};
+
+export const mapColumnsToGroups = ({ columnsHtmlNodes = [], wipLimits = {}, withoutGroupName = 'Without group' }) => {
+  const resultGroupsMap = {
+    allGroupIds: [...keys(wipLimits), withoutGroupName],
+    byGroupId: {},
+  };
+
+  columnsHtmlNodes.forEach(column => {
+    const { columnId } = column.dataset;
+    let { name } = findGroupByColumnId(columnId, wipLimits);
+
+    if (!name) name = withoutGroupName;
+    if (!resultGroupsMap.byGroupId[name]) resultGroupsMap.byGroupId[name] = { allColumnIds: [], byColumnId: {} };
+
+    resultGroupsMap.byGroupId[name].allColumnIds.push(columnId);
+    resultGroupsMap.byGroupId[name].byColumnId[columnId] = { column, id: columnId };
+  });
+
+  return resultGroupsMap;
 };

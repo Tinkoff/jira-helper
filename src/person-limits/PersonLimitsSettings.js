@@ -1,8 +1,7 @@
 import { PageModification } from '../shared/PageModification';
 import { getSettingsTab } from '../routing';
-import { settingsDOM } from '../column-limits/constants';
+import { btnGroupIdForColumnsSettingsPage, BOARD_PROPERTIES } from '../shared/constants';
 import { openPersonLimitsModal } from './personLimitsModal';
-import { BOARD_PROPERTIES } from '../shared/constants';
 
 export default class extends PageModification {
   async shouldApply() {
@@ -14,7 +13,7 @@ export default class extends PageModification {
   }
 
   waitForLoading() {
-    return this.waitForElement(`#columns #${settingsDOM.groupOfBtns}`);
+    return this.waitForElement(`#columns #${btnGroupIdForColumnsSettingsPage}`);
   }
 
   loadData() {
@@ -35,7 +34,7 @@ export default class extends PageModification {
 
   appendPersonLimitsButton() {
     const personLimitsButton = this.insertHTML(
-      document.querySelector(`#${settingsDOM.groupOfBtns}`),
+      document.getElementById(btnGroupIdForColumnsSettingsPage),
       'beforeend',
       '<button class="aui-button">Manage per-person WIP-limits</button>'
     );

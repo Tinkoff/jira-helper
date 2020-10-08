@@ -39,7 +39,7 @@ export class PrintCardButton {
       const listAmountOfIssues = listViewCounter && listViewCounter.textContent;
 
       const detailsViewCounter = document.querySelector('#content .pager-container .showing');
-      const detailsAmountOfIssues = detailsViewCounter.textContent.split(' ').pop();
+      const detailsAmountOfIssues = detailsViewCounter && detailsViewCounter.textContent.split(' ').pop();
 
       return +(listAmountOfIssues || detailsAmountOfIssues || 0);
     } catch (err) {
