@@ -1,57 +1,38 @@
-export const getMainTemplate = ({
-  title = '',
-  wrapperId = 'printcards-popup',
-  contentWrapperId = 'printcards-popup__content',
-  confirmBtnId = 'dialog-confirm',
-  cancelBtnId = 'dialog-cancel',
-  optionsURL = '',
-}) => `<section id="${wrapperId}" class="aui-dialog2 aui-dialog2-medium aui-layer" role="dialog" data-aui-focus="false" data-aui-blanketed="true" aria-hidden="false" style="z-index: 3000;">
-    <style>
-        .progressbar-container {
-            border-radius: 3px;
-            display: inline-block;
-            overflow: hidden;
-            width: 100%;
-        }
-        .progressbar {
-            display: table;
-            min-width: 150px;
-            width: 100%;
-        }
-        .progressbar__entry {
-            display: table-cell;
-            height: 10px;
-            will-change: width;
-            transition: all 0.2s ease-in-out;
-        } 
-        .progressbar__entry_complete {
-            background: #14892c;
-        }
-        .progressbar__entry_in-progress {
-            background: #f6c342;
-        }
-        .printcards-block {
-            margin: 17px auto;
-        }
-    </style>
-    <header class="aui-dialog2-header">
-        <h2 class="aui-dialog2-header-main">${title}</h2>
-    </header>
-    <div class="aui-dialog2-content" id="${contentWrapperId}">
-        <a href="${optionsURL}" class="jh-link-to-about-printing">More information about printing and template</a>
-        <br/><br />
-    </div>
-    <footer class="aui-dialog2-footer">
-        <div class="aui-dialog2-footer-actions">
-            <button id="${confirmBtnId}" class="aui-button aui-button-primary">Print</button>
-            <button id="${cancelBtnId}" class="aui-button">Cancel</button>
-        </div>
-    </footer>
-</section>
+export const getAboutTemplate = ({ optionsURL, text }) => `
+  <a href="${optionsURL}" class="jh-link-to-about-printing">${text}</a>
+  <br/><br />
 `;
 
 export const getProgressTemplate = ({ id, desc, completePercent, inProgressPercent }) => `
         <div id="${id}" class="printcards-block">
+        <style>
+            .progressbar-container {
+                border-radius: 3px;
+                display: inline-block;
+                overflow: hidden;
+                width: 100%;
+            }
+            .progressbar {
+                display: table;
+                min-width: 150px;
+                width: 100%;
+            }
+            .progressbar__entry {
+                display: table-cell;
+                height: 10px;
+                will-change: width;
+                transition: all 0.2s ease-in-out;
+            }
+            .progressbar__entry_complete {
+                background: #14892c;
+            }
+            .progressbar__entry_in-progress {
+                background: #f6c342;
+            }
+            .printcards-block {
+                margin: 17px auto;
+            }
+        </style>
             <div class="progressbar-container">
                 <div class="progressbar">
                     <div class="progressbar__entry progressbar__entry_complete progress_complete" style="width: ${completePercent}%"></div>
@@ -83,7 +64,7 @@ export const getTaskLimitTemplate = ({ startBtnId, maxTasksInputId, maxIssues })
           </div>
           <br />
           <button class="aui-button" id="${startBtnId}">Prepare Data</button>
-        </form> 
+        </form>
     </div>
 `;
 

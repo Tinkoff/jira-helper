@@ -6,8 +6,8 @@ import runModifications from './shared/runModifications';
 import SwimlaneStats from './swimlane/SwimlaneStats';
 import SwimlaneLimits from './swimlane/SwimlaneLimits';
 import SwimlaneSettings from './swimlane/SwimlaneSettings';
-import WIPLimitsSettings from './column-limits/WIPLimitsSettings';
-import WIPLimits from './column-limits/WIPLimits';
+import WIPLimitsSettingsPage from './column-limits/SettingsPage';
+import WIPLimitsBoardPage from './column-limits/BoardPage';
 import TetrisPlanningButton from './tetris-planning/TetrisPlanningButton';
 import TetrisPlanning from './tetris-planning/TetrisPlanning';
 import BugTemplate from './bug-template/BugTemplate';
@@ -31,8 +31,15 @@ async function start() {
   setUpBlurSensitiveOnPage();
 
   const modificationsMap = {
-    [Routes.BOARD]: [WIPLimits, SwimlaneStats, SwimlaneLimits, TetrisPlanning, MarkFlaggedIssues, PersonLimits],
-    [Routes.SETTINGS]: [SwimlaneSettings, WIPLimitsSettings, PersonLimitsSettings, TetrisPlanningButton],
+    [Routes.BOARD]: [
+      WIPLimitsBoardPage,
+      SwimlaneStats,
+      SwimlaneLimits,
+      TetrisPlanning,
+      MarkFlaggedIssues,
+      PersonLimits,
+    ],
+    [Routes.SETTINGS]: [SwimlaneSettings, WIPLimitsSettingsPage, PersonLimitsSettings, TetrisPlanningButton],
     [Routes.ISSUE]: [MarkFlaggedIssues],
     [Routes.SEARCH]: [MarkFlaggedIssues, PrintCards],
     [Routes.REPORTS]: [AddSlaLine, AddChartGrid],

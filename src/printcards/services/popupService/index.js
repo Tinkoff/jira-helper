@@ -2,13 +2,14 @@ import splitEvery from '@tinkoff/utils/array/splitEvery';
 import each from '@tinkoff/utils/array/each';
 import { getEpicKey } from '../../utils/common';
 import {
-  getMainTemplate,
+  getAboutTemplate,
   getProgressTemplate,
   getRoleSettingsTemplate,
   getTaskLimitTemplate,
 } from './helpers/popupTemplates';
 import { setCards, setRoles } from '../../../background/actions';
 import { searchIssues } from '../../../shared/jiraApi';
+import { Popup } from '../../../shared/getPopup';
 
 export class PopupService {
   constructor({ extensionService, specialFieldsService }) {
@@ -17,15 +18,8 @@ export class PopupService {
 
     this.currentJql = ' ';
     this.SPLIT_ISSUES_EVERY_NUMBER = 50;
-    this.isOpened = false;
     this.messageForClosedPopup = 'CLOSED_POPUP_TRIGGERED';
-
-    this.templateIdentifiers = {
-      wrapperId: 'printcards-popup',
-      contentWrapperId: 'printcards-popup__content',
-      confirmBtnId: 'printcards-popup__confirm',
-      cancelBtnId: 'printcards-popup__cancel',
-    };
+    this.popup = null;
 
     this.settingsIdentifiers = {
       startBtnId: 'printcards__start-prepare',
@@ -68,20 +62,12 @@ export class PopupService {
     });
   }
 
-  onCancelForm() {
-    this.isOpened = false;
-
+  onCancelForm(closeCallback) {
     // Здесь создаётся таска для того, чтобы могли выполниться какие-нибудь микротаски в это время, например запросы issues,epics
     // И остановиться, если увидят `isOpened = false`.
     setTimeout(() => {
-      this.removeDarkBackground();
-      document.querySelector(`#${this.templateIdentifiers.wrapperId}`).remove();
+      closeCallback();
     }, 0);
-  }
-
-  addBasicPopupListeners() {
-    document.querySelector(`#${this.templateIdentifiers.confirmBtnId}`).disabled = true;
-    document.querySelector(`#${this.templateIdentifiers.cancelBtnId}`).addEventListener('click', this.onCancelForm);
   }
 
   onStartLoading(e) {
@@ -117,22 +103,21 @@ export class PopupService {
   }
 
   async startLoadingEpics(epicKeys) {
-    const loadingEpicsHTML = getProgressTemplate({
-      inProgressPercent: 100,
-      completePercent: 0,
-      desc: 'Loading epics for issues',
-      id: this.progressesIds.epics,
-    });
+    this.popup.appendToContent(
+      getProgressTemplate({
+        inProgressPercent: 100,
+        completePercent: 0,
+        desc: 'Loading epics for issues',
+        id: this.progressesIds.epics,
+      })
+    );
 
-    document
-      .querySelector(`#${this.templateIdentifiers.contentWrapperId}`)
-      .insertAdjacentHTML('beforeend', loadingEpicsHTML);
     const keysForPartialRequesting = splitEvery(25, epicKeys);
 
     const result = [];
     let accum = 0;
     for (const keys of keysForPartialRequesting) {
-      if (!this.isOpened) return Promise.reject(this.messageForClosedPopup);
+      if (!this.popup.isOpened) return Promise.reject(this.messageForClosedPopup);
 
       // eslint-disable-next-line no-await-in-loop
       const res = await searchIssues(`issuekey  in (${keys.join(',')})&maxResults=1000`);
@@ -152,21 +137,19 @@ export class PopupService {
   }
 
   async startLoadingIssues(amountOffIssues = 1000) {
-    const loadingTaskProgressBar = getProgressTemplate({
-      inProgressPercent: 100,
-      completePercent: 0,
-      desc: 'Loading issues',
-      id: this.progressesIds.issues,
-    });
-
-    document
-      .querySelector(`#${this.templateIdentifiers.contentWrapperId}`)
-      .insertAdjacentHTML('beforeend', loadingTaskProgressBar);
+    this.popup.appendToContent(
+      getProgressTemplate({
+        inProgressPercent: 100,
+        completePercent: 0,
+        desc: 'Loading issues',
+        id: this.progressesIds.issues,
+      })
+    );
 
     let startAt = 0;
     const result = [];
     while (startAt < amountOffIssues) {
-      if (!this.isOpened) return Promise.reject(this.messageForClosedPopup);
+      if (!this.popup.isOpened) return Promise.reject(this.messageForClosedPopup);
 
       // eslint-disable-next-line no-await-in-loop
       const res = await searchIssues(
@@ -193,40 +176,24 @@ export class PopupService {
     ).style.width = `${completePercent}%`;
   }
 
-  removeDarkBackground() {
-    document.querySelector('.aui-blanket').setAttribute('aria-hidden', 'true');
-  }
-
-  renderDarkBackground() {
-    if (document.querySelector('.aui-blanket')) {
-      document.querySelector('.aui-blanket').setAttribute('aria-hidden', 'false');
-    } else {
-      document.body.insertAdjacentHTML('beforeend', '<div class="aui-blanket" tabindex="0" aria-hidden="false"></div>');
-    }
-  }
-
   renderBasicSettings() {
-    const basicSettingsTemplate = getTaskLimitTemplate({
-      startBtnId: this.settingsIdentifiers.startBtnId,
-      maxTasksInputId: this.settingsIdentifiers.maxTasksInputId,
-      maxIssues: this.issueCount,
-    });
-
-    document
-      .querySelector(`#${this.templateIdentifiers.contentWrapperId}`)
-      .insertAdjacentHTML('beforeend', basicSettingsTemplate);
+    this.popup.appendToContent(
+      getTaskLimitTemplate({
+        startBtnId: this.settingsIdentifiers.startBtnId,
+        maxTasksInputId: this.settingsIdentifiers.maxTasksInputId,
+        maxIssues: this.issueCount,
+      })
+    );
     document.querySelector(`#${this.settingsIdentifiers.startBtnId}`).addEventListener('click', this.onStartLoading);
   }
 
   renderRoleSettings(roleFields) {
-    const rolesTemplate = getRoleSettingsTemplate({
-      requiredRolesBlockId: this.rolesSettingsId.requiredRolesBlock,
-      fields: roleFields,
-    });
-
-    document
-      .querySelector(`#${this.templateIdentifiers.contentWrapperId}`)
-      .insertAdjacentHTML('beforeend', rolesTemplate);
+    this.popup.appendToContent(
+      getRoleSettingsTemplate({
+        requiredRolesBlockId: this.rolesSettingsId.requiredRolesBlock,
+        fields: roleFields,
+      })
+    );
 
     each(checkbox => {
       checkbox.addEventListener('click', () => {
@@ -242,25 +209,26 @@ export class PopupService {
       });
     }, document.querySelectorAll(`${this.checkboxSelector}`));
 
-    document.querySelector(`#${this.templateIdentifiers.confirmBtnId}`).removeAttribute('disabled');
-    document.querySelector(`#${this.templateIdentifiers.confirmBtnId}`).addEventListener('click', this.onConfirmForm);
+    this.popup.toggleConfirmAvailability(true);
   }
 
   renderPopup(jql, issueCount) {
     this.currentJql = jql;
     this.issueCount = issueCount;
-    this.isOpened = true;
 
-    const mainTemplate = getMainTemplate({
+    this.popup = new Popup({
       title: 'Printing cards',
-      optionsURL: this.extensionService.getUrl('options.html'),
-      ...this.templateIdentifiers,
+      onConfirm: this.onConfirmForm,
+      onCancel: this.onCancelForm,
+      okButtonText: 'Print',
+      initialContentInnerHTML: getAboutTemplate({
+        optionsURL: this.extensionService.getUrl('options.html'),
+        text: 'More information about printing and template',
+      }),
     });
 
-    document.body.insertAdjacentHTML('beforeend', mainTemplate);
-    this.addBasicPopupListeners();
-
-    this.renderDarkBackground();
+    this.popup.render();
+    this.popup.toggleConfirmAvailability(false);
 
     this.renderBasicSettings();
   }

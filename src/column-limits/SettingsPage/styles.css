@@ -1,0 +1,84 @@
+.jiraHelperSubgroupMaximumWrapper {
+  text-align: center;
+  background-color: white;
+  padding: 10px 0;
+  color: gray;
+  border: 1px solid gray;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.jiraHelperSubgroupMaximumWrapper input {
+  padding: 5px;
+  margin-top: 5px;
+  border-radius: 3px;
+  border: 1px solid gray;
+}
+
+.highlightUpdatedLimit {
+  border: 1px solid #189c2c !important;
+}
+
+
+.columnDraggableJH {
+  padding: 5px 10px;
+  background: gray;
+  border-radius: 5px;
+  color: white;
+  margin: 2px;
+  cursor: move;
+}
+
+.columnListJH {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  flex-wrap: wrap;
+  border: 2px solid white;
+}
+
+.columnGroupJH {
+  min-height: 50px;
+  margin-bottom: 10px;
+  background-color: lightgray;
+}
+
+.columnGroupLimitsJH {
+  display: block;
+  background: white;
+  padding: 5px 10px;
+}
+
+.addGroupDropzoneJH {
+  height: 60px;
+  background: #ddedf3;
+  border: 2px dashed #90b8f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  color: darkgray;
+}
+
+.addGroupDropzoneActiveJH {
+  border: 2px dashed black;
+}
+
+
+.jhGroupOfBtns {
+  margin-top: 1rem;
+}
+
+.form {
+  display: flex;
+}
+
+.formLeftBlock {
+  width: 200px;
+  min-height: 400px;
+  margin-right: 20px;
+}
+
+.formRightBlock {
+  flex: 1;
+}
