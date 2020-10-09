@@ -113,7 +113,7 @@ Set it up in the board settings by choosing columns which will share the constra
 
 _"Board Settings -> Columns"_ Only the Board Administrator can save this setting.
 
-![settings wip-limit for column](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_wip_limit_settings_columns.gif)
+![settings wip-limit for column](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/group-wip-limit.gif)
 
 You are still able to use the default JIRA WIP-limits, while using the combined WIP-limits.
 

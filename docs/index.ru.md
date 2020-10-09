@@ -122,15 +122,13 @@ _WIP – work in progress_
 
 _"Board Settings -> Columns"_
 
-![settings wip-limit for column](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jirahelper_wip_limit_settings_columns.gif)
+![settings wip-limit for column](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/group-wip-limit.gif)
 
 При этом, можно пользоваться функциональностью ограничений колонок предоставленной JIRA!
 
 На board визаулизация ограничений будет поверх заголовков колонок.
 
 При нарушении wip-limit background колонки подсветиться красным цветом.
-
-![wip-limit of column](https://github.com/TinkoffCreditSystems/jira-helper/blob/images/features/jirahelper_wip_limit_columns.gif)
 
 С версии [2.1.0](https://github.com/TinkoffCreditSystems/jira-helper/releases/tag/2.1.0) возможно учитывать или не учитывать запросы типа sub-task в CONWIP лимитах.
 
