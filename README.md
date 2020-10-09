@@ -4,16 +4,16 @@
 
 _version 2.6.0_
 
-- [Chart Bar - showed count issues in columns for every swimlane on a board](./dosc/index.md#swimline-chart-bar)
-- [showed a red-flag on the issue panel](./dosc/index.md#flag-on-issue-panel)
-- [Tetris-planning for the Scrum backlog](./dosc/index.md#tetris-planning-for-scrum)
-- [Printing stickers 76x76мм on a usual laser printer by the set many issues of JIRA](./dosc/index.md#printing-many-stickers)
-- [WIP-limit for several columns](./dosc/index.md#wip-limits-for-several-columns)
-- [WIP-limit for Swimlane](./dosc/index.md#wip-limits-for-swimlanes)
-- [Personal WIP-limit](./dosc/index.md#wip-limit-for-person)
-- [SLA-line for Control Chart with percentile](./dosc/index.md#sla-line-for-control-chart)
-- [Overlay Measurement Ruler on the Control Chart](./dosc/index.md#control-chart-ruler)
-- [Secret data blurring](./dosc/index.md#the-blurring-of-secret-data)
+- [Chart Bar - showed count issues in columns for every swimlane on a board](./docs/index.md#swimline-chart-bar)
+- [showed a red-flag on the issue panel](./docs/index.md#flag-on-issue-panel)
+- [Tetris-planning for the Scrum backlog](./docs/index.md#tetris-planning-for-scrum)
+- [Printing stickers 76x76мм on a usual laser printer by the set many issues of JIRA](./docs/index.md#printing-many-stickers)
+- [WIP-limit for several columns](./docs/index.md#wip-limits-for-several-columns)
+- [WIP-limit for Swimlane](./docs/index.md#wip-limits-for-swimlanes)
+- [Personal WIP-limit](./docs/index.md#wip-limit-for-person)
+- [SLA-line for Control Chart with percentile](./docs/index.md#sla-line-for-control-chart)
+- [Overlay Measurement Ruler on the Control Chart](./docs/index.md#control-chart-ruler)
+- [Secret data blurring](./docs/index.md#the-blurring-of-secret-data)
 
 ## Issuing project tasks
 

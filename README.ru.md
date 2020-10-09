@@ -6,16 +6,16 @@
 
 _version 2.6.0_
 
-- [Chart Bar - показывает количество задач в колоноках для кадой swimlane на доске](./dosc/index.ru.md#swimline-chart-bar)
-- [Показывает красный флажок на панели задач](./dosc/index.ru.md#flag-on-issue-panel)
-- [Тетрис-планирование для Scrum backlog](./dosc/index.ru.md#tetris-planning-for-scrum)
-- [Печать множества стикеров 76x76mm на обычном лазерном принтере](./dosc/index.ru.md#printing-many-stickers)
-- [WIP-limit для нескольких колонок](./dosc/index.ru.md#wip-limits-for-several-columns)
-- [WIP-limit для Swimlane](./dosc/index.ru.md#wip-limits-for-swimlanes)
-- [Personal WIP-limit](./dosc/index.ru.md#wip-limit-for-person)
-- [SLA-линия для Control Chart с процентилем](./dosc/index.ru.md#sla-line-for-control-chart)
-- [Наложение линейки измерений на Control Chart](./dosc/index.ru.md#ruler-of-measuring-for-control-chart)
-- [Размытие секретных данных](./dosc/index.ru.md#blurring-of-secret-data)
+- [Chart Bar - показывает количество задач в колоноках для кадой swimlane на доске](./docs/index.ru.md#swimline-chart-bar)
+- [Показывает красный флажок на панели задач](./docs/index.ru.md#flag-on-issue-panel)
+- [Тетрис-планирование для Scrum backlog](./docs/index.ru.md#tetris-planning-for-scrum)
+- [Печать множества стикеров 76x76mm на обычном лазерном принтере](./docs/index.ru.md#printing-many-stickers)
+- [WIP-limit для нескольких колонок](./docs/index.ru.md#wip-limits-for-several-columns)
+- [WIP-limit для Swimlane](./docs/index.ru.md#wip-limits-for-swimlanes)
+- [Personal WIP-limit](./docs/index.ru.md#wip-limit-for-person)
+- [SLA-линия для Control Chart с процентилем](./docs/index.ru.md#sla-line-for-control-chart)
+- [Наложение линейки измерений на Control Chart](./docs/index.ru.md#ruler-of-measuring-for-control-chart)
+- [Размытие секретных данных](./docs/index.ru.md#blurring-of-secret-data)
 
 ## Ведение задач проекта
 
