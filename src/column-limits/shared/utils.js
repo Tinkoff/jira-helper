@@ -56,9 +56,9 @@ export const generateColorByFirstChars = str => {
   return colors[generatedColorIndex];
 };
 
-export const mapColumnsToGroups = ({ columnsHtmlNodes = [], wipLimits = {}, withoutGroupName = 'Without group' }) => {
+export const mapColumnsToGroups = ({ columnsHtmlNodes = [], wipLimits = {}, withoutGroupId = 'Without group' }) => {
   const resultGroupsMap = {
-    allGroupIds: [...keys(wipLimits), withoutGroupName],
+    allGroupIds: [...keys(wipLimits), withoutGroupId],
     byGroupId: {},
   };
 
@@ -66,7 +66,7 @@ export const mapColumnsToGroups = ({ columnsHtmlNodes = [], wipLimits = {}, with
     const { columnId } = column.dataset;
     let { name } = findGroupByColumnId(columnId, wipLimits);
 
-    if (!name) name = withoutGroupName;
+    if (!name) name = withoutGroupId;
     if (!resultGroupsMap.byGroupId[name]) resultGroupsMap.byGroupId[name] = { allColumnIds: [], byColumnId: {} };
 
     resultGroupsMap.byGroupId[name].allColumnIds.push(columnId);

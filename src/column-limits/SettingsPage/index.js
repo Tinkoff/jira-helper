@@ -16,14 +16,11 @@ import {
 import styles from './styles.css';
 import { getRandomString } from '../../shared/utils';
 
-const WITHOUT_GROUP_NAME = 'Without Group';
+const WITHOUT_GROUP_ID = 'Without Group';
 
 export default class SettingsWIPLimits extends PageModification {
   static ids = {
-    addGroupBtn: 'jiraHelperAddGroupBtn',
-    clearGroupBtn: 'jiraHelperClearGroupBtn',
-    saveGroupBtn: 'jiraHelperSaveGroupBtn',
-    hintForPickGroups: 'jiraHelperHintForPickingGroup',
+    openEditorButton: 'jh-add-group-btn',
     formId: 'jh-wip-limits-form',
     createGroupDropzone: 'jh-column-dropzone',
     allGroups: 'jh-all-groups',
@@ -32,7 +29,7 @@ export default class SettingsWIPLimits extends PageModification {
   static classes = {
     draggable: 'draggable-jh',
     dropzone: 'dropzone-jh',
-    groupLimitsInput: 'group-limits-jh',
+    groupLimitsInput: 'group-limits-input-jh',
   };
 
   static jiraSelectors = {
@@ -86,14 +83,19 @@ export default class SettingsWIPLimits extends PageModification {
 
   editorFormListeners = {
     dragstart: e => {
-      if (e.target.classList.contains(SettingsWIPLimits.classes.draggable)) {
-        this.draggingElement = e.target;
-      }
+      if (!e.target.classList.contains(SettingsWIPLimits.classes.draggable)) return;
+
+      this.draggingElement = e.target;
+    },
+    dragend: e => {
+      if (!e.target.classList.contains(SettingsWIPLimits.classes.draggable)) return;
+
+      this.draggingElement = null;
     },
     dragleave: e => {
-      if (e.target.classList.contains(SettingsWIPLimits.classes.dropzone)) {
-        e.target.classList.remove(styles.addGroupDropzoneActiveJH);
-      }
+      if (!e.target.classList.contains(SettingsWIPLimits.classes.dropzone)) return;
+
+      e.target.classList.remove(styles.addGroupDropzoneActiveJH);
     },
     drop: e => {
       if (!e.target.classList.contains(SettingsWIPLimits.classes.dropzone)) return;
@@ -109,22 +111,21 @@ export default class SettingsWIPLimits extends PageModification {
       this.draggingElement.remove();
     },
     dragover: e => {
-      if (e.target.classList.contains(SettingsWIPLimits.classes.dropzone)) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.target.classList.add(styles.addGroupDropzoneActiveJH);
-      }
+      if (!e.target.classList.contains(SettingsWIPLimits.classes.dropzone)) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+      e.target.classList.add(styles.addGroupDropzoneActiveJH);
     },
     input: e => {
-      if (e.target.classList.contains(SettingsWIPLimits.classes.groupLimitsInput)) {
-        const groupId = e.target.getAttribute('data-group-id');
+      if (!e.target.classList.contains(SettingsWIPLimits.classes.groupLimitsInput)) return;
 
-        if (this.wipLimits[groupId]) {
-          this.wipLimits[groupId] = {
-            ...this.wipLimits[groupId],
-            max: e.target.value,
-          };
-        }
+      const groupId = e.target.getAttribute('data-group-id');
+      if (this.wipLimits[groupId]) {
+        this.wipLimits[groupId] = {
+          ...this.wipLimits[groupId],
+          max: e.target.value,
+        };
       }
     },
   };
@@ -134,7 +135,7 @@ export default class SettingsWIPLimits extends PageModification {
       document.querySelector(SettingsWIPLimits.jiraSelectors.columnsConfigLastChild),
       'beforebegin',
       groupSettingsBtnTemplate({
-        addGroupBtnId: SettingsWIPLimits.ids.addGroupBtn,
+        openEditorBtn: SettingsWIPLimits.ids.openEditorButton,
         groupOfBtnsId: btnGroupIdForColumnsSettingsPage,
       })
     );
@@ -154,7 +155,7 @@ export default class SettingsWIPLimits extends PageModification {
     this.mappedColumnsToGroups = mapColumnsToGroups({
       columnsHtmlNodes: this.getColumns(),
       wipLimits: this.wipLimits,
-      withoutGroupName: WITHOUT_GROUP_NAME,
+      withoutGroupId: WITHOUT_GROUP_ID,
     });
 
     this.renderGroupsEditor();
@@ -167,7 +168,7 @@ export default class SettingsWIPLimits extends PageModification {
     return groupTemplate({
       dropzoneClass: SettingsWIPLimits.classes.dropzone,
       groupLimitsClass: SettingsWIPLimits.classes.groupLimitsInput,
-      withoutGroupName: WITHOUT_GROUP_NAME,
+      withoutGroupId: WITHOUT_GROUP_ID,
       groupId,
       groupMax: max,
       columnsHtml: columns
@@ -197,12 +198,12 @@ export default class SettingsWIPLimits extends PageModification {
     this.popup.appendToContent(
       formTemplate({
         id: SettingsWIPLimits.ids.formId,
-        leftBlock: this.groupHtml(WITHOUT_GROUP_NAME),
+        leftBlock: this.groupHtml(WITHOUT_GROUP_ID),
         rightBlock: `
           ${groupsTemplate({
             id: SettingsWIPLimits.ids.allGroups,
             children: this.mappedColumnsToGroups.allGroupIds
-              .map(groupId => (groupId !== WITHOUT_GROUP_NAME ? this.groupHtml(groupId) : ''))
+              .map(groupId => (groupId !== WITHOUT_GROUP_ID ? this.groupHtml(groupId) : ''))
               .join(''),
           })}
           ${dragOverHereTemplate({
@@ -230,7 +231,7 @@ export default class SettingsWIPLimits extends PageModification {
     }
 
     const isGroupAlreadyExist = keys(this.wipLimits).includes(toGroup);
-    const isNewGroup = toGroup !== WITHOUT_GROUP_NAME;
+    const isNewGroup = toGroup !== WITHOUT_GROUP_ID;
 
     switch (true) {
       case isGroupAlreadyExist:
@@ -252,7 +253,7 @@ export default class SettingsWIPLimits extends PageModification {
     this.mappedColumnsToGroups = mapColumnsToGroups({
       columnsHtmlNodes: this.getColumns(),
       wipLimits: this.wipLimits,
-      withoutGroupName: WITHOUT_GROUP_NAME,
+      withoutGroupId: WITHOUT_GROUP_ID,
     });
 
     this.popup.clearContent();

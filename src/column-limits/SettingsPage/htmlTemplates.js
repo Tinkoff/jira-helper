@@ -1,10 +1,10 @@
 import style from './styles.css';
 import { generateColorByFirstChars as generateColor } from '../shared/utils';
 
-export const groupSettingsBtnTemplate = ({ groupOfBtnsId = '', addGroupBtnId = '', text = 'Group Settings' }) =>
-  `<div id="${groupOfBtnsId}" class="aui-buttons ${style.jhGroupOfBtns}"><button id="${addGroupBtnId}" class="aui-button">${text}</button></div>`;
+export const groupSettingsBtnTemplate = ({ groupOfBtnsId = '', openEditorBtn = '' }) =>
+  `<div id="${groupOfBtnsId}" class="aui-buttons ${style.jhGroupOfBtns}"><button id="${openEditorBtn}" class="aui-button">Group Settings</button></div>`;
 
-export const formTemplate = ({ leftBlock = 'khkhkkh', rightBlock = 'khkhkkh', id = 'jh-wip-limits-id' }) =>
+export const formTemplate = ({ leftBlock = '', rightBlock = '', id = 'jh-wip-limits-id' }) =>
   `<form class="aui ${style.form}" id="${id}">
     <div class="${style.formLeftBlock}">${leftBlock}</div>
     <div class="${style.formRightBlock}">${rightBlock}</div>
@@ -15,17 +15,17 @@ export const groupsTemplate = ({ id = 'jh-groups-template', children = '' }) => 
 export const groupTemplate = ({
   dropzoneClass = '',
   groupLimitsClass = '',
-  withoutGroupName = '',
+  withoutGroupId = '',
   groupId = '',
   groupMax = '',
   columnsHtml = '',
 }) => `
         <div
           class="${style.columnGroupJH} "
-          style="${groupId !== withoutGroupName ? `background-color: ${generateColor(groupId)}` : ''}"
+          style="${groupId !== withoutGroupId ? `background-color: ${generateColor(groupId)}` : ''}"
         >
             ${
-              groupId === withoutGroupName
+              groupId === withoutGroupId
                 ? ''
                 : `<section class="${style.columnGroupLimitsJH}">
                   <span>Limit for group:</span>
