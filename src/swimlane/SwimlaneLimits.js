@@ -68,10 +68,14 @@ export default class extends PageModification {
       swimlanesIssuesCount[swimlaneId] = numberIssues;
 
       const swimlaneDescription = swimlane.querySelector('.ghx-description');
+      const innerSwimlaneHeader = swimlane.querySelector('.ghx-swimlane-header');
 
       if (numberIssues > limit) {
         swimlane.style.backgroundColor = '#ff5630';
         swimlaneDescription.style.color = '#ffd700';
+
+        // Some JIRA-versions has white backgroundColor on swimlane header, f.e. v8.8.1
+        innerSwimlaneHeader.style.backgroundColor = '#ff5630';
       }
 
       this.renderSwimlaneHeaderLimit(numberIssues, limit, swimlaneHeader);
