@@ -40,7 +40,7 @@ export class Popup {
   };
 
   html() {
-    return `<section id="${this.popupIdentifiers.wrapperId}" class="aui-dialog2 aui-dialog2-medium aui-layer" role="dialog" data-aui-focus="false" data-aui-blanketed="true" aria-hidden="false" style="z-index: 3000;">
+    return `<section open id="${this.popupIdentifiers.wrapperId}" class="aui-dialog2 aui-dialog2-medium aui-layer" role="dialog" data-aui-focus="false" data-aui-blanketed="true" aria-hidden="false" style="z-index: 3000;">
       <header class="aui-dialog2-header">
           <h2 class="aui-dialog2-header-main">${this.initialProps.title}</h2>
       </header>
@@ -72,6 +72,9 @@ export class Popup {
   renderDarkBackground() {
     if (document.querySelector('.aui-blanket')) {
       document.querySelector('.aui-blanket').setAttribute('aria-hidden', 'false');
+
+      // На Jira v8.12.3 используется аттрибут hidden на бэкграунде
+      document.querySelector('.aui-blanket').removeAttribute('hidden');
     } else {
       document.body.insertAdjacentHTML('beforeend', '<div class="aui-blanket" tabindex="0" aria-hidden="false"></div>');
     }
@@ -79,6 +82,7 @@ export class Popup {
 
   removeDarkBackground() {
     document.querySelector('.aui-blanket').setAttribute('aria-hidden', 'true');
+    document.querySelector('.aui-blanket').setAttribute('hidden', true);
   }
 
   // PUBLIC METHODS

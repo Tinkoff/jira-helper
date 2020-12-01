@@ -131,7 +131,7 @@ export default class SettingsWIPLimits extends PageModification {
   };
 
   renderSettingsButton() {
-    const openModalBtn = this.insertHTML(
+    this.insertHTML(
       document.querySelector(SettingsWIPLimits.jiraSelectors.columnsConfigLastChild),
       'beforebegin',
       groupSettingsBtnTemplate({
@@ -140,6 +140,7 @@ export default class SettingsWIPLimits extends PageModification {
       })
     );
 
+    const openModalBtn = document.querySelector(`#${SettingsWIPLimits.ids.openEditorButton}`);
     this.addEventListener(openModalBtn, 'click', this.openGroupSettingsPopup);
   }
 
