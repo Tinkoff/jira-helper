@@ -1,5 +1,6 @@
 :global(#create-issue-dialog .jira-wikifield),
-:global(#issue-create .jira-wikifield) {
+:global(#issue-create .jira-wikifield),
+:global(#create-subtask-dialog .jira-wikifield) {
     position: relative;
 }
 
