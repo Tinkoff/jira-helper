@@ -4,10 +4,8 @@ import style from './styles.css';
 import defaultIframeTemplate from './template.html';
 
 const defaultTextareaTemplate = defaultIframeTemplate.replace(/<br \/>/g, '\n');
-const createIssueDialogIdentifiers = ['#create-issue-dialog', '#issue-create'];
+const createIssueDialogIdentifiers = ['#create-issue-dialog', '#issue-create', '#create-subtask-dialog'];
 const descriptionInDialogSelector = '.jira-wikifield';
-const parentDivSelectorPopap = '#create-issue-dialog .jira-wikifield';
-const parentDivSelector = '#issue-create .jira-wikifield';
 const buttonAddCls = style.buttonJiraAddTemplateForBug;
 const buttonSaveCls = style.buttonJiraSaveTemplateForBug;
 const localStorageTemplateTextarea = 'jira_helper_textarea_bug_template';
@@ -31,10 +29,9 @@ export default class extends PageModification {
   apply() {
     this.applyTemplate();
 
-    Promise.race([
-      this.waitForElement('#create-issue-dialog', document.body),
-      this.waitForElement('#issue-create', document.body),
-    ]).then(target => {
+    const elements = createIssueDialogIdentifiers.map(selector => this.waitForElement(selector, document.body));
+
+    Promise.race(elements).then(target => {
       this.onDOMChange(`#${target.id}`, this.applyTemplate, { childList: true, subtree: true });
     });
 
@@ -80,12 +77,12 @@ export default class extends PageModification {
   }
 
   addTemplate = () => {
-    const iframe =
-      document.querySelector(`${parentDivSelector} iframe`) ||
-      document.querySelector(`${parentDivSelectorPopap} iframe`);
-    const textarea =
-      document.querySelector(`${parentDivSelector} textarea#description`) ||
-      document.querySelector(`${parentDivSelectorPopap} textarea#description`);
+    const iframe = createIssueDialogIdentifiers.reduce((acc, selector) => {
+      return acc || document.querySelector(`${selector} ${descriptionInDialogSelector} iframe`);
+    }, null);
+    const textarea = createIssueDialogIdentifiers.reduce((acc, selector) => {
+      return acc || document.querySelector(`${selector} ${descriptionInDialogSelector} textarea#description`);
+    }, null);
 
     const textTextarea = localStorage.getItem(localStorageTemplateTextarea);
     const templateIframe = textTextarea ? textToHtml(textTextarea) : defaultIframeTemplate;
@@ -102,9 +99,9 @@ export default class extends PageModification {
   };
 
   saveTemplate = () => {
-    const textarea =
-      document.querySelector(`${parentDivSelector} textarea#description`) ||
-      document.querySelector(`${parentDivSelectorPopap} textarea#description`);
+    const textarea = createIssueDialogIdentifiers.reduce((acc, selector) => {
+      return acc || document.querySelector(`${selector} ${descriptionInDialogSelector} textarea#description`);
+    }, null);
 
     if (!window.confirm(`Are you sure you want to save the text "${textarea.value}" in the template?`)) {
       return;
