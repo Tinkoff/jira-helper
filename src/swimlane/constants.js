@@ -9,5 +9,6 @@ export const settingsJiraDOM = {
   headCell: 'th',
   everythingElseRow: 'ghx-default-swimlane',
   swimlane: '.ghx-swimlane',
+  swimlaneHeaderContainer: '.ghx-swimlane-header',
   swimlaneHeader: '.ghx-heading',
 };

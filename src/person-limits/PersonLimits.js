@@ -3,6 +3,13 @@ import { BOARD_PROPERTIES } from '../shared/constants';
 import { settingsJiraDOM as DOM } from '../swimlane/constants';
 
 const isPersonLimitAppliedToIssue = (personLimit, assignee, columnId, swimlaneId) => {
+  if (swimlaneId == null) {
+    return (
+      (personLimit.person.displayName === assignee || personLimit.person.name === assignee) &&
+      personLimit.columns.some(column => column.id === columnId)
+    );
+  }
+
   return (
     (personLimit.person.displayName === assignee || personLimit.person.name === assignee) &&
     personLimit.columns.some(column => column.id === columnId) &&
@@ -129,31 +136,53 @@ export default class extends PageModification {
     });
   }
 
+  hasCustomSwimlines() {
+    const someSwimline = document.querySelector(DOM.swimlaneHeaderContainer);
+
+    if (someSwimline == null) {
+      return false;
+    }
+
+    return someSwimline.getAttribute('aria-label').indexOf('Swimlane for custom') !== -1;
+  }
+
+  countAmountPersonalIssuesInColumn(column, stats, swimlaneId) {
+    const { columnId } = column.dataset;
+
+    column.querySelectorAll(this.cssSelectorOfIssues).forEach(issue => {
+      const avatar = issue.querySelector('.ghx-avatar-img');
+      const assignee = getAssignee(avatar);
+
+      if (assignee) {
+        stats.forEach(personLimit => {
+          if (isPersonLimitAppliedToIssue(personLimit, assignee, columnId, swimlaneId)) {
+            personLimit.issues.push(issue);
+          }
+        });
+      }
+    });
+  }
+
   getLimitsStats(personLimits) {
     const stats = personLimits.limits.map(personLimit => ({
       ...personLimit,
       issues: [],
     }));
 
-    document.querySelectorAll(DOM.swimlane).forEach(swimlane => {
-      const swimlaneId = swimlane.getAttribute('swimlane-id');
+    if (this.hasCustomSwimlines()) {
+      document.querySelectorAll(DOM.swimlane).forEach(swimlane => {
+        const swimlaneId = swimlane.getAttribute('swimlane-id');
 
-      swimlane.querySelectorAll('.ghx-column').forEach(column => {
-        const { columnId } = column.dataset;
-
-        column.querySelectorAll(this.cssSelectorOfIssues).forEach(issue => {
-          const avatar = issue.querySelector('.ghx-avatar-img');
-          const assignee = getAssignee(avatar);
-
-          if (assignee) {
-            stats.forEach(personLimit => {
-              if (isPersonLimitAppliedToIssue(personLimit, assignee, columnId, swimlaneId)) {
-                personLimit.issues.push(issue);
-              }
-            });
-          }
+        swimlane.querySelectorAll('.ghx-column').forEach(column => {
+          this.countAmountPersonalIssuesInColumn(column, stats, swimlaneId);
         });
       });
+
+      return stats;
+    }
+
+    document.querySelectorAll('.ghx-column').forEach(column => {
+      this.countAmountPersonalIssuesInColumn(column, stats);
     });
 
     return stats;
