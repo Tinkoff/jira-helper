@@ -21,6 +21,8 @@ jobs:
       - name: Lint, Test & Build
         run: |
           npm i
+          npm run lint
           npm test
+          npm run build
         env:
           CI: true
