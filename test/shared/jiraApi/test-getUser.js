@@ -1,4 +1,4 @@
-import { getUser } from '../../src/shared/jiraApi';
+import { getUser } from '../../../src/shared/jiraApi';
 
 jest.mock('@tinkoff/request-core', () =>
   jest.fn().mockImplementation(() => request => {
