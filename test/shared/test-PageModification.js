@@ -3,7 +3,7 @@ import { PageModification } from '../../src/shared/PageModification';
 describe('MarkFlaggedIssues', () => {
   const pageModification = new PageModification();
 
-  test(' shouldApply ', () => {
+  test('.shouldApply ', () => {
     expect(pageModification.shouldApply()).toEqual(true);
   });
 
