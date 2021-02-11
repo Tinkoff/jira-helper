@@ -33,6 +33,7 @@
   ],
   "scripts": {
     "bootstrap": "npm i --no-save",
+    "test": "npx jest",
     "build": "cross-env NODE_ENV=production webpack -p --config webpack/webpack.config.prod.js",
     "prod": "npm run build && zip -r dist.zip ./dist",
     "clear": "rm -rf dist",
@@ -83,6 +84,7 @@
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "3.0.4",
     "husky": "^4.3.8",
+    "jest": "26.6.3",
     "lint-staged": "^10.5.3",
     "prettier": "^1.19.1",
     "raw-loader": "0.5.1",
