@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/TinkoffCreditSystems/jira-helper.svg?branch=master)](https://travis-ci.com/TinkoffCreditSystems/jira-helper)
+![Build Status](https://github.com/TinkoffCreditSystems/jira-helper/workflows/Node%20CI/badge.svg)
 
 ## “jira-helper” features
 
