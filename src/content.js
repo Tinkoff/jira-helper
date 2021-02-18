@@ -5,7 +5,7 @@ import AddChartGrid from './charts/AddChartGrid';
 import runModifications from './shared/runModifications';
 import SwimlaneStats from './swimlane/SwimlaneStats';
 import SwimlaneLimits from './swimlane/SwimlaneLimits';
-import SwimlaneSettings from './swimlane/SwimlaneSettings';
+import SwimlaneSettingsPopup from './swimlane/SwimlaneSettingsPopup';
 import WIPLimitsSettingsPage from './column-limits/SettingsPage';
 import WIPLimitsBoardPage from './column-limits/BoardPage';
 import TetrisPlanningButton from './tetris-planning/TetrisPlanningButton';
@@ -39,7 +39,7 @@ async function start() {
       MarkFlaggedIssues,
       PersonLimits,
     ],
-    [Routes.SETTINGS]: [SwimlaneSettings, WIPLimitsSettingsPage, PersonLimitsSettings, TetrisPlanningButton],
+    [Routes.SETTINGS]: [SwimlaneSettingsPopup, WIPLimitsSettingsPage, PersonLimitsSettings, TetrisPlanningButton],
     [Routes.ISSUE]: [MarkFlaggedIssues],
     [Routes.SEARCH]: [MarkFlaggedIssues, PrintCards],
     [Routes.REPORTS]: [AddSlaLine, AddChartGrid],
