@@ -17,12 +17,13 @@ export const groupTemplate = ({
   groupLimitsClass = '',
   withoutGroupId = '',
   groupId = '',
+  customGroupColor,
   groupMax = '',
   columnsHtml = '',
 }) => `
         <div
           class="${style.columnGroupJH} "
-          style="${groupId !== withoutGroupId ? `background-color: ${generateColor(groupId)}` : ''}"
+          style="${groupId !== withoutGroupId ? `background-color: ${customGroupColor || generateColor(groupId)}` : ''}"
         >
             ${
               groupId === withoutGroupId
@@ -41,3 +42,24 @@ export const columnTemplate = ({ columnId = '', dataGroupId = '', columnTitle = 
 
 export const dragOverHereTemplate = ({ dropzoneId = '', dropzoneClass = '' }) =>
   `<div  class="${style.addGroupDropzoneJH} ${dropzoneClass}" id="${dropzoneId}">Drag column over here to create group</div>`;
+
+export const colorPickerTooltipTemplate = ({
+  tooltipClass,
+  id,
+  colorPickerId,
+  colorPickerResultId,
+  okBtnId,
+  closeBtnId,
+  btnWrpClass,
+  colorPickerResultClass,
+}) => `
+  <div id="${id}" class="${tooltipClass}">
+    <div class="${btnWrpClass}">
+      <div class="${colorPickerResultClass}" id="${colorPickerResultId}"></div>
+      <div>
+        <button id="${okBtnId}" class="aui-button aui-button-primary" type="button">Ok</button>
+        <button id="${closeBtnId}" class="aui-button" type="button">Close</button>
+      </div>
+    </div>
+    <div id="${colorPickerId}"></div>
+  </div>`;
