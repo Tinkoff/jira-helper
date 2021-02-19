@@ -65,7 +65,7 @@ export default class SwimlaneSettingsLimit extends PageModification {
     });
 
     const editBtn = document.getElementById(SwimlaneSettingsLimit.ids.editLimitsBtn);
-    editBtn.addEventListener('click', () => {
+    this.addEventListener(editBtn, 'click', () => {
       this.popup.render();
       this.popup.appendToContent(
         settingsPopupTableTemplate(
