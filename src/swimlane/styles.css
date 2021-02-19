@@ -25,24 +25,6 @@
     border: none;
 }
 
-.limitInfo {
-  width: 3rem;
-}
-
-.limitInput {
-  width: 50%;
-  height: 2.14285714em;
-  line-height: 1.4285714285714;
-  padding: 4px 5px;
-  border: 1px solid #c1c7d0;
-  border-radius: 3.01px;
-  vertical-align: baseline;
-}
-
-.limitValue {
-  font-size: inherit;
-}
-
 .limitBadge {
   padding: 2px 4px;
   border-radius: 5px;
@@ -52,23 +34,6 @@
   background-color: #1b855c;
 }
 
-.ignoreWIPInColumns {
-  width: 5rem;
-}
-
-.ignoreWIPInColumnsValue {
-  font-size: inherit;
-}
-
-.ignoreWIPInColumnsInput {
-  width: 50%;
-}
-
-.resetSwimlaneWrapper {
-  margin-top: 1rem;
-}
-
-.text-value {}
 
 .loader {
   display: block !important;

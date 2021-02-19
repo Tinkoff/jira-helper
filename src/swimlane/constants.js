@@ -12,3 +12,35 @@ export const settingsJiraDOM = {
   swimlaneHeaderContainer: '.ghx-swimlane-header',
   swimlaneHeader: '.ghx-heading',
 };
+
+export const settingsEditBtnTemplate = btnId => `<div style="margin-top: 1rem">
+            <button id="${btnId}" class="aui-button" type="button">Edit swimlane limits</button>
+        </div>`;
+
+export const settingsPopupTableTemplate = (tableId, tableBody) => `
+   <form class="aui">
+     <table id="${tableId}">
+        <thead>
+          <tr>
+            <th>Swimlane</th>
+            <th>WIP limits</th>
+            <th>Is expedite</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableBody}
+        </tbody>
+      </table>
+  </form>
+`;
+
+export const settingsPopupTableRowTemplate = ({ id, name, limit, isIgnored, rowClass }) =>
+  `<tr class="${rowClass}" data-swimlane-id="${id}">
+      <td>${name}</td>
+      <td>
+        <input class="text" type="number" value="${limit}"/>
+      </td>
+      <td>
+        <input type="checkbox" ${isIgnored ? 'checked' : ''} /> 
+      </td>
+  </tr>`;
