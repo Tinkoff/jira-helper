@@ -62,7 +62,8 @@
     "@tinkoff/utils": "^2.1.3",
     "core-js": "^3.8.3",
     "cross-env": "^5.2.0",
-    "gsap": "^3.6.0"
+    "gsap": "^3.6.0",
+    "simple-color-picker": "^1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.13",

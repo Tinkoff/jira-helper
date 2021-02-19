@@ -35,10 +35,10 @@
   padding: 10px;
   flex-wrap: wrap;
   border: 2px solid white;
+  cursor: pointer;
 }
 
 .columnGroupJH {
-  min-height: 50px;
   margin-bottom: 10px;
   background-color: lightgray;
 }
@@ -81,4 +81,25 @@
 
 .formRightBlock {
   flex: 1;
+}
+
+
+.tooltip {
+  position: absolute;
+  background: white;
+  visibility: hidden;
+}
+
+.tooltipButtonsWrp {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tooltipButtonsWrp button~button {
+  margin-left: 0 !important;
+}
+
+.tooltipResult {
+  flex: 0.7;
+  background: red;
 }

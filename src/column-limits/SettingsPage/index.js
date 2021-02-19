@@ -15,6 +15,7 @@ import {
 } from './htmlTemplates';
 import styles from './styles.css';
 import { getRandomString } from '../../shared/utils';
+import { ColorPickerTooltip } from './colorPickerTooltip';
 
 const WITHOUT_GROUP_ID = 'Without Group';
 
@@ -61,6 +62,17 @@ export default class SettingsWIPLimits extends PageModification {
     if (!boardData.canEdit) return;
 
     this.wipLimits = wipLimits;
+    this.colorPickerTooltip = new ColorPickerTooltip({
+      onClose: () => {
+        this.colorPickerGroupId = null;
+      },
+      onOk: hexStrColor => {
+        this.wipLimits[this.colorPickerGroupId].customHexColor = hexStrColor;
+        this.popup.clearContent();
+        this.renderGroupsEditor();
+      },
+      addEventListener: (target, event, cb) => this.addEventListener(target, event, cb),
+    });
 
     this.renderSettingsButton();
   }
@@ -163,7 +175,7 @@ export default class SettingsWIPLimits extends PageModification {
   };
 
   groupHtml(groupId) {
-    const { max } = this.wipLimits[groupId] || {};
+    const { max, customHexColor } = this.wipLimits[groupId] || {};
     const columns = this.mappedColumnsToGroups.byGroupId[groupId];
 
     return groupTemplate({
@@ -171,6 +183,7 @@ export default class SettingsWIPLimits extends PageModification {
       groupLimitsClass: SettingsWIPLimits.classes.groupLimitsInput,
       withoutGroupId: WITHOUT_GROUP_ID,
       groupId,
+      customGroupColor: customHexColor,
       groupMax: max,
       columnsHtml: columns
         ? columns.allColumnIds
@@ -214,6 +227,7 @@ export default class SettingsWIPLimits extends PageModification {
         `,
       })
     );
+    this.showColorPicker();
     this.initEditorListeners();
   }
 
@@ -221,7 +235,7 @@ export default class SettingsWIPLimits extends PageModification {
     const form = document.getElementById(SettingsWIPLimits.ids.formId);
 
     keys(this.editorFormListeners).forEach(listenerKey => {
-      form.addEventListener(listenerKey, this.editorFormListeners[listenerKey]);
+      this.addEventListener(form, listenerKey, this.editorFormListeners[listenerKey]);
     });
   }
 
@@ -260,6 +274,36 @@ export default class SettingsWIPLimits extends PageModification {
     this.popup.clearContent();
     this.renderGroupsEditor();
   }
+
+  showColorPicker = () => {
+    this.popup.appendToContent(this.colorPickerTooltip.html());
+    this.colorPickerTooltip.init();
+
+    this.addEventListener(this.popup.contentBlock, 'scroll', () => {
+      this.colorPickerTooltip.hideTooltip();
+    });
+
+    {
+      const allGroups = document.getElementById(SettingsWIPLimits.ids.allGroups);
+      const getTooltipPosition = target => {
+        const dropzonePosition = target.getBoundingClientRect();
+        const popupTopOffset = Number.parseInt(
+          window.getComputedStyle(this.popup.htmlElement).getPropertyValue('top'),
+          10
+        );
+        return dropzonePosition.top - popupTopOffset;
+      };
+
+      this.addEventListener(allGroups, 'click', event => {
+        if (!event.target.classList.contains(SettingsWIPLimits.classes.dropzone)) return;
+
+        this.colorPickerGroupId = event.target.getAttribute('data-group-id');
+        const tooltipTopPosition = getTooltipPosition(event.target);
+
+        this.colorPickerTooltip.showTooltip(tooltipTopPosition);
+      });
+    }
+  };
 
   handleSubmit = async unmountPopup => {
     await this.updateBoardProperty(BOARD_PROPERTIES.WIP_LIMITS_SETTINGS, this.wipLimits);

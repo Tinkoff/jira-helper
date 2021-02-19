@@ -71,9 +71,10 @@ export default class extends PageModification {
       if (isColumnByRightWithSameGroup)
         document.querySelector(`.ghx-column[data-id="${columnId}"]`).style.borderTopRightRadius = '10px';
 
+      const groupColor = this.boardGroups[name].customHexColor || generateColorByFirstChars(name);
       Object.assign(document.querySelector(`.ghx-column[data-id="${columnId}"]`).style, {
         backgroundColor: '#deebff',
-        borderTop: `4px solid ${generateColorByFirstChars(name)}`,
+        borderTop: `4px solid ${groupColor}`,
       });
     });
   }
