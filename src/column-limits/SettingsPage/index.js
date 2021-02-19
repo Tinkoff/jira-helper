@@ -71,6 +71,7 @@ export default class SettingsWIPLimits extends PageModification {
         this.popup.clearContent();
         this.renderGroupsEditor();
       },
+      addEventListener: (target, event, cb) => this.addEventListener(target, event, cb),
     });
 
     this.renderSettingsButton();
@@ -234,7 +235,7 @@ export default class SettingsWIPLimits extends PageModification {
     const form = document.getElementById(SettingsWIPLimits.ids.formId);
 
     keys(this.editorFormListeners).forEach(listenerKey => {
-      form.addEventListener(listenerKey, this.editorFormListeners[listenerKey]);
+      this.addEventListener(form, listenerKey, this.editorFormListeners[listenerKey]);
     });
   }
 
@@ -278,7 +279,7 @@ export default class SettingsWIPLimits extends PageModification {
     this.popup.appendToContent(this.colorPickerTooltip.html());
     this.colorPickerTooltip.init();
 
-    this.popup.contentBlock.addEventListener('scroll', () => {
+    this.addEventListener(this.popup.contentBlock, 'scroll', () => {
       this.colorPickerTooltip.hideTooltip();
     });
 
@@ -293,7 +294,7 @@ export default class SettingsWIPLimits extends PageModification {
         return dropzonePosition.top - popupTopOffset;
       };
 
-      allGroups.addEventListener('click', event => {
+      this.addEventListener(allGroups, 'click', event => {
         if (!event.target.classList.contains(SettingsWIPLimits.classes.dropzone)) return;
 
         this.colorPickerGroupId = event.target.getAttribute('data-group-id');

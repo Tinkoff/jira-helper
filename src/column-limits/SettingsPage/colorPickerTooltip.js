@@ -18,7 +18,7 @@ export class ColorPickerTooltip {
     closeBtn: 'jh-color-picker-cancel-btn',
   };
 
-  constructor({ onClose = noop, onOk = (/* hexStr */) => {} }) {
+  constructor({ onClose = noop, onOk = (/* hexStr */) => {}, addEventListener }) {
     this.colorPicker = new ColorPicker({
       color: '#FF0000',
       background: '#454545',
@@ -27,6 +27,7 @@ export class ColorPickerTooltip {
     });
     this.onClose = onClose;
     this.onOk = onOk;
+    this.addEventListener = addEventListener;
   }
 
   html() {
@@ -86,7 +87,7 @@ export class ColorPickerTooltip {
     const okBtn = document.getElementById(ColorPickerTooltip.ids.okBtn);
     const closeBtn = document.getElementById(ColorPickerTooltip.ids.closeBtn);
 
-    okBtn.addEventListener('click', this._save);
-    closeBtn.addEventListener('click', this._cancel);
+    this.addEventListener(okBtn, 'click', this._save);
+    this.addEventListener(closeBtn, 'click', this._cancel);
   }
 }
