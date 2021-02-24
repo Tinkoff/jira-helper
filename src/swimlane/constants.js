@@ -24,7 +24,10 @@ export const settingsPopupTableTemplate = (tableId, tableBody) => `
           <tr>
             <th>Swimlane</th>
             <th>WIP limits</th>
-            <th>Is expedite</th>
+            <th>
+               Is expedite
+               <i title="Issues from this swimlane will be ignored from column WIP limits" style="font-style: normal; cursor: pointer;">&#9432;</i>
+            </th>
           </tr>
         </thead>
         <tbody>
