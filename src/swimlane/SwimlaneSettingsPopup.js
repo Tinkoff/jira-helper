@@ -117,10 +117,8 @@ export default class SwimlaneSettingsLimit extends PageModification {
       const swimlaneId = row.getAttribute('data-swimlane-id');
       const limitValue = Number.parseInt(rawLimitValue, 10);
 
-      if (limitValue < 1) return;
-
       updatedSettings[swimlaneId] = {
-        limit: limitValue,
+        limit: limitValue < 1 ? undefined : limitValue,
         ignoreWipInColumns: isExpediteValue,
       };
     });
