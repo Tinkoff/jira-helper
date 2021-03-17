@@ -7,6 +7,7 @@ export class Popup {
     onCancel = noopWithCallback,
     onConfirm = noopWithCallback,
     okButtonText = 'Ok',
+    size = 'medium', // large, medium, small
   }) {
     this.isOpened = false;
 
@@ -16,6 +17,7 @@ export class Popup {
       onCancel,
       onConfirm,
       okButtonText,
+      size,
     };
 
     this.popupIdentifiers = {
@@ -40,7 +42,7 @@ export class Popup {
   };
 
   html() {
-    return `<section open id="${this.popupIdentifiers.wrapperId}" class="aui-dialog2 aui-dialog2-medium aui-layer" role="dialog" data-aui-focus="false" data-aui-blanketed="true" aria-hidden="false" style="z-index: 3000;">
+    return `<section open id="${this.popupIdentifiers.wrapperId}" class="aui-dialog2 aui-dialog2-${this.initialProps.size} aui-layer" role="dialog" data-aui-focus="false" data-aui-blanketed="true" aria-hidden="false" style="z-index: 3000;">
       <header class="aui-dialog2-header">
           <h2 class="aui-dialog2-header-main">${this.initialProps.title}</h2>
       </header>
