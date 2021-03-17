@@ -12,6 +12,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
     projectKey: '.ghx-key-link-project-key',
     extraField: '.ghx-extra-field',
     swimlane: '.ghx-swimlane',
+    column: '.ghx-column',
     ghxPool: '#ghx-pool',
   };
 
@@ -160,7 +161,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
       document.querySelectorAll(DOM.swimlane).forEach(swimlane => {
         const swimlaneId = swimlane.getAttribute('swimlane-id');
 
-        swimlane.querySelectorAll('.ghx-column').forEach(column => {
+        swimlane.querySelectorAll(FieldLimitsSettingsPage.jiraSelectors.column).forEach(column => {
           this.countAmountPersonalIssuesInColumn(column, stats, swimlaneId);
         });
       });
@@ -168,7 +169,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
       return stats;
     }
 
-    document.querySelectorAll('.ghx-column').forEach(column => {
+    document.querySelectorAll(FieldLimitsSettingsPage.jiraSelectors.column).forEach(column => {
       this.countAmountPersonalIssuesInColumn(column, stats);
     });
 

@@ -35,7 +35,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
   }
 
   getModificationId() {
-    return `add-quick-filters-settings-${this.getBoardId()}`;
+    return `add-field-settings-${this.getBoardId()}`;
   }
 
   waitForLoading() {
