@@ -118,7 +118,12 @@ export default class FieldLimitsSettingsPage extends PageModification {
 
   hasCustomSwimlines() {
     const someSwimline = document.querySelector(DOM.swimlaneHeaderContainer);
-    return someSwimline != null;
+
+    if (someSwimline == null) {
+      return false;
+    }
+
+    return someSwimline.getAttribute('aria-label').indexOf('custom:') !== -1;
   }
 
   countAmountPersonalIssuesInColumn(column, stats, swimlaneId) {
@@ -131,7 +136,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
         const stat = stats[fieldLimitKey];
 
         if (!stat.columns.includes(columnId)) return;
-        if (!stat.swimlanes.includes(swimlaneId)) return;
+        if (swimlaneId && !stat.swimlanes.includes(swimlaneId)) return;
 
         const projectKey =
           issue.querySelector(FieldLimitsSettingsPage.jiraSelectors.projectKey)?.innerHTML ||
