@@ -50,7 +50,16 @@ export default class FieldLimitsSettingsPage extends PageModification {
     boardData = {},
     quickFilterSettings = {
       limits: {
-        /* [limitKeys.encode(....)]: { limit: number } */
+        /*
+          [limitKeys.encode(....)]: {
+              fieldValue: string,
+              fieldId: string,
+              projectKey: string,
+              limit: number,
+              columns: string[],
+              swimlanes: string[]
+           }
+        */
       },
     },
   ]) {
@@ -162,7 +171,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
           fieldValue,
           fieldId,
           projectKey,
-          limit,
+          limit: +limit,
           columns,
           swimlanes,
         };
