@@ -1,0 +1,10 @@
+.fieldLimitsList {
+    display: inline-flex;
+    margin-left: 20px;
+    position: relative;
+}
+
+.fieldLimitsItem {
+    font-size: 0.8em;
+    margin-right: 5px;
+}

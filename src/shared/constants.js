@@ -5,7 +5,7 @@ export const BOARD_PROPERTIES = {
   SLA_CONFIG: 'slaConfig3',
   TETRIS_PLANNING: 'settingTetrisPlaning',
   PERSON_LIMITS: 'personLimitsSettings',
-  TEAM_LIMITS: 'teamLimitsJH',
+  FIELD_LIMITS: 'fieldLimitsJH',
 };
 
 // TODO: Группа кнопок на странице с колонками используется в нескольких местах

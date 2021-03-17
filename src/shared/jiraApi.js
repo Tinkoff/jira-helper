@@ -170,10 +170,3 @@ export const getUser = query =>
     .then(users => {
       return users.find(user => user.name?.includes(query) || user.displayName?.includes(query)) ?? users[0];
     });
-
-export const getCreateIssueMetadata = (projectKeysStr = '') =>
-  requestJira({
-    url: 'api/2/issue/createmeta',
-    type: 'json',
-    query: { projectKeys: projectKeysStr, expand: 'projects.issuetypes.fields' },
-  });

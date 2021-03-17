@@ -143,6 +143,7 @@ export default class extends PageModification {
       return false;
     }
 
+    // TODO: Shouldn't work for any other language except English, so we have to think about it. F.e., in Russian, it is "Дорожка для custom"
     return someSwimline.getAttribute('aria-label').indexOf('Swimlane for custom') !== -1;
   }
 
