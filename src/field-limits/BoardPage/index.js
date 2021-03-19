@@ -9,7 +9,6 @@ import { settingsJiraDOM as DOM } from '../../swimlane/constants';
 export default class FieldLimitsSettingsPage extends PageModification {
   static jiraSelectors = {
     subnavTitle: '#subnav-title',
-    projectKey: '.ghx-key-link-project-key',
     extraField: '.ghx-extra-field',
     swimlane: '.ghx-swimlane',
     column: '.ghx-column',
@@ -18,6 +17,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
 
   static classes = {
     fieldLimitsBlock: 'field-limit-block-stat-jh',
+    issuesCount: 'field-issues-count',
   };
 
   shouldApply() {
@@ -81,7 +81,9 @@ export default class FieldLimitsSettingsPage extends PageModification {
               return fieldLimitBlockTemplate({
                 blockClass: FieldLimitsSettingsPage.classes.fieldLimitsBlock,
                 dataFieldLimitKey: limitKey,
-                innerText: fieldValue.charAt(0),
+                innerText: fieldValue,
+                limitValue: limitsStats[limitKey].limit,
+                issuesCountClass: FieldLimitsSettingsPage.classes.issuesCount,
               });
             })
             .join(''),
@@ -91,17 +93,27 @@ export default class FieldLimitsSettingsPage extends PageModification {
 
     this.fieldLimitsList.getElementsByClassName(FieldLimitsSettingsPage.classes.fieldLimitsBlock).forEach(fieldNode => {
       const limitKey = fieldNode.getAttribute('data-field-limit-key');
-      const { projectKey, fieldValue, fieldId } = limitsKey.decode(limitKey);
+      const { fieldValue, fieldId } = limitsKey.decode(limitKey);
       const stat = limitsStats[limitKey];
+      const currentIssueNode = fieldNode.querySelector(`.${FieldLimitsSettingsPage.classes.issuesCount}`);
 
-      if (!projectKey || !fieldId || !fieldValue) return;
+      if (!fieldId || !fieldValue) return;
 
       const amountOfFieldIssuesOnBoard = stat.issues.length;
       const limitOfFieldIssuesOnBoard = stat.limit;
 
-      if (amountOfFieldIssuesOnBoard > limitOfFieldIssuesOnBoard) fieldNode.style.backgroundColor = '#ff5630';
-      else if (amountOfFieldIssuesOnBoard === limitOfFieldIssuesOnBoard) fieldNode.style.backgroundColor = '#ffd700';
-      else fieldNode.style.backgroundColor = '#1b855c';
+      if (amountOfFieldIssuesOnBoard > limitOfFieldIssuesOnBoard) {
+        fieldNode.style.backgroundColor = '#ff5630';
+        currentIssueNode.style.backgroundColor = '#ff5630';
+      } else if (amountOfFieldIssuesOnBoard === limitOfFieldIssuesOnBoard) {
+        fieldNode.style.backgroundColor = '#ffd700';
+        currentIssueNode.style.backgroundColor = '#ffd700';
+      } else {
+        fieldNode.style.backgroundColor = '#1b855c';
+        currentIssueNode.style.backgroundColor = '#1b855c';
+      }
+
+      currentIssueNode.innerHTML = `${amountOfFieldIssuesOnBoard}/${limitOfFieldIssuesOnBoard}`;
 
       fieldNode.setAttribute(
         'title',
@@ -110,7 +122,6 @@ export default class FieldLimitsSettingsPage extends PageModification {
           current: amountOfFieldIssuesOnBoard,
           fieldValue,
           fieldName: this.normalizedExtraFields.byId[fieldId].name,
-          projectKey,
         })
       );
     });
@@ -137,12 +148,6 @@ export default class FieldLimitsSettingsPage extends PageModification {
 
         if (!stat.columns.includes(columnId)) return;
         if (swimlaneId && !stat.swimlanes.includes(swimlaneId)) return;
-
-        const projectKey =
-          issue.querySelector(FieldLimitsSettingsPage.jiraSelectors.projectKey)?.innerHTML ||
-          issue.querySelector('.ghx-issuekey-pkey')?.innerHTML; // Old Jira || New Jira
-
-        if (projectKey !== stat.projectKey) return;
 
         for (const exField of extraFieldsForIssue) {
           const tooltipAttr = exField.getAttribute('data-tooltip');

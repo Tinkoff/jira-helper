@@ -2,11 +2,10 @@ import indexBy from '@tinkoff/utils/array/indexBy';
 import pluck from '@tinkoff/utils/array/pluck';
 
 export const limitsKey = {
-  encode: (projectKey, fieldValue, fieldId) => `${projectKey}@@@${fieldValue}@@@${fieldId}`,
+  encode: (fieldValue, fieldId) => `${fieldValue}@@@${fieldId}`,
   decode: limitKey => {
-    const [projectKey, fieldValue, fieldId] = limitKey.split('@@@');
+    const [fieldValue, fieldId] = limitKey.split('@@@');
     return {
-      projectKey,
       fieldValue,
       fieldId,
     };

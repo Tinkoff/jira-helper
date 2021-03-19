@@ -7,8 +7,10 @@ import { limitsKey, normalize } from '../shared';
 
 export default class FieldLimitsSettingsPage extends PageModification {
   static jiraSelectors = {
-    detailView: '#ghx-config-cardLayout',
-    detailViewDesc: '#ghx-config-cardLayout > p',
+    cardLayout: '#ghx-config-cardLayout',
+    cardLayoutDesc: '#ghx-config-cardLayout > p',
+    cardLayoutConfig: '#ghx-card-layout-config-work',
+    cardLayoutCurrentFields: '#ghx-card-layout-config-work .ui-sortable > tr',
   };
 
   static ids = {
@@ -16,7 +18,6 @@ export default class FieldLimitsSettingsPage extends PageModification {
     popupTable: 'jh-field-limits-table',
     popupTableBody: 'jh-field-limits-tbody',
     popupTableAddLimitRow: 'jh-field-limits-add-btn',
-    inputProjectKey: 'jh-input-project-key',
     inputFieldValue: 'jh-input-field-value',
     columnsSelectId: 'jh-columns-select',
     swimlanesSelectId: 'jh-swimlanes-select',
@@ -39,7 +40,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
   }
 
   waitForLoading() {
-    return this.waitForElement(FieldLimitsSettingsPage.jiraSelectors.detailView);
+    return this.waitForElement(FieldLimitsSettingsPage.jiraSelectors.cardLayout);
   }
 
   loadData() {
@@ -54,7 +55,6 @@ export default class FieldLimitsSettingsPage extends PageModification {
           [limitKeys.encode(....)]: {
               fieldValue: string,
               fieldId: string,
-              projectKey: string,
               limit: number,
               columns: string[],
               swimlanes: string[]
@@ -67,7 +67,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
 
     this.boardData = boardData;
 
-    this.normalizedFields = normalize('fieldId', boardData.detailViewFieldConfig.currentFields);
+    this.normalizedFields = normalize('fieldId', this.getCurrentFields());
     this.normalizedSwimlanes = normalize('id', boardData.swimlanesConfig.swimlanes);
     this.normalizedColumns = normalize('id', boardData.rapidListConfig.mappedColumns);
 
@@ -75,12 +75,31 @@ export default class FieldLimitsSettingsPage extends PageModification {
       limits: quickFilterSettings.limits || {},
     };
 
+    this.onDOMChange(
+      FieldLimitsSettingsPage.jiraSelectors.cardLayoutConfig,
+      () => {
+        this.normalizedFields = normalize('fieldId', this.getCurrentFields());
+      },
+      { childList: true, subtree: true }
+    );
+
     this.renderEditButton();
+  }
+
+  getCurrentFields() {
+    const currentFieldNodes = document.querySelectorAll(FieldLimitsSettingsPage.jiraSelectors.cardLayoutCurrentFields);
+
+    const result = [];
+    currentFieldNodes.forEach(node => {
+      const fieldId = node.getAttribute('data-fieldid');
+      result.push({ fieldId, name: node.children[1]?.innerText });
+    });
+    return result;
   }
 
   renderEditButton() {
     this.insertHTML(
-      document.querySelector(FieldLimitsSettingsPage.jiraSelectors.detailViewDesc),
+      document.querySelector(FieldLimitsSettingsPage.jiraSelectors.cardLayoutDesc),
       'afterend',
       settingsEditBtnTemplate(FieldLimitsSettingsPage.ids.settingsBtn)
     );
@@ -103,7 +122,6 @@ export default class FieldLimitsSettingsPage extends PageModification {
         tableId: FieldLimitsSettingsPage.ids.popupTable,
         tableBodyId: FieldLimitsSettingsPage.ids.popupTableBody,
         addLimitBtnId: FieldLimitsSettingsPage.ids.popupTableAddLimitRow,
-        projectKeyInputId: FieldLimitsSettingsPage.ids.inputProjectKey,
         fieldValueInputId: FieldLimitsSettingsPage.ids.inputFieldValue,
         columnsSelectId: FieldLimitsSettingsPage.ids.columnsSelectId,
         swimlanesSelectId: FieldLimitsSettingsPage.ids.swimlanesSelectId,
@@ -162,15 +180,14 @@ export default class FieldLimitsSettingsPage extends PageModification {
 
   handleAddFieldLimitRowClick() {
     this.addEventListener(document.getElementById(FieldLimitsSettingsPage.ids.popupTableAddLimitRow), 'click', () => {
-      const { fieldId, fieldValue, projectKey, limit } = this.getInputValues();
+      const { fieldId, fieldValue, limit } = this.getInputValues();
       const { columns, swimlanes } = this.getSelectedSwimlanesAndColumnsOptions();
-      const id = limitsKey.encode(projectKey, fieldValue, fieldId);
+      const id = limitsKey.encode(fieldValue, fieldId);
 
       if (!this.settings.limits[id]) {
         this.settings.limits[id] = {
           fieldValue,
           fieldId,
-          projectKey,
           limit: +limit,
           columns,
           swimlanes,
@@ -190,13 +207,12 @@ export default class FieldLimitsSettingsPage extends PageModification {
     document.getElementById(FieldLimitsSettingsPage.ids.popupTableBody).innerHTML = '';
 
     Object.keys(this.settings.limits).forEach(limitKey => {
-      const { limit, columns, swimlanes, fieldId, fieldValue, projectKey } = this.settings.limits[limitKey];
+      const { limit, columns, swimlanes, fieldId, fieldValue } = this.settings.limits[limitKey];
 
       this.renderLimitRow({
         id: limitKey,
         fieldValue,
         fieldId,
-        projectKey,
         limit,
         columns,
         swimlanes,
@@ -204,13 +220,12 @@ export default class FieldLimitsSettingsPage extends PageModification {
     });
   }
 
-  renderLimitRow({ id, projectKey, fieldValue, fieldId, limit, columns, swimlanes }) {
+  renderLimitRow({ id, fieldValue, fieldId, limit, columns, swimlanes }) {
     const row = this.insertHTML(
       document.getElementById(FieldLimitsSettingsPage.ids.popupTableBody),
       'beforeend',
       fieldRowTemplate({
         id,
-        projectKey,
         fieldValue,
         fieldId,
         fieldName: this.normalizedFields.byId[fieldId].name,
@@ -229,14 +244,12 @@ export default class FieldLimitsSettingsPage extends PageModification {
 
   getInputValues() {
     const fieldValue = document.getElementById(FieldLimitsSettingsPage.ids.inputFieldValue).value;
-    const projectKey = document.getElementById(FieldLimitsSettingsPage.ids.inputProjectKey).value;
     const limit = document.getElementById(FieldLimitsSettingsPage.ids.wipLimitInputId).value;
 
     const selectedField = document.getElementById(FieldLimitsSettingsPage.ids.fieldSelectId)?.selectedOptions[0];
     const fieldId = selectedField.value;
 
     return {
-      projectKey,
       fieldValue,
       fieldId,
       limit,

@@ -8,7 +8,6 @@ export const fieldLimitsTableTemplate = ({
   tableId,
   tableBodyId,
   addLimitBtnId,
-  projectKeyInputId,
   fieldValueInputId,
   columnsSelectId,
   swimlanesSelectId,
@@ -25,9 +24,18 @@ export const fieldLimitsTableTemplate = ({
         <table>
           <tr>
             <td>
-              <div class="field-group">
-                <label for="project-key">Project Key</label>
-                <input id="${projectKeyInputId}" class="text medium-field" name="project-key" type="text" value="" placeholder="Project Key, f.e. PFI" />
+               <div class="field-group">
+                <label for="field-name">Field</label>
+                <select id="${selectFieldId}" class="select" name="field-name" defaultValue="${
+  selectFieldOptions[0]?.value
+}">
+                    ${selectFieldOptions.map(
+                      (option, i) =>
+                        `<option ${i === 0 ? 'selected="selected"' : ''} value="${option.value}">${
+                          option.text
+                        }</option>`
+                    )}
+                </select>
               </div>
               <div class="field-group">
                 <label for="field-value">Field Value</label>
@@ -36,17 +44,6 @@ export const fieldLimitsTableTemplate = ({
               <div class="field-group">
                 <label for="field-limit">WIP Limit</label>
                 <input id="${wipLimitInputId}" class="text medium-field" type="number" name="field-limit" placeholder="0">
-              </div>
-              <div class="field-group">
-                <label for="field-name">Field</label>
-                <select id="${selectFieldId}" class="select" name="field-name" defaultValue="${
-  selectFieldOptions[0]?.value
-}">
-                  ${selectFieldOptions.map(
-                    (option, i) =>
-                      `<option ${i === 0 ? 'selected="selected"' : ''} value="${option.value}">${option.text}</option>`
-                  )}
-                </select>
               </div>
             </td>
             <td>
@@ -85,7 +82,6 @@ export const fieldLimitsTableTemplate = ({
         <thead>
           <tr>
             <th></th>
-            <th>Project</th>
             <th>Field Name</th>
             <th>Field Value</th>
             <th>Limit</th>
@@ -102,7 +98,6 @@ export const fieldLimitsTableTemplate = ({
 
 export const fieldRowTemplate = ({
   id,
-  projectKey,
   fieldId,
   fieldName,
   fieldValue,
@@ -113,7 +108,6 @@ export const fieldRowTemplate = ({
 }) => `
     <tr data-field-project-row="${id}">
       <td><input type="checkbox" class="checkbox" data-id="${id}"></td>
-      <td data-type="project-key">${projectKey}</td>
       <td data-type="field-name" data-value="${fieldId}">${fieldName}</td>
       <td data-type="field-value">${fieldValue}</td>
       <td data-type="field-limit">${limit}</td>
