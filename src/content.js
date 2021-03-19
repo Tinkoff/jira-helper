@@ -12,6 +12,8 @@ import TetrisPlanningButton from './tetris-planning/TetrisPlanningButton';
 import TetrisPlanning from './tetris-planning/TetrisPlanning';
 import BugTemplate from './bug-template/BugTemplate';
 import MarkFlaggedIssues from './issue/MarkFlaggedIssues';
+import FieldLimitsSettingsPage from './field-limits/SettingsPage';
+import FieldLimitsBoardPage from './field-limits/BoardPage';
 import PrintCards from './printcards/PrintCards';
 import { setUpBlurSensitiveOnPage, initBlurSensitive } from './blur-for-sensitive/blurSensitive';
 import PersonLimitsSettings from './person-limits/PersonLimitsSettings';
@@ -38,8 +40,15 @@ async function start() {
       TetrisPlanning,
       MarkFlaggedIssues,
       PersonLimits,
+      FieldLimitsBoardPage,
     ],
-    [Routes.SETTINGS]: [SwimlaneSettingsPopup, WIPLimitsSettingsPage, PersonLimitsSettings, TetrisPlanningButton],
+    [Routes.SETTINGS]: [
+      SwimlaneSettingsPopup,
+      WIPLimitsSettingsPage,
+      PersonLimitsSettings,
+      TetrisPlanningButton,
+      FieldLimitsSettingsPage,
+    ],
     [Routes.ISSUE]: [MarkFlaggedIssues],
     [Routes.SEARCH]: [MarkFlaggedIssues, PrintCards],
     [Routes.REPORTS]: [AddSlaLine, AddChartGrid],
