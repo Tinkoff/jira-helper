@@ -44,7 +44,6 @@ export default class extends PageModification {
     <style type="text/css">
         #avatars-limits {
             display: inline-flex;
-            position: absolute;
             margin-left: 30px;
         }
 

@@ -1,10 +1,15 @@
 .fieldLimitsList {
     display: inline-flex;
     margin-left: 20px;
-    position: relative;
+    position: absolute;
 }
 
 .fieldLimitsItem {
-    font-size: 0.8em;
-    margin-right: 5px;
+    width: 32px;
+    height: 32px;
+    font-size: 1.4rem;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+    color: white;
 }

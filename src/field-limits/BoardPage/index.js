@@ -8,7 +8,7 @@ import { settingsJiraDOM as DOM } from '../../swimlane/constants';
 
 export default class FieldLimitsSettingsPage extends PageModification {
   static jiraSelectors = {
-    boardName: '#ghx-board-name',
+    subnavTitle: '#subnav-title',
     projectKey: '.ghx-key-link-project-key',
     extraField: '.ghx-extra-field',
     swimlane: '.ghx-swimlane',
@@ -71,17 +71,17 @@ export default class FieldLimitsSettingsPage extends PageModification {
   applyLimitsList(limitsStats) {
     if (!this.fieldLimitsList || !document.body.contains(this.fieldLimitsList)) {
       this.fieldLimitsList = this.insertHTML(
-        document.querySelector(FieldLimitsSettingsPage.jiraSelectors.boardName),
+        document.querySelector(FieldLimitsSettingsPage.jiraSelectors.subnavTitle),
         'beforeend',
         fieldLimitsTemplate({
           listBody: Object.keys(limitsStats)
             .map(limitKey => {
-              const { projectKey, fieldId, fieldValue } = limitsKey.decode(limitKey);
+              const { fieldValue } = limitsKey.decode(limitKey);
 
               return fieldLimitBlockTemplate({
                 blockClass: FieldLimitsSettingsPage.classes.fieldLimitsBlock,
                 dataFieldLimitKey: limitKey,
-                innerText: `[ ${projectKey} | ${this.normalizedExtraFields.byId[fieldId].name} | ${fieldValue} ]`,
+                innerText: fieldValue.charAt(0),
               });
             })
             .join(''),
@@ -99,9 +99,9 @@ export default class FieldLimitsSettingsPage extends PageModification {
       const amountOfFieldIssuesOnBoard = stat.issues.length;
       const limitOfFieldIssuesOnBoard = stat.limit;
 
-      if (amountOfFieldIssuesOnBoard > limitOfFieldIssuesOnBoard) fieldNode.style.color = '#ff5630';
-      else if (amountOfFieldIssuesOnBoard === limitOfFieldIssuesOnBoard) fieldNode.style.color = '#ffd700';
-      else fieldNode.style.color = '#1b855c';
+      if (amountOfFieldIssuesOnBoard > limitOfFieldIssuesOnBoard) fieldNode.style.backgroundColor = '#ff5630';
+      else if (amountOfFieldIssuesOnBoard === limitOfFieldIssuesOnBoard) fieldNode.style.backgroundColor = '#ffd700';
+      else fieldNode.style.backgroundColor = '#1b855c';
 
       fieldNode.setAttribute(
         'title',
