@@ -15,7 +15,7 @@ import {
 } from './htmlTemplates';
 import styles from './styles.css';
 import { getRandomString } from '../../shared/utils';
-import { ColorPickerTooltip } from './colorPickerTooltip';
+import { ColorPickerTooltip } from '../../_common/colorPickerTooltip';
 
 const WITHOUT_GROUP_ID = 'Without Group';
 
