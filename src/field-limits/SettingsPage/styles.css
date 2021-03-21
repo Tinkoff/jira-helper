@@ -9,3 +9,16 @@
 .settingsEditBtn {
     margin-top: 1rem;
 }
+
+.fieldValue {
+  color: #ffffff;
+  height: 32px;
+  border-radius: 25%;
+  background-color: #3366ff;
+  text-align: center;
+  width: 40px;
+  font-size: 0.8vw;
+  vertical-align: middle;
+  line-height: 32px;
+  overflow: hidden;
+}

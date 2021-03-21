@@ -109,7 +109,7 @@ export const fieldRowTemplate = ({
     <tr data-field-project-row="${id}">
       <td><input type="checkbox" class="checkbox" data-id="${id}"></td>
       <td data-type="field-name" data-value="${fieldId}">${fieldName}</td>
-      <td data-type="field-value">${fieldValue}</td>
+      <td data-type="field-value"><div class="${style.fieldValue}">${fieldValue}</div></td>
       <td data-type="field-limit">${limit}</td>
       <td data-type="field-columns">${columns.map(c => c.name).join(', ')}</td>
       <td data-type="field-swimlanes">${swimlanes.map(s => s.name).join(', ')}</td>
