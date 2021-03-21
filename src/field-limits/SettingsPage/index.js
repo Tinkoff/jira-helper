@@ -4,6 +4,7 @@ import { settingsEditBtnTemplate, fieldLimitsTableTemplate, fieldRowTemplate } f
 import { Popup } from '../../shared/getPopup';
 import { BOARD_PROPERTIES } from '../../shared/constants';
 import { limitsKey, normalize } from '../shared';
+import { ColorPickerTooltip } from '../../_common/colorPickerTooltip';
 
 export default class FieldLimitsSettingsPage extends PageModification {
   static jiraSelectors = {
@@ -82,6 +83,18 @@ export default class FieldLimitsSettingsPage extends PageModification {
       },
       { childList: true, subtree: true }
     );
+
+    this.colorPickerTooltip = new ColorPickerTooltip({
+      onClose: () => {
+        this.colorPickerGroupId = null;
+      },
+      onOk: hexStrColor => {
+        this.wipLimits[this.colorPickerGroupId].customHexColor = hexStrColor;
+        this.popup.clearContent();
+        this.renderGroupsEditor();
+      },
+      addEventListener: (target, event, cb) => this.addEventListener(target, event, cb),
+    });
 
     this.renderEditButton();
   }

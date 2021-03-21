@@ -4,7 +4,7 @@ export const fieldLimitsTemplate = ({ listBody }) => `<div class="${s.fieldLimit
 
 export const fieldLimitBlockTemplate = ({ blockClass, dataFieldLimitKey, innerText, issuesCountClass }) => `
                           <div class="${blockClass} ${s.fieldLimitsItem}" data-field-limit-key="${dataFieldLimitKey}">
-                              ${innerText}
+                              <div class="${s.motion}"><span>${innerText}</span></div>
                               <div class="${s.limitStats} ${issuesCountClass}"></div>
                           </div>`;
 
