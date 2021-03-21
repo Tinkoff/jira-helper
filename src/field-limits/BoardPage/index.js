@@ -55,6 +55,11 @@ export default class FieldLimitsSettingsPage extends PageModification {
   applyLimits() {
     const limitsStats = this.getLimitsStats();
 
+    this.doColorCardsIssue(limitsStats);
+    this.applyLimitsList(limitsStats);
+  }
+
+  doColorCardsIssue(limitsStats) {
     Object.keys(limitsStats).forEach(limitKey => {
       const stat = limitsStats[limitKey];
       if (isEmpty(stat.issues)) return;
@@ -64,8 +69,6 @@ export default class FieldLimitsSettingsPage extends PageModification {
           issue.style.backgroundColor = '#ff5630';
         });
     });
-
-    this.applyLimitsList(limitsStats);
   }
 
   applyLimitsList(limitsStats) {
@@ -103,13 +106,10 @@ export default class FieldLimitsSettingsPage extends PageModification {
       const limitOfFieldIssuesOnBoard = stat.limit;
 
       if (amountOfFieldIssuesOnBoard > limitOfFieldIssuesOnBoard) {
-        fieldNode.style.backgroundColor = '#ff5630';
         currentIssueNode.style.backgroundColor = '#ff5630';
       } else if (amountOfFieldIssuesOnBoard === limitOfFieldIssuesOnBoard) {
-        fieldNode.style.backgroundColor = '#ffd700';
         currentIssueNode.style.backgroundColor = '#ffd700';
       } else {
-        fieldNode.style.backgroundColor = '#1b855c';
         currentIssueNode.style.backgroundColor = '#1b855c';
       }
 
