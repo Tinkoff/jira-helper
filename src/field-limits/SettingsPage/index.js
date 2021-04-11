@@ -4,7 +4,7 @@ import { settingsEditBtnTemplate, fieldLimitsTableTemplate, fieldRowTemplate } f
 import { Popup } from '../../shared/getPopup';
 import { BOARD_PROPERTIES } from '../../shared/constants';
 import { limitsKey, normalize } from '../shared';
-import { ColorPickerTooltip } from '../../_common/colorPickerTooltip';
+import { ColorPickerTooltip } from '../../shared/colorPickerTooltip';
 
 export default class FieldLimitsSettingsPage extends PageModification {
   static jiraSelectors = {
@@ -20,6 +20,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
     popupTableBody: 'jh-field-limits-tbody',
     popupTableAddLimitRow: 'jh-field-limits-add-btn',
     inputFieldValue: 'jh-input-field-value',
+    visualNameInput: 'jh-input-visual-name',
     columnsSelectId: 'jh-columns-select',
     swimlanesSelectId: 'jh-swimlanes-select',
     wipLimitInputId: 'jh-wip-limit-input',
@@ -136,6 +137,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
         tableBodyId: FieldLimitsSettingsPage.ids.popupTableBody,
         addLimitBtnId: FieldLimitsSettingsPage.ids.popupTableAddLimitRow,
         fieldValueInputId: FieldLimitsSettingsPage.ids.inputFieldValue,
+        visualNameInputId: FieldLimitsSettingsPage.ids.visualNameInput,
         columnsSelectId: FieldLimitsSettingsPage.ids.columnsSelectId,
         swimlanesSelectId: FieldLimitsSettingsPage.ids.swimlanesSelectId,
         wipLimitInputId: FieldLimitsSettingsPage.ids.wipLimitInputId,
@@ -193,12 +195,13 @@ export default class FieldLimitsSettingsPage extends PageModification {
 
   handleAddFieldLimitRowClick() {
     this.addEventListener(document.getElementById(FieldLimitsSettingsPage.ids.popupTableAddLimitRow), 'click', () => {
-      const { fieldId, fieldValue, limit } = this.getInputValues();
+      const { fieldId, fieldValue, visualValue, limit } = this.getInputValues();
       const { columns, swimlanes } = this.getSelectedSwimlanesAndColumnsOptions();
       const id = limitsKey.encode(fieldValue, fieldId);
 
       if (!this.settings.limits[id]) {
         this.settings.limits[id] = {
+          visualValue,
           fieldValue,
           fieldId,
           limit: +limit,
@@ -220,11 +223,12 @@ export default class FieldLimitsSettingsPage extends PageModification {
     document.getElementById(FieldLimitsSettingsPage.ids.popupTableBody).innerHTML = '';
 
     Object.keys(this.settings.limits).forEach(limitKey => {
-      const { limit, columns, swimlanes, fieldId, fieldValue } = this.settings.limits[limitKey];
+      const { limit, columns, swimlanes, fieldId, fieldValue, visualValue } = this.settings.limits[limitKey];
 
       this.renderLimitRow({
         id: limitKey,
         fieldValue,
+        visualValue,
         fieldId,
         limit,
         columns,
@@ -233,13 +237,14 @@ export default class FieldLimitsSettingsPage extends PageModification {
     });
   }
 
-  renderLimitRow({ id, fieldValue, fieldId, limit, columns, swimlanes }) {
+  renderLimitRow({ id, fieldValue, visualValue, fieldId, limit, columns, swimlanes }) {
     const row = this.insertHTML(
       document.getElementById(FieldLimitsSettingsPage.ids.popupTableBody),
       'beforeend',
       fieldRowTemplate({
         id,
         fieldValue,
+        visualValue,
         fieldId,
         fieldName: this.normalizedFields.byId[fieldId].name,
         limit,
@@ -257,12 +262,14 @@ export default class FieldLimitsSettingsPage extends PageModification {
 
   getInputValues() {
     const fieldValue = document.getElementById(FieldLimitsSettingsPage.ids.inputFieldValue).value;
+    const visualValue = document.getElementById(FieldLimitsSettingsPage.ids.visualNameInput).value;
     const limit = document.getElementById(FieldLimitsSettingsPage.ids.wipLimitInputId).value;
 
     const selectedField = document.getElementById(FieldLimitsSettingsPage.ids.fieldSelectId)?.selectedOptions[0];
     const fieldId = selectedField.value;
 
     return {
+      visualValue,
       fieldValue,
       fieldId,
       limit,

@@ -79,12 +79,12 @@ export default class FieldLimitsSettingsPage extends PageModification {
         fieldLimitsTemplate({
           listBody: Object.keys(limitsStats)
             .map(limitKey => {
-              const { fieldValue } = limitsKey.decode(limitKey);
+              const { visualValue } = limitsStats[limitKey];
 
               return fieldLimitBlockTemplate({
                 blockClass: FieldLimitsSettingsPage.classes.fieldLimitsBlock,
                 dataFieldLimitKey: limitKey,
-                innerText: fieldValue,
+                innerText: visualValue,
                 limitValue: limitsStats[limitKey].limit,
                 issuesCountClass: FieldLimitsSettingsPage.classes.issuesCount,
               });
