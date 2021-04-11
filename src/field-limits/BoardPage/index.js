@@ -43,7 +43,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
     if (isEmpty(fieldLimits) || isEmpty(fieldLimits.limits)) return;
     this.fieldLimits = fieldLimits;
     this.cssSelectorOfIssues = this.getCssSelectorOfIssues(boardData);
-    this.normalizedExtraFields = normalize('fieldId', boardData.detailViewFieldConfig.currentFields);
+    this.normalizedExtraFields = normalize('fieldId', boardData.cardLayoutConfig.currentFields);
 
     this.applyLimits();
     this.onDOMChange(FieldLimitsSettingsPage.jiraSelectors.ghxPool, () => this.applyLimits(), {
