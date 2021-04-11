@@ -9,7 +9,7 @@
 .fieldLimitsItem {
     width: 40px;
     height: 32px;
-    font-size: 1.4rem;
+    font-size: 0.8rem;
     line-height: 30px;
     margin-left: 4px;
     text-align: center;
@@ -31,24 +31,4 @@
     font-size: 12px;
     line-height: 12px;
     font-weight: 400;
-}
-
-@keyframes scroll {
-  0% {transform: translate(0,0);}
-  100% {transform: translate(-100%,0);}
-}
-
-.motion {
-  display: block;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.motion span {
-  display: inline-block;
-}
-
-.motion span:hover {
-  animation: scroll 5s infinite linear;
 }
