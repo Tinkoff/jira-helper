@@ -108,6 +108,7 @@ export const fieldRowTemplate = ({
   fieldName,
   fieldValue,
   visualValue,
+  bkgColor,
   limit,
   columns = [],
   swimlanes = [],
@@ -117,7 +118,8 @@ export const fieldRowTemplate = ({
       <td><input type="checkbox" class="checkbox" data-id="${id}"></td>
       <td data-type="field-name" data-value="${fieldId}">${fieldName}</td>
       <td data-type="field-value">${fieldValue}</td>
-      <td data-type="visual-name"><div class="${style.fieldValue}">${visualValue}</div></td>
+      <td data-type="visual-name"><div data-id="${id}"
+          class="${style.visualName}" style="background-color:${bkgColor || 'none'}">${visualValue}</div></td>
       <td data-type="field-limit">${limit}</td>
       <td data-type="field-columns">${columns.map(c => c.name).join(', ')}</td>
       <td data-type="field-swimlanes">${swimlanes.map(s => s.name).join(', ')}</td>

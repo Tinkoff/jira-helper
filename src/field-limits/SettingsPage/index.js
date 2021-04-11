@@ -5,6 +5,7 @@ import { Popup } from '../../shared/getPopup';
 import { BOARD_PROPERTIES } from '../../shared/constants';
 import { limitsKey, normalize } from '../shared';
 import { ColorPickerTooltip } from '../../shared/colorPickerTooltip';
+import style from './styles.css';
 
 export default class FieldLimitsSettingsPage extends PageModification {
   static jiraSelectors = {
@@ -87,12 +88,11 @@ export default class FieldLimitsSettingsPage extends PageModification {
 
     this.colorPickerTooltip = new ColorPickerTooltip({
       onClose: () => {
-        this.colorPickerGroupId = null;
+        this.colorPickerFieldId = null;
       },
       onOk: hexStrColor => {
-        this.wipLimits[this.colorPickerGroupId].customHexColor = hexStrColor;
-        this.popup.clearContent();
-        this.renderGroupsEditor();
+        this.settings.limits[this.colorPickerFieldId].bkgColor = hexStrColor;
+        this.renderRows();
       },
       addEventListener: (target, event, cb) => this.addEventListener(target, event, cb),
     });
@@ -160,8 +160,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
     );
 
     this.renderRows();
-    this.handleAddFieldLimitRowClick();
-    this.handleAppliesLimitsToRows();
+    this.renderColorPicker();
   };
 
   handleAppliesLimitsToRows() {
@@ -219,25 +218,58 @@ export default class FieldLimitsSettingsPage extends PageModification {
     unmountCallback();
   };
 
+  renderColorPicker = () => {
+    this.popup.appendToContent(this.colorPickerTooltip.html());
+    this.colorPickerTooltip.init();
+
+    this.addEventListener(this.popup.contentBlock, 'scroll', () => {
+      this.colorPickerTooltip.hideTooltip();
+    });
+    {
+      const table = document.getElementById(FieldLimitsSettingsPage.ids.popupTable);
+      const getTooltipPosition = target => {
+        const visualNamePosition = target.getBoundingClientRect();
+        const popupTopOffset = Number.parseInt(
+          window.getComputedStyle(this.popup.htmlElement).getPropertyValue('top'),
+          10
+        );
+        return visualNamePosition.top - popupTopOffset;
+      };
+
+      this.addEventListener(table, 'click', event => {
+        if (!event.target.classList.contains(style.visualName)) return;
+
+        this.colorPickerFieldId = event.target.getAttribute('data-id');
+        const tooltipTopPosition = getTooltipPosition(event.target);
+
+        this.colorPickerTooltip.showTooltip(tooltipTopPosition);
+      });
+    }
+  };
+
   renderRows() {
     document.getElementById(FieldLimitsSettingsPage.ids.popupTableBody).innerHTML = '';
 
     Object.keys(this.settings.limits).forEach(limitKey => {
-      const { limit, columns, swimlanes, fieldId, fieldValue, visualValue } = this.settings.limits[limitKey];
+      const { limit, columns, swimlanes, fieldId, fieldValue, visualValue, bkgColor } = this.settings.limits[limitKey];
 
       this.renderLimitRow({
         id: limitKey,
         fieldValue,
         visualValue,
+        bkgColor,
         fieldId,
         limit,
         columns,
         swimlanes,
       });
     });
+
+    this.handleAddFieldLimitRowClick();
+    this.handleAppliesLimitsToRows();
   }
 
-  renderLimitRow({ id, fieldValue, visualValue, fieldId, limit, columns, swimlanes }) {
+  renderLimitRow({ id, fieldValue, visualValue, bkgColor, fieldId, limit, columns, swimlanes }) {
     const row = this.insertHTML(
       document.getElementById(FieldLimitsSettingsPage.ids.popupTableBody),
       'beforeend',
@@ -245,6 +277,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
         id,
         fieldValue,
         visualValue,
+        bkgColor,
         fieldId,
         fieldName: this.normalizedFields.byId[fieldId].name,
         limit,
