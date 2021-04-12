@@ -63,11 +63,8 @@ export default class SettingsWIPLimits extends PageModification {
 
     this.wipLimits = wipLimits;
     this.colorPickerTooltip = new ColorPickerTooltip({
-      onClose: () => {
-        this.colorPickerGroupId = null;
-      },
-      onOk: hexStrColor => {
-        this.wipLimits[this.colorPickerGroupId].customHexColor = hexStrColor;
+      onOk: (hexStrColor, dataId) => {
+        this.wipLimits[dataId].customHexColor = hexStrColor;
         this.popup.clearContent();
         this.renderGroupsEditor();
       },
@@ -276,33 +273,12 @@ export default class SettingsWIPLimits extends PageModification {
   }
 
   showColorPicker = () => {
-    this.popup.appendToContent(this.colorPickerTooltip.html());
-    this.colorPickerTooltip.init();
+    const allGroups = document.getElementById(SettingsWIPLimits.ids.allGroups);
+    this.colorPickerTooltip.init(this.popup.contentBlock, 'data-group-id');
 
-    this.addEventListener(this.popup.contentBlock, 'scroll', () => {
-      this.colorPickerTooltip.hideTooltip();
+    this.addEventListener(allGroups, 'click', event => {
+      this.colorPickerTooltip.showTooltip(event);
     });
-
-    {
-      const allGroups = document.getElementById(SettingsWIPLimits.ids.allGroups);
-      const getTooltipPosition = target => {
-        const dropzonePosition = target.getBoundingClientRect();
-        const popupTopOffset = Number.parseInt(
-          window.getComputedStyle(this.popup.htmlElement).getPropertyValue('top'),
-          10
-        );
-        return dropzonePosition.top - popupTopOffset;
-      };
-
-      this.addEventListener(allGroups, 'click', event => {
-        if (!event.target.classList.contains(SettingsWIPLimits.classes.dropzone)) return;
-
-        this.colorPickerGroupId = event.target.getAttribute('data-group-id');
-        const tooltipTopPosition = getTooltipPosition(event.target);
-
-        this.colorPickerTooltip.showTooltip(tooltipTopPosition);
-      });
-    }
   };
 
   handleSubmit = async unmountPopup => {

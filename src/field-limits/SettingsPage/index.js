@@ -5,7 +5,6 @@ import { Popup } from '../../shared/getPopup';
 import { BOARD_PROPERTIES } from '../../shared/constants';
 import { limitsKey, normalize } from '../shared';
 import { ColorPickerTooltip } from '../../shared/colorPickerTooltip';
-import style from './styles.css';
 
 export default class FieldLimitsSettingsPage extends PageModification {
   static jiraSelectors = {
@@ -87,11 +86,8 @@ export default class FieldLimitsSettingsPage extends PageModification {
     );
 
     this.colorPickerTooltip = new ColorPickerTooltip({
-      onClose: () => {
-        this.colorPickerFieldId = null;
-      },
-      onOk: hexStrColor => {
-        this.settings.limits[this.colorPickerFieldId].bkgColor = hexStrColor;
+      onOk: (hexStrColor, dataId) => {
+        this.settings.limits[dataId].bkgColor = hexStrColor;
         this.renderRows();
       },
       addEventListener: (target, event, cb) => this.addEventListener(target, event, cb),
@@ -219,32 +215,13 @@ export default class FieldLimitsSettingsPage extends PageModification {
   };
 
   renderColorPicker = () => {
-    this.popup.appendToContent(this.colorPickerTooltip.html());
-    this.colorPickerTooltip.init();
+    const table = document.getElementById(FieldLimitsSettingsPage.ids.popupTable);
 
-    this.addEventListener(this.popup.contentBlock, 'scroll', () => {
-      this.colorPickerTooltip.hideTooltip();
+    this.colorPickerTooltip.init(this.popup.contentBlock, 'colorpicker-data-id');
+
+    this.addEventListener(table, 'click', event => {
+      this.colorPickerTooltip.showTooltip(event);
     });
-    {
-      const table = document.getElementById(FieldLimitsSettingsPage.ids.popupTable);
-      const getTooltipPosition = target => {
-        const visualNamePosition = target.getBoundingClientRect();
-        const popupTopOffset = Number.parseInt(
-          window.getComputedStyle(this.popup.htmlElement).getPropertyValue('top'),
-          10
-        );
-        return visualNamePosition.top - popupTopOffset;
-      };
-
-      this.addEventListener(table, 'click', event => {
-        if (!event.target.classList.contains(style.visualName)) return;
-
-        this.colorPickerFieldId = event.target.getAttribute('data-id');
-        const tooltipTopPosition = getTooltipPosition(event.target);
-
-        this.colorPickerTooltip.showTooltip(tooltipTopPosition);
-      });
-    }
   };
 
   renderRows() {
