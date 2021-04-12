@@ -1,7 +1,7 @@
 import mapObj from '@tinkoff/utils/object/map';
 import isEmpty from '@tinkoff/utils/is/empty';
 import { PageModification } from '../../shared/PageModification';
-import { BOARD_PROPERTIES } from '../../shared/constants';
+import { BOARD_PROPERTIES, COLORS } from '../../shared/constants';
 import { limitsKey, normalize } from '../shared';
 import { fieldLimitBlockTemplate, fieldLimitsTemplate, fieldLimitTitleTemplate } from './htmlTemplates';
 import { settingsJiraDOM as DOM } from '../../swimlane/constants';
@@ -66,13 +66,16 @@ export default class FieldLimitsSettingsPage extends PageModification {
 
       if (stat.issues.length > stat.limit)
         stat.issues.forEach(issue => {
-          issue.style.backgroundColor = '#ff5630';
+          issue.style.backgroundColor = COLORS.OVER_WIP_LIMITS;
         });
     });
   }
 
   applyLimitsList(limitsStats) {
     if (!this.fieldLimitsList || !document.body.contains(this.fieldLimitsList)) {
+      if (!document.querySelector(FieldLimitsSettingsPage.jiraSelectors.subnavTitle)) {
+        return;
+      }
       this.fieldLimitsList = this.insertHTML(
         document.querySelector(FieldLimitsSettingsPage.jiraSelectors.subnavTitle),
         'beforeend',
@@ -106,12 +109,16 @@ export default class FieldLimitsSettingsPage extends PageModification {
       const amountOfFieldIssuesOnBoard = stat.issues.length;
       const limitOfFieldIssuesOnBoard = stat.limit;
 
-      if (amountOfFieldIssuesOnBoard > limitOfFieldIssuesOnBoard) {
-        currentIssueNode.style.backgroundColor = '#ff5630';
-      } else if (amountOfFieldIssuesOnBoard === limitOfFieldIssuesOnBoard) {
-        currentIssueNode.style.backgroundColor = '#ffd700';
-      } else {
-        currentIssueNode.style.backgroundColor = '#1b855c';
+      switch (Math.sign(limitOfFieldIssuesOnBoard - amountOfFieldIssuesOnBoard)) {
+        case -1:
+          currentIssueNode.style.backgroundColor = COLORS.OVER_WIP_LIMITS;
+          break;
+        case 0:
+          currentIssueNode.style.backgroundColor = COLORS.ON_THE_LIMIT;
+          break;
+        default:
+          currentIssueNode.style.backgroundColor = COLORS.BELOW_THE_LIMIT;
+          break;
       }
 
       currentIssueNode.innerHTML = `${amountOfFieldIssuesOnBoard}/${limitOfFieldIssuesOnBoard}`;
