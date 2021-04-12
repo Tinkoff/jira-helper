@@ -28,6 +28,8 @@ export class ColorPickerTooltip {
     this.onClose = onClose;
     this.onOk = onOk;
     this.addEventListener = addEventListener;
+    this.dataId = null;
+    this.attrNameOfDataId = null;
   }
 
   html() {
@@ -43,7 +45,23 @@ export class ColorPickerTooltip {
     });
   }
 
-  init() {
+  init(hostElement, attrDataId) {
+    this.hostElement = hostElement;
+    this.attrNameOfDataId = attrDataId;
+
+    if (!(this.hostElement instanceof HTMLElement)) {
+      throw new Error('host element for colorpicker is not DOM element');
+    }
+    if (!this.attrNameOfDataId) {
+      throw new Error('attribute name of data id for colorpicker is empty');
+    }
+
+    this.hostElement.insertAdjacentHTML('beforeend', this.html());
+
+    this.addEventListener(hostElement, 'scroll', () => {
+      this.hideTooltip();
+    });
+
     this.tooltip = document.getElementById(ColorPickerTooltip.ids.colorPickerTooltip);
     this.pickerResultElem = document.getElementById(ColorPickerTooltip.ids.colorPickerResult);
 
@@ -67,15 +85,25 @@ export class ColorPickerTooltip {
     this.onClose();
   }
 
-  showTooltip(position) {
+  showTooltip({ target }) {
+    if (!target.hasAttribute(this.attrNameOfDataId)) return;
     if (!this.tooltip) return;
+
+    this.dataId = target.getAttribute(this.attrNameOfDataId);
+    const position = this.getTooltipPosition(target);
 
     this.tooltip.style.visibility = 'visible';
     this.tooltip.style.top = `${position}px`;
   }
 
+  getTooltipPosition(target) {
+    const tPosition = target.getBoundingClientRect();
+    const hPosition = this.hostElement.getBoundingClientRect();
+    return tPosition.top - hPosition.top;
+  }
+
   _save = () => {
-    this.onOk(this.colorPicker.getColor());
+    this.onOk(this.colorPicker.getColor(), this.dataId);
     this.hideTooltip();
   };
 

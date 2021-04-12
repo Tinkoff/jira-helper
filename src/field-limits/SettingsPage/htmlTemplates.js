@@ -9,6 +9,7 @@ export const fieldLimitsTableTemplate = ({
   tableBodyId,
   addLimitBtnId,
   fieldValueInputId,
+  visualNameInputId,
   columnsSelectId,
   swimlanesSelectId,
   wipLimitInputId,
@@ -40,6 +41,10 @@ export const fieldLimitsTableTemplate = ({
               <div class="field-group">
                 <label for="field-value">Field Value</label>
                 <input id="${fieldValueInputId}" class="text medium-field" type="text" name="field-value" placeholder="Field Value">
+              </div>
+              <div class="field-group">
+                <label for="field-value">Visual Name</label>
+                <input id="${visualNameInputId}" class="text medium-field" type="text" name="visual-name" placeholder="Visual Name">
               </div>
               <div class="field-group">
                 <label for="field-limit">WIP Limit</label>
@@ -84,6 +89,7 @@ export const fieldLimitsTableTemplate = ({
             <th></th>
             <th>Field Name</th>
             <th>Field Value</th>
+            <th>Visual Name</th>
             <th>Limit</th>
             <th>Columns</th>
             <th>Swimlanes</th>
@@ -101,6 +107,8 @@ export const fieldRowTemplate = ({
   fieldId,
   fieldName,
   fieldValue,
+  visualValue,
+  bkgColor,
   limit,
   columns = [],
   swimlanes = [],
@@ -110,6 +118,8 @@ export const fieldRowTemplate = ({
       <td><input type="checkbox" class="checkbox" data-id="${id}"></td>
       <td data-type="field-name" data-value="${fieldId}">${fieldName}</td>
       <td data-type="field-value">${fieldValue}</td>
+      <td data-type="visual-name"><div colorpicker-data-id="${id}"
+          class="${style.visualName}" style="background-color:${bkgColor || 'none'}">${visualValue}</div></td>
       <td data-type="field-limit">${limit}</td>
       <td data-type="field-columns">${columns.map(c => c.name).join(', ')}</td>
       <td data-type="field-swimlanes">${swimlanes.map(s => s.name).join(', ')}</td>
