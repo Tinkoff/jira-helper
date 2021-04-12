@@ -1,6 +1,6 @@
 {
   "name": "jira-helper",
-  "version": "2.11.0",
+  "version": "2.11.1",
   "description": "jira-helper: Elements for vizualizations, tetris-planing with sprints, button template, swimline-viz",
   "repository": "https://github.com/TinkoffCreditSystems/jira-helper.git",
   "license": "ISC",
@@ -29,6 +29,20 @@
       "name": "Alexey Sokolov",
       "url": "https://github.com/Polvista",
       "email:": "sokol789@yandex.ru"
+    },
+    {
+      "name": "Krotov Artem",
+      "url": "https://github.com/timmson"
+    },
+    {
+      "name": "Dmitry",
+      "url": "https://github.com/ddrozdov",
+      "email:": "vodzord@gmail.com"
+    },
+    {
+      "name": "Max",
+      "url": "https://github.com/Maksimall89",
+      "email:": "maksimall89@gmail.com"
     }
   ],
   "scripts": {
