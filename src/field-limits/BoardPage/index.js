@@ -145,6 +145,16 @@ export default class FieldLimitsSettingsPage extends PageModification {
     return someSwimline.getAttribute('aria-label').indexOf('custom:') !== -1;
   }
 
+  getExtraFieldHasValue(exField, value) {
+    let result = false;
+    if (exField.childNodes instanceof NodeList) {
+      exField.childNodes.forEach(el => {
+        result = result || el.innerText.indexOf(value) > -1;
+      });
+    }
+    return result;
+  }
+
   countAmountPersonalIssuesInColumn(column, stats, swimlaneId) {
     const { columnId } = column.dataset;
 
@@ -157,11 +167,13 @@ export default class FieldLimitsSettingsPage extends PageModification {
         if (!stat.columns.includes(columnId)) return;
         if (swimlaneId && !stat.swimlanes.includes(swimlaneId)) return;
 
+        const fieldNameSt = this.normalizedExtraFields.byId[stat.fieldId].name;
+
         for (const exField of extraFieldsForIssue) {
           const tooltipAttr = exField.getAttribute('data-tooltip');
-          const expectedTooltipAttrValue = `${this.normalizedExtraFields.byId[stat.fieldId].name}: ${stat.fieldValue}`;
+          const fieldName = tooltipAttr.split(':')[0];
 
-          if (tooltipAttr && tooltipAttr === expectedTooltipAttrValue) {
+          if (fieldName === fieldNameSt && this.getExtraFieldHasValue(exField, stat.fieldValue)) {
             stats[fieldLimitKey].issues.push(issue);
           }
         }
