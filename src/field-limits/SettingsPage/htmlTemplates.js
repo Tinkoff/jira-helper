@@ -54,14 +54,14 @@ export const fieldLimitsTableTemplate = ({
             <td>
               <div class="field-group" style="display: flex">
                 <label>Columns</label>
-                <select id="${columnsSelectId}" class="select2" multiple style="margin: 0 12px" size="4">
+                <select id="${columnsSelectId}" class="select2" multiple style="margin: 0 12px; width: 195px;" size="4">
                   ${columnOptions.map(option => `<option selected value="${option.value}">${option.text}</option>`)}
                 </select>
                 <button type="button" id="${applyColumnsId}" class="aui-button aui-button-link">Apply columns<br/>for selected users</button>
               </div>
               <div class="field-group" style="display: flex">
                 <label>Swimlanes</label>
-                <select id="${swimlanesSelectId}" class="select2" multiple style="margin: 0 12px" size="5">
+                <select id="${swimlanesSelectId}" class="select2" multiple style="margin: 0 12px; width: 195px;" size="5">
                   ${swimlaneOptions.map(option => `<option selected value="${option.value}">${option.text}</option>`)}
                 </select>
                 <button type="button" id="${applySwimlanesId}" class="aui-button aui-button-link">Apply swimlanes<br/>for selected users</button>
