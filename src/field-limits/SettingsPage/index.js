@@ -247,6 +247,9 @@ export default class FieldLimitsSettingsPage extends PageModification {
   }
 
   renderLimitRow({ id, fieldValue, visualValue, bkgColor, fieldId, limit, columns, swimlanes }) {
+    const nzFieldIdSettings = this.normalizedFields.byId[fieldId];
+
+    const fieldName = nzFieldIdSettings ? nzFieldIdSettings.name : `[${fieldId}]`;
     const row = this.insertHTML(
       document.getElementById(FieldLimitsSettingsPage.ids.popupTableBody),
       'beforeend',
@@ -256,10 +259,10 @@ export default class FieldLimitsSettingsPage extends PageModification {
         visualValue,
         bkgColor,
         fieldId,
-        fieldName: this.normalizedFields.byId[fieldId].name,
+        fieldName,
         limit,
-        columns: columns.map(columnId => this.normalizedColumns.byId[columnId]),
-        swimlanes: swimlanes.map(swimlaneId => this.normalizedSwimlanes.byId[swimlaneId]),
+        columns: columns.map(columnId => this.normalizedColumns.byId[columnId] || `column [${fieldId}]`),
+        swimlanes: swimlanes.map(swimlaneId => this.normalizedSwimlanes.byId[swimlaneId] || `swimlane [${fieldId}]`),
         deleteClassBtn: FieldLimitsSettingsPage.classes.deleteRowBtn,
       })
     );
