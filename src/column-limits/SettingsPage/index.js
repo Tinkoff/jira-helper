@@ -196,7 +196,6 @@ export default class SettingsWIPLimits extends PageModification {
   columnHtml(id, column, groupId) {
     const columnHeader = column.querySelector(SettingsWIPLimits.jiraSelectors.columnHeaderName);
     const columnTitle = columnHeader.getAttribute('title');
-
     return columnTemplate({
       columnTitle,
       columnId: id,
@@ -281,8 +280,31 @@ export default class SettingsWIPLimits extends PageModification {
     });
   };
 
+  getWipLimitsForOnlyExistsColumns() {
+    const columns = Array.from(this.getColumns()).map(el => el.getAttribute('data-column-id'));
+    const wipLimits = {};
+
+    Object.keys(this.wipLimits).forEach(key => {
+      const group = this.wipLimits[key];
+      let i = group.columns.length - 1;
+
+      while (i >= 0) {
+        if (!columns.includes(group.columns[i])) {
+          group.columns.splice(i, 1);
+        }
+        i -= 1;
+      }
+
+      if (group.columns.length > 0) {
+        wipLimits[key] = group;
+      }
+    });
+
+    return wipLimits;
+  }
+
   handleSubmit = async unmountPopup => {
-    await this.updateBoardProperty(BOARD_PROPERTIES.WIP_LIMITS_SETTINGS, this.wipLimits);
+    await this.updateBoardProperty(BOARD_PROPERTIES.WIP_LIMITS_SETTINGS, this.getWipLimitsForOnlyExistsColumns());
     unmountPopup();
   };
 }

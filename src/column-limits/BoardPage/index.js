@@ -119,6 +119,12 @@ export default class extends PageModification {
         ...groupColumns.map(columnId => columnsInOrder.indexOf(columnId)).filter(index => index != null)
       );
       const leftTailColumnId = columnsInOrder[leftTailColumnIndex];
+
+      if (!leftTailColumnId) {
+        // throw `Need rebuild WIP-limits of columns. WIP-limits used not exists column ${leftTailColumnId}`;
+        return;
+      }
+
       this.insertHTML(
         document.querySelector(`.ghx-column[data-id="${leftTailColumnId}"]`),
         'beforeend',
