@@ -48,7 +48,8 @@ export default class extends PageModification {
         }
 
         #avatars-limits .person-avatar {
-        position: relative;
+            cursor: pointer;
+            position: relative;
             margin-right: 4px;
             width: 32px;
             height: 32px;
@@ -104,12 +105,7 @@ export default class extends PageModification {
     });
 
     if (!this.avatarsList || !document.body.contains(this.avatarsList)) {
-      this.avatarsList = this.insertHTML(
-        document.querySelector('#subnav-title'),
-        'beforeend',
-        `
-    <div id="avatars-limits">
-      ${stats
+      const html = stats
         .map(
           personLimit => `
         <div class="person-avatar">
@@ -117,13 +113,17 @@ export default class extends PageModification {
             <div class="limit-stats">
                 <span class="stats-current"></span>/<span>${personLimit.limit}</span>
             </div>
-        </div>
-      `
+        </div>`
         )
-        .join('')}
-    </div>
-    `
-      );
+        .join('');
+
+      this.avatarsList = document.createElement('div');
+
+      this.avatarsList.id = 'avatars-limits';
+      this.avatarsList.innerHTML = html;
+
+      this.addEventListener(this.avatarsList, 'click', this.onClickAvatar);
+      document.querySelector('#subnav-title').insertBefore(this.avatarsList, null);
     }
 
     this.avatarsList.querySelectorAll('.limit-stats').forEach((stat, index) => {
@@ -133,6 +133,31 @@ export default class extends PageModification {
 
       stat.querySelector('.stats-current').textContent = stats[index].issues.length;
     });
+  }
+
+  onClickAvatar(event) {
+    const name = event.target.title;
+    const cardsNodeList = document.querySelectorAll('.ghx-issue');
+    const cards = Array.from(cardsNodeList);
+    let cardsVisibility = event.target.getAttribute('view-my-cards');
+
+    if (cardsVisibility !== 'none') {
+      cardsVisibility = 'none';
+      event.target.setAttribute('view-my-cards', cardsVisibility);
+      event.target.style.border = 'solid 1px red';
+    } else {
+      cardsVisibility = 'block';
+      event.target.setAttribute('view-my-cards', cardsVisibility);
+      event.target.style.border = 'none';
+    }
+
+    cards
+      .filter(n => !n.querySelector(`[data-tooltip="Assignee: ${name}"]`))
+      .forEach(n => {
+        if (n instanceof HTMLElement) {
+          n.style.display = cardsVisibility;
+        }
+      });
   }
 
   hasCustomSwimlines() {
