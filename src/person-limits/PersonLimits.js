@@ -122,7 +122,7 @@ export default class extends PageModification {
       this.avatarsList.id = 'avatars-limits';
       this.avatarsList.innerHTML = html;
 
-      this.avatarsList.onclick = this.onClickByAvatar();
+      this.addEventListener(this.avatarsList, 'click', this.onClickAvatar);
       document.querySelector('#subnav-title').insertBefore(this.avatarsList, null);
     }
 
@@ -135,31 +135,29 @@ export default class extends PageModification {
     });
   }
 
-  onClickByAvatar() {
-    return event => {
-      const name = event.target.title;
-      const cardsNodeList = document.querySelectorAll('.ghx-issue');
-      const cards = Array.from(cardsNodeList);
-      let cardsVisibility = event.target.getAttribute('view-my-cards');
+  onClickAvatar(event) {
+    const name = event.target.title;
+    const cardsNodeList = document.querySelectorAll('.ghx-issue');
+    const cards = Array.from(cardsNodeList);
+    let cardsVisibility = event.target.getAttribute('view-my-cards');
 
-      if (cardsVisibility !== 'none') {
-        cardsVisibility = 'none';
-        event.target.setAttribute('view-my-cards', cardsVisibility);
-        event.target.style.border = 'solid 1px red';
-      } else {
-        cardsVisibility = 'block';
-        event.target.setAttribute('view-my-cards', cardsVisibility);
-        event.target.style.border = 'none';
-      }
+    if (cardsVisibility !== 'none') {
+      cardsVisibility = 'none';
+      event.target.setAttribute('view-my-cards', cardsVisibility);
+      event.target.style.border = 'solid 1px red';
+    } else {
+      cardsVisibility = 'block';
+      event.target.setAttribute('view-my-cards', cardsVisibility);
+      event.target.style.border = 'none';
+    }
 
-      cards
-        .filter(n => !n.querySelector(`[data-tooltip="Assignee: ${name}"]`))
-        .forEach(n => {
-          if (n instanceof HTMLElement) {
-            n.style.display = cardsVisibility;
-          }
-        });
-    };
+    cards
+      .filter(n => !n.querySelector(`[data-tooltip="Assignee: ${name}"]`))
+      .forEach(n => {
+        if (n instanceof HTMLElement) {
+          n.style.display = cardsVisibility;
+        }
+      });
   }
 
   hasCustomSwimlines() {
