@@ -122,6 +122,7 @@ const renderSlaPercentageLabel = ({ chartElement, value, slaProcentile, slaPosit
 const findDiaposonForSlaRectPosition = ({ chartElement, slaProcentile, ticsVals }) => {
   const maxDay = ticsVals[ticsVals.length - 1].value;
   const slaPosition = [0, 0];
+  const step = maxDay < 50 ? 0.5 : 1;
   let pIn = 0;
   let day = ticsVals[0].value;
 
@@ -132,7 +133,7 @@ const findDiaposonForSlaRectPosition = ({ chartElement, slaProcentile, ticsVals 
     valPosition = getChartLinePosition(ticsVals, day);
     fProcentile = calculateSlaProcentile({ chartElement, slaPosition: valPosition });
 
-    day += 0.1; // for case if user set fractional number to input
+    day += step; // for case if user set fractional number to input
     if (fProcentile === slaProcentile) {
       slaPosition[pIn] = valPosition;
 
