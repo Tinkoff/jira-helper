@@ -2,15 +2,13 @@ export const getChartTics = chartElement => {
   const ticks = [...chartElement.querySelectorAll('.tick')].filter(
     elem => elem.lastChild.attributes.y.value === '0' && elem.lastChild.textContent
   );
-  return ticks
-    .map(elem => {
-      const [, transform] = elem.attributes.transform.value.split(',');
-      return {
-        position: Number(transform.slice(0, -1)),
-        value: Number(elem.lastChild.textContent),
-      };
-    })
-    .sort((a, b) => a.value - b.value);
+  return ticks.map(elem => {
+    const [, transform] = elem.attributes.transform.value.split(',');
+    return {
+      position: Number(transform.slice(0, -1)),
+      value: Number(elem.lastChild.textContent),
+    };
+  });
 };
 
 export const getChartLinePosition = (ticksVals, value) => {

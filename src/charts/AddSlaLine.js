@@ -27,7 +27,7 @@ const getBasicSlaRect = (chartElement, slaPathElementIdentifier, strokeColor) =>
   slaRect.id = rectId;
   slaRect.setAttributeNS(null, 'fill', strokeColor || SLA_COLOR);
   slaRect.setAttributeNS(null, 'stroke', strokeColor || SLA_COLOR);
-  slaRect.setAttributeNS(null, 'fill-opacity', '0.25');
+  slaRect.setAttributeNS(null, 'fill-opacity', '0.15');
   slaRect.setAttributeNS(null, 'stroke-width', '1');
   slaRect.setAttributeNS(null, 'x', '0');
   slaRect.setAttributeNS(null, 'y', '0');
@@ -120,41 +120,41 @@ const renderSlaPercentageLabel = ({ chartElement, value, slaProcentile, slaPosit
 };
 
 const findDiaposonForSlaRectPosition = ({ chartElement, slaProcentile, ticsVals }) => {
-  let pMin = 0;
-  let pMax = ticsVals.length - 1;
+  const maxDay = ticsVals[ticsVals.length - 1].value;
+  const slaPosition = [0, 0];
+  let pIn = 0;
+  let day = ticsVals[0].value;
 
-  let minSlaPosition = 0;
-  let minProcentile = 0;
-  let maxSlaPosition = 0;
-  let maxProcentile = 0;
-  let minValue = 0;
-  let maxValue = 0;
+  let fProcentile = 0;
+  let valPosition = 0;
 
-  while (pMin <= pMax) {
-    if (minProcentile !== slaProcentile) {
-      minValue = ticsVals[pMin].value;
-      minSlaPosition = getChartLinePosition(ticsVals, minValue);
-      minProcentile = calculateSlaProcentile({ chartElement, slaPosition: minSlaPosition });
+  while (pIn < 2 && day <= maxDay) {
+    valPosition = getChartLinePosition(ticsVals, day);
+    fProcentile = calculateSlaProcentile({ chartElement, slaPosition: valPosition });
+
+    day += 0.1; // for case if user set fractional number to input
+    if (fProcentile === slaProcentile) {
+      slaPosition[pIn] = valPosition;
+
+      if (pIn === 0) {
+        pIn += 1;
+        slaPosition[pIn] = valPosition; // if one step on the one procentile
+        // eslint-disable-next-line no-continue
+        continue;
+      }
     }
-    if (maxProcentile !== slaProcentile) {
-      maxValue = ticsVals[pMax].value;
-      maxSlaPosition = getChartLinePosition(ticsVals, maxValue);
-      maxProcentile = calculateSlaProcentile({ chartElement, slaPosition: maxSlaPosition });
+
+    if (pIn === 1 && fProcentile !== slaProcentile) {
+      // exit from top board
+      pIn += 1;
+      break;
     }
-    pMin += 1;
-    pMax -= 1;
   }
-  window.console.log(
-    {
-      minSlaPosition,
-      maxSlaPosition,
-    },
-    ticsVals
-  );
-  return {
-    minSlaPosition,
-    maxSlaPosition,
-  };
+
+  slaPosition[0] = Number.isNaN(slaPosition[0]) ? 0 : slaPosition[0];
+  slaPosition[1] = Number.isNaN(slaPosition[1]) ? 0 : slaPosition[1];
+
+  return slaPosition;
 };
 
 const renderSlaLine = (sla, chartElement, changingSlaValue = sla) => {
@@ -169,7 +169,7 @@ const renderSlaLine = (sla, chartElement, changingSlaValue = sla) => {
     if (Number.isNaN(slaPosition)) return;
 
     const slaProcentile = calculateSlaProcentile({ chartElement, slaPosition });
-    const { minSlaPosition, maxSlaPosition } = findDiaposonForSlaRectPosition({
+    const [minSlaPosition, maxSlaPosition] = findDiaposonForSlaRectPosition({
       chartElement,
       slaProcentile,
       ticsVals,
