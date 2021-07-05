@@ -1,10 +1,14 @@
 const fs = require('fs');
 const path = require('path');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const webpack = require('webpack');
-const pcg = require('../package.json');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const pcg = require('../package.json');
 
 const version = process.env.PACKAGE_VERSION || pcg.version;
 
@@ -16,7 +20,7 @@ module.exports = {
     options: './src/options/options.js',
     background: './src/background/background.js',
     printcards: './src/printcards/cardsRender/printcards.js',
-    //blureforsensitive: './src/blure-for-sensitive/blurSensitive.js'
+    // blureforsensitive: './src/blure-for-sensitive/blurSensitive.js'
   },
   output: {
     filename: '[name].js',
@@ -64,10 +68,13 @@ module.exports = {
       { from: './src/options/static/**/*', to: './options_static', flatten: true },
       { from: './src/printcards/cardsRender/fonts/**/*', to: './fonts', flatten: true },
       { from: './src/manifest.json', to: './' },
-      { from: './src/tetris-planning/openModal.js', to: './' },
       { from: './src/person-limits/nativeModalScript.js', to: './' },
       { from: './src/blur-for-sensitive/blurSensitive.css', to: './src', flatten: true },
       { from: './src/contextMenu.js', to: './', flatten: true },
+      { from: './src/tetris-planning/openModal.js', to: './' },
+      { from: './src/popup/openTetrisPlanningWindow.js', to: './', flatten: true },
+      { from: './src/background/background-wrapper.js', to: './', flatten: true },
+      { from: './src/background/background.js', to: './', flatten: true },
     ]),
     new HtmlWebpackPlugin({
       filename: 'index.html',
@@ -87,13 +94,6 @@ module.exports = {
       chunks: ['options'],
     }),
     new HtmlWebpackPlugin({
-      filename: 'background.html',
-      title: 'background',
-      template: path.resolve(__dirname, '../src/background/background.html'),
-      inject: 'head',
-      chunks: ['background'],
-    }),
-    new HtmlWebpackPlugin({
       filename: 'printcards.html',
       title: 'printcards',
       template: path.resolve(__dirname, '../src/printcards/cardsRender/printcards.html'),
@@ -107,6 +107,7 @@ module.exports = {
     {
       apply(compiler) {
         compiler.hooks.afterEmit.tap('SetVersionPlugin', () => {
+          // eslint-disable-next-line global-require
           const manifest = require('../dist/manifest.json');
 
           manifest.version = version;

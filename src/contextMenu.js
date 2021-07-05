@@ -1,5 +1,22 @@
 /* global chrome */
 // Blure
+
+// Manifest V3 extension
+function greetUser(name) {
+  alert(`Hello, ${name}!`);
+}
+chrome.action.onClicked.addListener(async tab => {
+  const userReq = await fetch('/https://example.com/user-data.json');
+  const user = await userReq.json();
+  const givenName = user.givenName || '<GIVEN_NAME>';
+
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    func: greetUser,
+    args: [givenName],
+  });
+});
+
 const blurSecretDataJira = (info, tab) => {
   chrome.tabs.sendMessage(tab.id, { blurSensitive: info.checked });
 };

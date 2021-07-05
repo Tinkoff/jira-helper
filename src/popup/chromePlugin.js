@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (/rapidView=(\d*)/im.test(tab.url)) {
         buttonTetris.addEventListener('click', () => {
-          window.chrome.tabs.executeScript(null, {
-            code: 'window.openTetrisPlanningWindow && window.openTetrisPlanningWindow();',
+          window.chrome.scripting.executeScript({
+            file: 'openTetrisPlanningWindow.js',
           });
         });
       }

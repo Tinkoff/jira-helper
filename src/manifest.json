@@ -1,5 +1,5 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "jira-helper",
     "short_name": "jira-helper",
     "version": "1.0.3",
@@ -14,21 +14,32 @@
     },
     "options_page": "options.html",
     "minimum_chrome_version": "55",
-    "browser_action": {
+    "action": {
         "default_title": "Jira Helper",
         "default_icon": "src/jira_helper_128x128.png"
     },
     "background": {
-        "scripts": ["background.js", "contextMenu.js"]
+        "service_worker": "background-wrapper.js"
+     },
+    "web_accessible_resources": [{
+        "resources": [
+            "img/*",
+            "openModal.js",
+            "nativeModalScript.js",
+            "openTetrisPlanningWindow.js",
+            "printcards.html"
+        ],
+        "matches": ["*://*/*"]
+    }],
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'"
     },
-    "web_accessible_resources": [
-        "printcards.html",
-        "openModal.js",
-        "nativeModalScript.js",
-        "img/*"
-    ],
-    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "content_scripts": [
+        {
+            "matches": [ "*://*/*" ],
+            "js": [ "contextMenu.js" ],
+            "run_at": "document_end"
+        },
         {
             "matches": [ "*://*/*" ],
             "js": [ "content.js" ],
@@ -38,7 +49,9 @@
     "permissions": [
         "storage",
         "tabs",
-        "contextMenus",
+        "contextMenus"
+    ],
+        "host_permissions": [
         "http://*/*", "https://*/*"
     ]
 }
