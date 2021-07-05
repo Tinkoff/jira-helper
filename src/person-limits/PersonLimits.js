@@ -17,16 +17,20 @@ const isPersonLimitAppliedToIssue = (personLimit, assignee, columnId, swimlaneId
   );
 };
 
+const getNameFromTooltip = tooltip => {
+  return tooltip
+    .split(':')[1]
+    .split('[')[0]
+    .trim(); // Assignee: Pavel [x]
+};
+
 const getAssignee = avatar => {
   if (!avatar) return null;
 
   const label = avatar.alt ?? avatar.dataset.tooltip;
   if (!label) return null;
 
-  return label
-    .split(':')[1]
-    .split('[')[0]
-    .trim(); // Assignee: Pavel [x]
+  return getNameFromTooltip(label);
 };
 
 export default class extends PageModification {
@@ -59,6 +63,11 @@ export default class extends PageModification {
             width: 32px;
             height: 32px;
             border-radius: 10px;
+            border: none;
+        }
+
+        #avatars-limits .person-avatar img[view-my-cards="block"] {
+            border: solid 1px red;
         }
 
         #avatars-limits .person-avatar .limit-stats {
@@ -72,6 +81,10 @@ export default class extends PageModification {
             font-size: 12px;
             line-height: 12px;
             font-weight: 400;
+        }
+
+        .ghx-issue.no-visibility {
+            display: none!important;
         }
     </style>
     `;
@@ -122,7 +135,7 @@ export default class extends PageModification {
       this.avatarsList.id = 'avatars-limits';
       this.avatarsList.innerHTML = html;
 
-      this.addEventListener(this.avatarsList, 'click', this.onClickAvatar);
+      this.addEventListener(this.avatarsList, 'click', event => this.onClickAvatar(event));
       document.querySelector('#subnav-title').insertBefore(this.avatarsList, null);
     }
 
@@ -136,28 +149,46 @@ export default class extends PageModification {
   }
 
   onClickAvatar(event) {
-    const name = event.target.title;
-    const cardsNodeList = document.querySelectorAll('.ghx-issue');
-    const cards = Array.from(cardsNodeList);
-    let cardsVisibility = event.target.getAttribute('view-my-cards');
+    if (event.target.nodeName !== 'IMG') return;
+    const cardsVisibility = event.target.getAttribute('view-my-cards');
 
-    if (cardsVisibility !== 'none') {
-      cardsVisibility = 'none';
-      event.target.setAttribute('view-my-cards', cardsVisibility);
-      event.target.style.border = 'solid 1px red';
+    if (!cardsVisibility) {
+      event.target.setAttribute('view-my-cards', 'block');
     } else {
-      cardsVisibility = 'block';
-      event.target.setAttribute('view-my-cards', cardsVisibility);
-      event.target.style.border = 'none';
+      event.target.removeAttribute('view-my-cards');
     }
 
-    cards
-      .filter(n => !n.querySelector(`[data-tooltip="Assignee: ${name}"]`))
-      .forEach(n => {
-        if (n instanceof HTMLElement) {
-          n.style.display = cardsVisibility;
-        }
+    this.showOnlyChosen();
+  }
+
+  showOnlyChosen() {
+    const cards = Array.from(document.querySelectorAll('.ghx-issue'));
+    const isHaveChoose = document.querySelectorAll('[view-my-cards="block"]').length > 0;
+
+    if (!isHaveChoose) {
+      cards.forEach(node => {
+        node.classList.remove('no-visibility');
       });
+      return;
+    }
+
+    const avatar = Array.from(document.querySelectorAll('[view-my-cards]'));
+    const avaTitles = avatar.map(el => el.title);
+
+    cards.forEach(node => {
+      const img = node.querySelector('.ghx-avatar img');
+      if (!img) {
+        node.classList.add('no-visibility');
+        return;
+      }
+
+      const name = getNameFromTooltip(img.getAttribute('data-tooltip'));
+      if (avaTitles.indexOf(name) > -1) {
+        node.classList.remove('no-visibility');
+      } else {
+        node.classList.add('no-visibility');
+      }
+    });
   }
 
   hasCustomSwimlines() {
