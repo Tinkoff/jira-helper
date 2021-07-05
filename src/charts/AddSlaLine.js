@@ -82,12 +82,10 @@ const getSlaLabel = (chartElement, slaPathElementIdentifier, fillColor) => {
   return slaLabelText;
 };
 
-const calculateSlaProcentile = ({ chartElement, slaPosition }) => {
-  const singleIssuesUnderSlaCount = [...chartElement.querySelectorAll('g.layer.issues circle.issue')].filter(
-    issue => issue.attributes.cy.value >= slaPosition
-  ).length;
+const calculateSlaProcentile = ({ slaPosition, issues, issuesCluster }) => {
+  const singleIssuesUnderSlaCount = issues.filter(issue => issue.attributes.cy.value >= slaPosition).length;
 
-  const issuesInClustersUnderSlaCount = [...chartElement.querySelectorAll('g.layer.issue-clusters circle.cluster')]
+  const issuesInClustersUnderSlaCount = issuesCluster
     .filter(issue => issue.attributes.cy.value >= slaPosition)
     .map(cluster =>
       Math.round(
@@ -119,7 +117,7 @@ const renderSlaPercentageLabel = ({ chartElement, value, slaProcentile, slaPosit
   slaLabel.setAttributeNS(null, 'y', slaPosition + 12);
 };
 
-const findDiaposonForSlaRectPosition = ({ chartElement, slaProcentile, ticsVals }) => {
+const findDiaposonForSlaRectPosition = ({ slaProcentile, ticsVals, issues, issuesCluster }) => {
   const maxDay = ticsVals[ticsVals.length - 1].value;
   const slaPosition = [0, 0];
   const step = maxDay < 50 ? 0.5 : 1;
@@ -131,7 +129,7 @@ const findDiaposonForSlaRectPosition = ({ chartElement, slaProcentile, ticsVals 
 
   while (pIn < 2 && day <= maxDay) {
     valPosition = getChartLinePosition(ticsVals, day);
-    fProcentile = calculateSlaProcentile({ chartElement, slaPosition: valPosition });
+    fProcentile = calculateSlaProcentile({ slaPosition, issues, issuesCluster });
 
     day += step; // for case if user set fractional number to input
     if (fProcentile === slaProcentile) {
@@ -161,6 +159,9 @@ const findDiaposonForSlaRectPosition = ({ chartElement, slaProcentile, ticsVals 
 const renderSlaLine = (sla, chartElement, changingSlaValue = sla) => {
   const ticsVals = getChartTics(chartElement);
 
+  const issues = [...chartElement.querySelectorAll('g.layer.issues circle.issue')];
+  const issuesCluster = [...chartElement.querySelectorAll('g.layer.issue-clusters circle.cluster')];
+
   const meanLine = chartElement.querySelector('.control-chart-mean');
   const [, rightPoint] = meanLine.getAttribute('d').split('L');
   const [lineLength] = rightPoint.split(',');
@@ -169,11 +170,12 @@ const renderSlaLine = (sla, chartElement, changingSlaValue = sla) => {
     const slaPosition = getChartLinePosition(ticsVals, value);
     if (Number.isNaN(slaPosition)) return;
 
-    const slaProcentile = calculateSlaProcentile({ chartElement, slaPosition });
+    const slaProcentile = calculateSlaProcentile({ slaPosition, issues, issuesCluster });
     const [minSlaPosition, maxSlaPosition] = findDiaposonForSlaRectPosition({
-      chartElement,
       slaProcentile,
       ticsVals,
+      issues,
+      issuesCluster,
     });
 
     const slaPath = getBasicSlaPath(chartElement, pathId, strokeColor);
