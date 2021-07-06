@@ -15,6 +15,30 @@ const SLA_INPUT_FIELD_ID = 'jira-helper-sla-input';
 
 const log10 = x => Math.log(x) / Math.log(10);
 
+const getBasicSlaRect = (chartElement, slaPathElementIdentifier, strokeColor) => {
+  const rectId = `${slaPathElementIdentifier}-rect`;
+  if (document.getElementById(rectId)) {
+    return document.getElementById(rectId);
+  }
+
+  const namespace = chartElement.namespaceURI;
+
+  const slaRect = document.createElementNS(namespace, 'rect');
+  slaRect.id = rectId;
+  slaRect.setAttributeNS(null, 'fill', strokeColor || SLA_COLOR);
+  slaRect.setAttributeNS(null, 'stroke', strokeColor || SLA_COLOR);
+  slaRect.setAttributeNS(null, 'fill-opacity', '0.15');
+  slaRect.setAttributeNS(null, 'stroke-width', '1');
+  slaRect.setAttributeNS(null, 'x', '0');
+  slaRect.setAttributeNS(null, 'y', '0');
+  slaRect.setAttributeNS(null, 'width', '0');
+  slaRect.setAttributeNS(null, 'height', '0');
+
+  chartElement.querySelector('.layer.mean').appendChild(slaRect);
+
+  return slaRect;
+};
+
 const getBasicSlaPath = (chartElement, slaPathElementIdentifier, strokeColor) => {
   if (document.getElementById(slaPathElementIdentifier)) {
     return document.getElementById(slaPathElementIdentifier);
@@ -58,11 +82,10 @@ const getSlaLabel = (chartElement, slaPathElementIdentifier, fillColor) => {
   return slaLabelText;
 };
 
-const renderSlaPercentageLabel = (chartElement, value, slaPosition, slaPathElementIdentifier, fillColor) => {
-  const singleIssuesUnderSlaCount = [...chartElement.querySelectorAll('g.layer.issues circle.issue')].filter(
-    issue => issue.attributes.cy.value >= slaPosition
-  ).length;
-  const issuesInClustersUnderSlaCount = [...chartElement.querySelectorAll('g.layer.issue-clusters circle.cluster')]
+const calculateSlaPercentile = ({ slaPosition, issues, issuesCluster }) => {
+  const singleIssuesUnderSlaCount = issues.filter(issue => issue.attributes.cy.value >= slaPosition).length;
+
+  const issuesInClustersUnderSlaCount = issuesCluster
     .filter(issue => issue.attributes.cy.value >= slaPosition)
     .map(cluster =>
       Math.round(
@@ -76,30 +99,95 @@ const renderSlaPercentageLabel = (chartElement, value, slaPosition, slaPathEleme
       )
     )
     .reduce((a, b) => a + b, 0);
+
   const totalIssuesCount = document.querySelector('.js-chart-snapshot-issue-count').innerText.replace(',', '');
+
   const percentUnderSla = Math.round(
     ((singleIssuesUnderSlaCount + issuesInClustersUnderSlaCount) / totalIssuesCount) * 100
   );
 
-  const slaLabel = getSlaLabel(chartElement, slaPathElementIdentifier, fillColor);
+  return percentUnderSla;
+};
+
+const renderSlaPercentageLabel = ({ chartElement, value, slaPercentile, slaPosition, pathId, strokeColor }) => {
+  const slaLabel = getSlaLabel(chartElement, pathId, strokeColor);
 
   slaLabel.firstChild.innerHTML = `${value}d`;
-  slaLabel.lastChild.innerHTML = `${percentUnderSla}%`;
+  slaLabel.lastChild.innerHTML = `${slaPercentile}%`;
   slaLabel.setAttributeNS(null, 'y', slaPosition + 12);
+};
+
+const findRangeForSlaRectPosition = ({ slaPercentile, ticsVals, issues, issuesCluster }) => {
+  const maxDay = ticsVals[ticsVals.length - 1].value;
+  const slaPosition = [0, 0];
+  const step = maxDay < 50 ? 0.5 : 1;
+  let pIn = 0;
+  let day = ticsVals[0].value;
+
+  let soughtPercentile = 0;
+  let valPosition = 0;
+
+  while (pIn < 2 && day <= maxDay) {
+    valPosition = getChartLinePosition(ticsVals, day);
+    soughtPercentile = calculateSlaPercentile({ slaPosition: valPosition, issues, issuesCluster });
+
+    day += step; // for case if user set fractional number to input
+    if (soughtPercentile === slaPercentile) {
+      slaPosition[pIn] = valPosition;
+
+      if (pIn === 0) {
+        pIn += 1;
+        slaPosition[pIn] = valPosition; // if one step on the one Percentile
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+    }
+
+    if (pIn === 1 && soughtPercentile !== slaPercentile) {
+      // exit from top board
+      pIn += 1;
+      break;
+    }
+  }
+
+  slaPosition[0] = Number.isNaN(slaPosition[0]) ? 0 : slaPosition[0];
+  slaPosition[1] = Number.isNaN(slaPosition[1]) ? 0 : slaPosition[1];
+
+  return slaPosition;
 };
 
 const renderSlaLine = (sla, chartElement, changingSlaValue = sla) => {
   const ticsVals = getChartTics(chartElement);
+
+  const issues = [...chartElement.querySelectorAll('g.layer.issues circle.issue')];
+  const issuesCluster = [...chartElement.querySelectorAll('g.layer.issue-clusters circle.cluster')];
 
   const meanLine = chartElement.querySelector('.control-chart-mean');
   const [, rightPoint] = meanLine.getAttribute('d').split('L');
   const [lineLength] = rightPoint.split(',');
 
   const renderSvgLine = ({ value, pathId, strokeColor }) => {
-    const slaPath = getBasicSlaPath(chartElement, pathId, strokeColor);
     const slaPosition = getChartLinePosition(ticsVals, value);
+    if (Number.isNaN(slaPosition)) return;
+
+    const slaPercentile = calculateSlaPercentile({ slaPosition, issues, issuesCluster });
+    const [minSlaPosition, maxSlaPosition] = findRangeForSlaRectPosition({
+      slaPercentile,
+      ticsVals,
+      issues,
+      issuesCluster,
+    });
+
+    const slaPath = getBasicSlaPath(chartElement, pathId, strokeColor);
     slaPath.setAttributeNS(null, 'd', `M0,${slaPosition} L${lineLength},${slaPosition}`);
-    renderSlaPercentageLabel(chartElement, value, slaPosition, pathId, strokeColor);
+
+    const slaRect = getBasicSlaRect(chartElement, pathId, strokeColor);
+    const slaRectHeight = minSlaPosition - maxSlaPosition;
+    slaRect.setAttributeNS(null, 'y', maxSlaPosition);
+    slaRect.setAttributeNS(null, 'width', lineLength);
+    slaRect.setAttributeNS(null, 'height', slaRectHeight);
+
+    renderSlaPercentageLabel({ chartElement, value, slaPercentile, slaPosition, pathId, strokeColor });
   };
 
   renderSvgLine({
