@@ -82,7 +82,7 @@ const getSlaLabel = (chartElement, slaPathElementIdentifier, fillColor) => {
   return slaLabelText;
 };
 
-const calculateSlaProcentile = ({ slaPosition, issues, issuesCluster }) => {
+const calculateSlaPercentile = ({ slaPosition, issues, issuesCluster }) => {
   const singleIssuesUnderSlaCount = issues.filter(issue => issue.attributes.cy.value >= slaPosition).length;
 
   const issuesInClustersUnderSlaCount = issuesCluster
@@ -109,41 +109,41 @@ const calculateSlaProcentile = ({ slaPosition, issues, issuesCluster }) => {
   return percentUnderSla;
 };
 
-const renderSlaPercentageLabel = ({ chartElement, value, slaProcentile, slaPosition, pathId, strokeColor }) => {
+const renderSlaPercentageLabel = ({ chartElement, value, slaPercentile, slaPosition, pathId, strokeColor }) => {
   const slaLabel = getSlaLabel(chartElement, pathId, strokeColor);
 
   slaLabel.firstChild.innerHTML = `${value}d`;
-  slaLabel.lastChild.innerHTML = `${slaProcentile}%`;
+  slaLabel.lastChild.innerHTML = `${slaPercentile}%`;
   slaLabel.setAttributeNS(null, 'y', slaPosition + 12);
 };
 
-const findDiaposonForSlaRectPosition = ({ slaProcentile, ticsVals, issues, issuesCluster }) => {
+const findRangeForSlaRectPosition = ({ slaPercentile, ticsVals, issues, issuesCluster }) => {
   const maxDay = ticsVals[ticsVals.length - 1].value;
   const slaPosition = [0, 0];
   const step = maxDay < 50 ? 0.5 : 1;
   let pIn = 0;
   let day = ticsVals[0].value;
 
-  let fProcentile = 0;
+  let soughtPercentile = 0;
   let valPosition = 0;
 
   while (pIn < 2 && day <= maxDay) {
     valPosition = getChartLinePosition(ticsVals, day);
-    fProcentile = calculateSlaProcentile({ slaPosition, issues, issuesCluster });
+    soughtPercentile = calculateSlaPercentile({ slaPosition: valPosition, issues, issuesCluster });
 
     day += step; // for case if user set fractional number to input
-    if (fProcentile === slaProcentile) {
+    if (soughtPercentile === slaPercentile) {
       slaPosition[pIn] = valPosition;
 
       if (pIn === 0) {
         pIn += 1;
-        slaPosition[pIn] = valPosition; // if one step on the one procentile
+        slaPosition[pIn] = valPosition; // if one step on the one Percentile
         // eslint-disable-next-line no-continue
         continue;
       }
     }
 
-    if (pIn === 1 && fProcentile !== slaProcentile) {
+    if (pIn === 1 && soughtPercentile !== slaPercentile) {
       // exit from top board
       pIn += 1;
       break;
@@ -170,9 +170,9 @@ const renderSlaLine = (sla, chartElement, changingSlaValue = sla) => {
     const slaPosition = getChartLinePosition(ticsVals, value);
     if (Number.isNaN(slaPosition)) return;
 
-    const slaProcentile = calculateSlaProcentile({ slaPosition, issues, issuesCluster });
-    const [minSlaPosition, maxSlaPosition] = findDiaposonForSlaRectPosition({
-      slaProcentile,
+    const slaPercentile = calculateSlaPercentile({ slaPosition, issues, issuesCluster });
+    const [minSlaPosition, maxSlaPosition] = findRangeForSlaRectPosition({
+      slaPercentile,
       ticsVals,
       issues,
       issuesCluster,
@@ -187,7 +187,7 @@ const renderSlaLine = (sla, chartElement, changingSlaValue = sla) => {
     slaRect.setAttributeNS(null, 'width', lineLength);
     slaRect.setAttributeNS(null, 'height', slaRectHeight);
 
-    renderSlaPercentageLabel({ chartElement, value, slaProcentile, slaPosition, pathId, strokeColor });
+    renderSlaPercentageLabel({ chartElement, value, slaPercentile, slaPosition, pathId, strokeColor });
   };
 
   renderSvgLine({
