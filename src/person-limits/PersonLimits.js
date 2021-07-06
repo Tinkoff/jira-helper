@@ -86,6 +86,10 @@ export default class extends PageModification {
         .ghx-issue.no-visibility {
             display: none!important;
         }
+
+        .ghx-parent-group.no-visibility {
+            display: none!important;
+        }
     </style>
     `;
   }
@@ -169,6 +173,7 @@ export default class extends PageModification {
       cards.forEach(node => {
         node.classList.remove('no-visibility');
       });
+      this.showAllSubTaskParentGroup();
       return;
     }
 
@@ -187,6 +192,27 @@ export default class extends PageModification {
         node.classList.remove('no-visibility');
       } else {
         node.classList.add('no-visibility');
+      }
+    });
+    this.showOrHideSubTaskParentGroup();
+  }
+
+  showAllSubTaskParentGroup() {
+    document.querySelectorAll('.ghx-parent-group').forEach(el => {
+      el.classList.remove('no-visibility');
+    });
+  }
+
+  showOrHideSubTaskParentGroup() {
+    const parentGroup = Array.from(document.querySelectorAll('.ghx-parent-group'));
+    parentGroup.forEach(el => {
+      const lenNoVisibleCards = el.querySelectorAll('.ghx-issue.no-visibility').length;
+      const lenCard = el.querySelectorAll('.ghx-issue').length;
+
+      if (lenNoVisibleCards === lenCard) {
+        el.classList.add('no-visibility');
+      } else {
+        el.classList.remove('no-visibility');
       }
     });
   }
