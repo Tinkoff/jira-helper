@@ -105,12 +105,12 @@ export const openPersonLimitsModal = async (modification, boardData, personLimit
 
   modal.querySelector('#person-limit-edit-button').addEventListener('click', async e => {
     e.preventDefault();
-    const personeid = parseInt(e.target.getAttribute('person-id'), 10);
+    const personId = parseInt(e.target.getAttribute('person-id'), 10);
     e.target.disabled = true;
 
-    if (!personeid) return;
+    if (!personId) return;
 
-    const index = personLimits.limits.findIndex(pl => pl.id === personeid);
+    const index = personLimits.limits.findIndex(pl => pl.id === personId);
 
     if (index === -1) return;
 
