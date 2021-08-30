@@ -1,4 +1,4 @@
-import { getSearchParam } from '../routing';
+import { getBoardIdFromURL, getSearchParam } from '../routing';
 import { waitForElement } from './utils';
 import {
   deleteBoardProperty,
@@ -54,39 +54,39 @@ export class PageModification {
   getBoardProperty(property) {
     const { cancelRequest, abortPromise } = this.createAbortPromise();
     this.sideEffects.push(cancelRequest);
-    return getBoardProperty(getSearchParam('rapidView'), property, { abortPromise });
+    return getBoardProperty(getBoardIdFromURL(), property, { abortPromise });
   }
 
   getBoardConfiguration() {
     const { cancelRequest, abortPromise } = this.createAbortPromise();
     this.sideEffects.push(cancelRequest);
-    return getBoardConfiguration(getSearchParam('rapidView', { abortPromise }));
+    return getBoardConfiguration(getBoardIdFromURL(), { abortPromise });
   }
 
   updateBoardProperty(property, value) {
     const { cancelRequest, abortPromise } = this.createAbortPromise();
     this.sideEffects.push(cancelRequest);
-    return updateBoardProperty(getSearchParam('rapidView'), property, value, { abortPromise });
+    return updateBoardProperty(getBoardIdFromURL(), property, value, { abortPromise });
   }
 
   deleteBoardProperty(property) {
     const { cancelRequest, abortPromise } = this.createAbortPromise();
     this.sideEffects.push(cancelRequest);
-    return deleteBoardProperty(getSearchParam('rapidView'), property, { abortPromise });
+    return deleteBoardProperty(getBoardIdFromURL(), property, { abortPromise });
   }
 
   getBoardEditData() {
     const { cancelRequest, abortPromise } = this.createAbortPromise();
     this.sideEffects.push(cancelRequest);
 
-    return getBoardEditData(getSearchParam('rapidView', { abortPromise }));
+    return getBoardEditData(getBoardIdFromURL(), { abortPromise });
   }
 
   getBoardEstimationData() {
     const { cancelRequest, abortPromise } = this.createAbortPromise();
     this.sideEffects.push(cancelRequest);
 
-    return getBoardEstimationData(getSearchParam('rapidView', { abortPromise }));
+    return getBoardEstimationData(getBoardIdFromURL(), { abortPromise });
   }
 
   searchIssues(jql, params = {}) {
@@ -186,6 +186,6 @@ export class PageModification {
   }
 
   getBoardId() {
-    return this.getSearchParam('rapidView');
+    return getBoardIdFromURL();
   }
 }

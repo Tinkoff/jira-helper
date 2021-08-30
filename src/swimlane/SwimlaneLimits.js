@@ -13,7 +13,7 @@ export default class extends PageModification {
   }
 
   getModificationId() {
-    return `add-swimlane-limits-${this.getSearchParam('rapidView')}`;
+    return `add-swimlane-limits-${this.getBoardId()}`;
   }
 
   appendStyles() {

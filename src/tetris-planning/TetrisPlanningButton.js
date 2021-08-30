@@ -12,7 +12,7 @@ export default class extends PageModification {
   }
 
   getModificationId() {
-    return `add-tetris-button-${this.getSearchParam('rapidView')}`;
+    return `add-tetris-button-${this.getBoardId()}`;
   }
 
   waitForLoading() {
@@ -47,7 +47,7 @@ export default class extends PageModification {
     this.insertHTML(
       document.body,
       'beforeend',
-      formatTemplateForInserting(template).replace(/\$BOARD/g, this.getSearchParam('rapidView'))
+      formatTemplateForInserting(template).replace(/\$BOARD/g, this.getBoardId())
     );
 
     this.insertHTML(

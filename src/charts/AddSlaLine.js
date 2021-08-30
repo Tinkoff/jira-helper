@@ -273,7 +273,7 @@ export default class extends PageModification {
   }
 
   getModificationId() {
-    return `add-sla-${this.getSearchParam('rapidView')}`;
+    return `add-sla-${this.getBoardId()}`;
   }
 
   waitForLoading() {

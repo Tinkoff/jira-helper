@@ -8,7 +8,7 @@ export default class extends PageModification {
   }
 
   getModificationId() {
-    return `tetris-planning-${this.getSearchParam('rapidView')}`;
+    return `tetris-planning-${this.getBoardId()}`;
   }
 
   waitForLoading() {

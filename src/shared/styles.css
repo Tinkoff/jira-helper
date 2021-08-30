@@ -17,3 +17,8 @@
   flex: 0.7;
   background: red;
 }
+
+.ghx-flags {
+  border-radius: 2px 2px !important;
+  background: yellow !important;
+}

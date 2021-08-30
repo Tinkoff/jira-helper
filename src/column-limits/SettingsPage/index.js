@@ -47,7 +47,7 @@ export default class SettingsWIPLimits extends PageModification {
   }
 
   getModificationId() {
-    return `add-wip-settings-${this.getSearchParam('rapidView')}`;
+    return `add-wip-settings-${this.getBoardId()}`;
   }
 
   waitForLoading() {
