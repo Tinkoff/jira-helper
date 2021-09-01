@@ -87,6 +87,10 @@ export default class extends PageModification {
             display: none!important;
         }
 
+        .ghx-swimlane.no-visibility {
+            display: none!important;
+        }
+
         .ghx-parent-group.no-visibility {
             display: none!important;
         }
@@ -173,7 +177,7 @@ export default class extends PageModification {
       cards.forEach(node => {
         node.classList.remove('no-visibility');
       });
-      this.showAllSubTaskParentGroup();
+      this.showOrHideTaskAggregations();
       return;
     }
 
@@ -194,27 +198,37 @@ export default class extends PageModification {
         node.classList.add('no-visibility');
       }
     });
-    this.showOrHideSubTaskParentGroup();
+    this.showOrHideTaskAggregations();
   }
 
-  showAllSubTaskParentGroup() {
-    document.querySelectorAll('.ghx-parent-group').forEach(el => {
-      el.classList.remove('no-visibility');
-    });
+  showOrHideTaskAggregations() {
+    this.showOrHideSubTaskParentGroup();
+    this.showOrHideEmptySwimlanes();
   }
 
   showOrHideSubTaskParentGroup() {
     const parentGroup = Array.from(document.querySelectorAll('.ghx-parent-group'));
     parentGroup.forEach(el => {
-      const lenNoVisibleCards = el.querySelectorAll('.ghx-issue.no-visibility').length;
-      const lenCard = el.querySelectorAll('.ghx-issue').length;
-
-      if (lenNoVisibleCards === lenCard) {
-        el.classList.add('no-visibility');
-      } else {
-        el.classList.remove('no-visibility');
-      }
+      this.showOrHideElementByVisibleIssueCards(el);
     });
+  }
+
+  showOrHideEmptySwimlanes() {
+    const swimLines = Array.from(document.querySelectorAll(DOM.swimlane));
+    swimLines.forEach(el => {
+      this.showOrHideElementByVisibleIssueCards(el);
+    });
+  }
+
+  showOrHideElementByVisibleIssueCards(el) {
+    const lenNoVisibleCards = el.querySelectorAll('.ghx-issue.no-visibility').length;
+    const lenCard = el.querySelectorAll('.ghx-issue').length;
+
+    if (lenNoVisibleCards === lenCard) {
+      el.classList.add('no-visibility');
+    } else {
+      el.classList.remove('no-visibility');
+    }
   }
 
   hasCustomSwimlines() {
