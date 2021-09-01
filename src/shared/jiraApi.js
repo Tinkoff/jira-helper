@@ -12,7 +12,7 @@ import isNil from '@tinkoff/utils/is/nil';
 import path from '@tinkoff/utils/object/path';
 import pathOr from '@tinkoff/utils/object/pathOr';
 import { defaultHeaders } from './defaultHeaders';
-import { getSearchParam } from '../routing';
+import { getBoardIdFromURL } from '../routing';
 
 export const configVersion = 'v1';
 const getPropName = property => `${property}${configVersion}`;
@@ -42,7 +42,7 @@ const getBoardProperties = boardId => {
   delete invalidatedProperties[cacheKey];
 
   return requestJira({
-    url: boardPropertiesUrl(getSearchParam('rapidView')),
+    url: boardPropertiesUrl(getBoardIdFromURL()),
     memoryCacheForce,
     type: 'json',
   });

@@ -11,7 +11,7 @@ export default class extends PageModification {
   }
 
   getModificationId() {
-    return `add-swimlane-stats-${this.getSearchParam('rapidView')}`;
+    return `add-swimlane-stats-${this.getBoardId()}`;
   }
 
   waitForLoading() {

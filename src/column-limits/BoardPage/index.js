@@ -12,7 +12,7 @@ export default class extends PageModification {
   }
 
   getModificationId() {
-    return `add-wip-limits-${this.getSearchParam('rapidView')}`;
+    return `add-wip-limits-${this.getBoardId()}`;
   }
 
   waitForLoading() {

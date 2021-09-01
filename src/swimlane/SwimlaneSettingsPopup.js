@@ -26,7 +26,7 @@ export default class SwimlaneSettingsLimit extends PageModification {
   }
 
   getModificationId() {
-    return `add-swimlane-settings-${this.getSearchParam('rapidView')}`;
+    return `add-swimlane-settings-${this.getBoardId()}`;
   }
 
   waitForLoading() {
