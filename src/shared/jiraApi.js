@@ -168,5 +168,13 @@ export const getUser = query =>
       if (res2.status === 'fulfilled') return res2.value;
     })
     .then(users => {
-      return users.find(user => user.name?.includes(query) || user.displayName?.includes(query)) ?? users[0];
+      if (!query) return users[0];
+
+      const exactMatch = users.find(user => user.name === query || user.displayName === query);
+      if (exactMatch) return exactMatch;
+
+      const substringMatch = users.find(user => user.name?.includes(query) || user.displayName?.includes(query));
+      if (substringMatch) return substringMatch;
+
+      return users[0];
     });
