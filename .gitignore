@@ -3,6 +3,7 @@ auto-update.xml
 dev-utils.crx
 dist.crx
 main.pem
+dist.pem
 .DS_Store
 node_modules
 .vscode

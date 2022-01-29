@@ -244,7 +244,7 @@ class ResizableDraggableGrid {
 
 export default class extends PageModification {
   shouldApply() {
-    return this.getSearchParam('chart') === 'controlChart';
+    return this.getSearchParam('chart') === 'controlChart' || this.getReportNameFromURL() === 'control-chart';
   }
 
   getModificationId() {

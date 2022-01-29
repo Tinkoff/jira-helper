@@ -16,8 +16,21 @@ export const getSearchParam = param => {
 };
 
 /*
+  sheme new 2022: https://companyname.atlassian.net/jira/software/c/projects/{KEY}/boards/41/reports/control-chart?days=0
+*/
+export const getReportNameFromURL = () => {
+  // eslint-disable-next-line no-useless-escape
+  const matchRapidView = window.location.pathname.match(/reports\/([^\/\?]*)/im);
+  if (matchRapidView != null) {
+    return matchRapidView[1];
+  }
+  return null;
+};
+
+/*
   sheme old https://companyname.atlassian.net/secure/RapidBoard.jspa?projectKey=PN&rapidView=12
-  sheme new https://companyname.atlassian.net/jira/software/c/projects/PN/boards/12
+  sheme new https://companyname.atlassian.net/jira/software/c/projects/{KEY}/boards/12
+  sheme new 2022: https://companyname.atlassian.net/jira/software/c/projects/{KEY}/boards/41/reports/control-chart?days=0
 */
 export const getBoardIdFromURL = () => {
   if (window.location.href.indexOf('rapidView') > 0) {
@@ -76,6 +89,8 @@ export const getCurrentRoute = () => {
   if (/boards\/(\d+)/im.test(pathname)) {
     if (params.get('config')) return Routes.SETTINGS;
     if (params.get('view') === 'reporting') return Routes.REPORTS;
+    // https://{server}/jira/software/c/projects/{key}/boards/{id}/reports/control-chart?days=0
+    if (/reports/im.test(pathname)) return Routes.REPORTS;
 
     return Routes.BOARD;
   }

@@ -1,4 +1,4 @@
-import { getBoardIdFromURL, getSearchParam } from '../routing';
+import { getBoardIdFromURL, getSearchParam, getReportNameFromURL } from '../routing';
 import { waitForElement } from './utils';
 import {
   deleteBoardProperty,
@@ -183,6 +183,10 @@ export class PageModification {
 
   getSearchParam(param) {
     return getSearchParam(param);
+  }
+
+  getReportNameFromURL() {
+    return getReportNameFromURL();
   }
 
   getBoardId() {
