@@ -48,7 +48,14 @@ export class PrintCardButton {
   }
 
   onClick() {
-    const jql = document.querySelector('#jql').value;
+    const elm = document.querySelector('#jql');
+    let jql = '';
+
+    if (elm) {
+      jql = document.querySelector('#jql').value;
+    } else {
+      jql = new URL(document.location).searchParams.get('jql');
+    }
 
     const issueCount = this.getAmountOfIssues();
     if ((!jql && !jql.length) || jql === 'ORDER BY updated DESC')
@@ -64,18 +71,37 @@ export class PrintCardButton {
     );
   }
 
-  render() {
+  bindBtb() {
     const { printCardsBtnId } = this.identifiers;
-    const isPageAlreadyContainsBtn = this.isExistJqElem(`#${printCardsBtnId}`);
-    const isOptionsContainerExist = this.isExistJqElem('.search-options-container');
-
-    if (isPageAlreadyContainsBtn) return;
-    if (!isOptionsContainerExist) return;
-
-    document.querySelector('.search-container').insertAdjacentHTML('beforeend', this.getBtnTemplate());
     this.$printCardBtn = document.querySelector(`#${printCardsBtnId}`);
 
     this.$printCardBtn.addEventListener('click', this.onClick);
     this.subscribeToSwitchingSearchMechanism();
+  }
+
+  render() {
+    const { printCardsBtnId } = this.identifiers;
+    const isPageAlreadyContainsBtn = this.isExistJqElem(`#${printCardsBtnId}`);
+    const cloudJiraContainer = document.querySelector('[data-testid="jql-editor-input"]');
+    const isOptionsContainerExist = this.isExistJqElem('.search-options-container');
+
+    if (isPageAlreadyContainsBtn) return;
+    let container;
+
+    if (cloudJiraContainer) {
+      container = document.querySelector('[data-testid="jql-editor-input"]').parentElement.parentElement;
+      container.insertAdjacentHTML('afterbegin', this.getBtnTemplate());
+      this.bindBtb();
+      const sampleBtn = container.querySelector('[role="presentation"]');
+      this.$printCardBtn.parentElement.classList.remove(styles.printCardBtn_Wrapper);
+      sampleBtn.classList.forEach(cls => this.$printCardBtn.parentElement.classList.add(cls));
+      return;
+    }
+
+    if (!isOptionsContainerExist) return;
+    container = document.querySelector('.search-container');
+    container.insertAdjacentHTML('beforeend', this.getBtnTemplate());
+
+    this.bindBtb();
   }
 }

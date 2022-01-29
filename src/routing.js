@@ -99,7 +99,8 @@ export const getCurrentRoute = () => {
     return params.get('jql') ? Routes.SEARCH : Routes.ISSUE;
   }
 
-  if (pathname.startsWith('/issues/')) return Routes.SEARCH;
+  // https://server.atlassian.net/jira/software/c/projects/{KEY}/issues/?jql=...
+  if (pathname.endsWith('/issues/')) return Routes.SEARCH;
 
   return null;
 };

@@ -10,7 +10,7 @@ export default class extends PageModification {
   }
 
   waitForLoading() {
-    return this.waitForElement('#jql');
+    return Promise.any([this.waitForElement('#jql'), this.waitForElement('[data-testid="jql-editor-input"]')]);
   }
 
   apply() {
