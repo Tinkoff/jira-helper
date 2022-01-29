@@ -289,13 +289,15 @@ export default class extends PageModification {
 
     let slaValue = Number(value);
 
-    window.onpopstate = () => {
+    const renderSlaLineByQeryParam = () => {
       const slaQueryParam = this.getSearchParam(SLA_QUERY_PARAMETER);
       if (slaQueryParam !== null) {
         document.getElementById(SLA_INPUT_FIELD_ID).value = slaQueryParam;
         renderSlaLine(slaValue, chartElement, Number(slaQueryParam));
       }
     };
+
+    window.onpopstate = renderSlaLineByQeryParam;
 
     const slaQueryParam = this.getSearchParam(SLA_QUERY_PARAMETER);
     let changingValue = slaQueryParam !== null ? Number(slaQueryParam) : slaValue;
@@ -315,6 +317,21 @@ export default class extends PageModification {
         this.updateBoardProperty(BOARD_PROPERTIES.SLA_CONFIG, { value: slaValue });
         renderSlaLine(slaValue, chartElement, changingValue);
       },
+    });
+
+    this.addEventListener(document.querySelector('#ghx-chart-content'), 'change', e => {
+      if (/jira-helper/.test(e.target.getAttribute('id'))) {
+        return;
+      }
+
+      // eslint-disable-next-line no-console
+      console.log('Event chages:', e);
+      const slaInput = document.getElementById(SLA_INPUT_FIELD_ID);
+      const event = new Event('input', {
+        bubbles: true,
+        cancelable: true,
+      });
+      slaInput.dispatchEvent(event);
     });
   }
 }
