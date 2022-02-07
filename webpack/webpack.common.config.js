@@ -16,7 +16,7 @@ module.exports = {
     options: './src/options/options.js',
     background: './src/background/background.js',
     printcards: './src/printcards/cardsRender/printcards.js',
-    //blureforsensitive: './src/blure-for-sensitive/blurSensitive.js'
+    // blureforsensitive: './src/blure-for-sensitive/blurSensitive.js'
   },
   output: {
     filename: '[name].js',
