@@ -4,20 +4,24 @@
     padding-left: 10px;
     position: absolute;
     border-left: 2px solid #f4f5f7;
+    flex-wrap: wrap;
+    margin-right: 200px;
 }
 
 .fieldLimitsItem {
-    width: 40px;
-    height: 32px;
+    margin-bottom: 2px;
+    height: 25px;
     font-size: 0.8rem;
-    line-height: 30px;
+    line-height: 25px;
     margin-left: 4px;
     text-align: center;
-    border-radius: 25%;
+    border-radius: 5px;
     color: white;
     cursor: help;
     position: relative;
     background-color: #3366ff;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 
 .limitStats {
