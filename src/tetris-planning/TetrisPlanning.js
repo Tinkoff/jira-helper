@@ -50,10 +50,11 @@ export default class extends PageModification {
         fieldsData.forEach(f => {
           const prefix = 'sp-value-limitation active-sprint-lozenge aui-lozenge aui-lozenge-';
           const el = document.createElement('span');
+          const val = f.value / (!f.divider || f.divider === 0 ? 1 : f.divider);
 
-          el.className = prefix + (f.value <= f.max ? 'success' : 'error');
+          el.className = prefix + (val <= f.max ? 'success' : 'error');
           el.style.marginRight = '5px';
-          el.innerText = `${f.name}: ${f.value}/${f.max}`;
+          el.innerText = `${f.name}: ${val}/${f.max}`;
           this.setTimeout(() => issueCountContainer.appendChild(el), 10);
         });
       });

@@ -56,7 +56,7 @@ export default class extends PageModification {
       fields.map(({ fieldId, name }) => `<option value="${name}" data-id="${fieldId}">${name}</option>`).join('')
     );
 
-    tetrisPlanning.forEach(({ id, name, max }) => this.appendRow(id, name, max));
+    tetrisPlanning.forEach(({ id, name, max, divider }) => this.appendRow(id, name, max, divider));
 
     this.addEventListener(document.querySelector('#dialog_planning_btn_add'), 'click', () => {
       const name = document.querySelector('#select2-example').value;
@@ -65,7 +65,8 @@ export default class extends PageModification {
       this.appendRow(
         id,
         document.querySelector('#select2-example').value,
-        document.querySelector('#dialog_planning_max_add').value
+        document.querySelector('#dialog_planning_max_add').value,
+        document.querySelector('#dialog_planning_value_divider').value || 1
       );
     });
 
@@ -75,6 +76,7 @@ export default class extends PageModification {
           id: row.dataset.id,
           name: row.querySelector('.name').textContent,
           max: row.querySelector('.max').textContent,
+          divider: Number(row.querySelector('.divider').textContent, 10),
         };
       }, document.querySelectorAll('#dialog_planning_tbody .aui-restfultable-row'));
 
@@ -88,7 +90,7 @@ export default class extends PageModification {
     document.body.appendChild(script);
   };
 
-  appendRow(id, name, max) {
+  appendRow(id, name, max, divider) {
     const row = this.insertHTML(
       document.querySelector('#dialog_planning_tbody'),
       'beforeend',
@@ -96,6 +98,7 @@ export default class extends PageModification {
           <td></td>
           <td class="name">${name}</td>
           <td class="max">${max}</td>
+          <td class="divider">${divider}</td>
           <td><a href="#" id="dialog_planning_btn_delete" class="aui-button">Delete</a></td>
           <td></td>
         </tr>`
