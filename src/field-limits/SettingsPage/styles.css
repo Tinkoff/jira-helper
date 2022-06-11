@@ -1,13 +1,22 @@
 .addFieldLimitTable {
-    width: 100%;
+  width: 100%;
+}
+
+.jhControlRowBtn {
+  margin-left: 0px !important;
+  margin-bottom: 2px !important;
+}
+
+.editFieldLimitBtn {
+  margin-top: 1rem !important;
 }
 
 .addFieldLimitBtn {
-    margin-top: 1rem !important;
+  margin-top: 1rem !important;
 }
 
 .settingsEditBtn {
-    margin-top: 1rem;
+  margin-top: 1rem !important;
 }
 
 .visualName {

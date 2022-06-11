@@ -8,6 +8,7 @@ export const fieldLimitsTableTemplate = ({
   tableId,
   tableBodyId,
   addLimitBtnId,
+  editLimitBtnId,
   fieldValueInputId,
   visualNameInputId,
   columnsSelectId,
@@ -20,7 +21,7 @@ export const fieldLimitsTableTemplate = ({
   swimlaneOptions = [],
   columnOptions = [],
 }) => `
-   <form class="aui">
+   <form class="aui" onsubmit="return false;">
       <fieldset>
         <table>
           <tr>
@@ -76,6 +77,9 @@ export const fieldLimitsTableTemplate = ({
                   <button class="aui-button aui-button-primary ${
                     style.addFieldLimitBtn
                   }" type="button" id="${addLimitBtnId}">Add limit</button>
+                  <button class="aui-button aui-button-primary ${
+                    style.editFieldLimitBtn
+                  }" type="submit" disabled id="${editLimitBtnId}">Edit limit</button>
                 </div>
               </div>
             </td>
@@ -103,7 +107,7 @@ export const fieldLimitsTableTemplate = ({
 `;
 
 export const fieldRowTemplate = ({
-  id,
+  limitKey,
   fieldId,
   fieldName,
   fieldValue,
@@ -112,17 +116,21 @@ export const fieldRowTemplate = ({
   limit,
   columns = [],
   swimlanes = [],
+  editClassBtn,
   deleteClassBtn,
 }) => `
-    <tr data-field-project-row="${id}">
-      <td><input type="checkbox" class="checkbox" data-id="${id}"></td>
+    <tr data-field-project-row="${limitKey}">
+      <td><input type="checkbox" class="checkbox" data-id="${limitKey}"></td>
       <td data-type="field-name" data-value="${fieldId}">${fieldName}</td>
       <td data-type="field-value">${fieldValue}</td>
-      <td data-type="visual-name"><div colorpicker-data-id="${id}"
+      <td data-type="visual-name"><div colorpicker-data-id="${limitKey}"
           class="${style.visualName}" style="background-color:${bkgColor || 'none'}">${visualValue}</div></td>
       <td data-type="field-limit">${limit}</td>
       <td data-type="field-columns">${columns.map(c => c.name).join(', ')}</td>
       <td data-type="field-swimlanes">${swimlanes.map(s => s.name).join(', ')}</td>
-      <td><button class="aui-button ${deleteClassBtn}">Delete</button></td>
+      <td>
+        <button class="aui-button ${editClassBtn} ${style.jhControlRowBtn}">Edit</button></br>
+        <button class="aui-button ${deleteClassBtn} ${style.jhControlRowBtn}">Delete</button>
+      </td>
     </tr>
   `;
