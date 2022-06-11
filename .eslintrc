@@ -22,11 +22,7 @@
     "import/prefer-default-export": "off",
     "quotes": ["error", "single"],
     "import/no-unresolved": [2, { "caseSensitive": false }],
-    "prettier/prettier": [
-      {}, {
-        "end_of_line": false
-      }
-    ],
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "class-methods-use-this": "off",
