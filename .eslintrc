@@ -12,7 +12,7 @@
     "ecmaFeatures": {
       "modules": true,
       "experimentalObjectRestSpread": true
-    },
+    }
   },
   "rules": {
     "no-console": "error",
@@ -22,7 +22,11 @@
     "import/prefer-default-export": "off",
     "quotes": ["error", "single"],
     "import/no-unresolved": [2, { "caseSensitive": false }],
-    "prettier/prettier": "error",
+    "prettier/prettier": [
+      {}, {
+        "end_of_line": false
+      }
+    ],
     "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "class-methods-use-this": "off",
