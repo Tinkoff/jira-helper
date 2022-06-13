@@ -19,6 +19,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
     popupTable: 'jh-field-limits-table',
     popupTableBody: 'jh-field-limits-tbody',
     popupTableAddLimitRow: 'jh-field-limits-add-btn',
+    popupTableEditLimitRow: 'jh-field-limits-edit-btn',
     inputFieldValue: 'jh-input-field-value',
     visualNameInput: 'jh-input-visual-name',
     columnsSelectId: 'jh-columns-select',
@@ -30,8 +31,11 @@ export default class FieldLimitsSettingsPage extends PageModification {
   };
 
   static classes = {
+    editRowBtn: 'jh-edit-row-btn',
     deleteRowBtn: 'jh-delete-row-btn',
   };
+
+  static limitKeyOfEditable = undefined;
 
   async shouldApply() {
     return (await getSettingsTab()) === 'cardLayout';
@@ -132,6 +136,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
         tableId: FieldLimitsSettingsPage.ids.popupTable,
         tableBodyId: FieldLimitsSettingsPage.ids.popupTableBody,
         addLimitBtnId: FieldLimitsSettingsPage.ids.popupTableAddLimitRow,
+        editLimitBtnId: FieldLimitsSettingsPage.ids.popupTableEditLimitRow,
         fieldValueInputId: FieldLimitsSettingsPage.ids.inputFieldValue,
         visualNameInputId: FieldLimitsSettingsPage.ids.visualNameInput,
         columnsSelectId: FieldLimitsSettingsPage.ids.columnsSelectId,
@@ -167,10 +172,10 @@ export default class FieldLimitsSettingsPage extends PageModification {
         const isSelected = row.querySelector('input[type="checkbox"]:checked');
         if (!isSelected) return;
 
-        const id = row.getAttribute('data-field-project-row');
+        const limitKey = row.getAttribute('data-field-project-row');
 
-        this.settings.limits[id] = {
-          ...this.settings.limits[id],
+        this.settings.limits[limitKey] = {
+          ...this.settings.limits[limitKey],
           ...mergedRowObj,
         };
       });
@@ -188,14 +193,22 @@ export default class FieldLimitsSettingsPage extends PageModification {
     });
   }
 
-  handleAddFieldLimitRowClick() {
-    this.addEventListener(document.getElementById(FieldLimitsSettingsPage.ids.popupTableAddLimitRow), 'click', () => {
+  handleButtonsFieldLimitRowClick() {
+    const btnAdd = document.getElementById(FieldLimitsSettingsPage.ids.popupTableAddLimitRow);
+    const btnEdit = document.getElementById(FieldLimitsSettingsPage.ids.popupTableEditLimitRow);
+
+    const setValuesToTable = limitKey => {
       const { fieldId, fieldValue, visualValue, limit } = this.getInputValues();
       const { columns, swimlanes } = this.getSelectedSwimlanesAndColumnsOptions();
-      const id = limitsKey.encode(fieldValue, fieldId);
+      const isEdit = limitKey != null;
 
-      if (!this.settings.limits[id]) {
-        this.settings.limits[id] = {
+      if (!isEdit) {
+        limitKey = limitsKey.encode(fieldValue, fieldId);
+      }
+
+      if (!this.settings.limits[limitKey] || isEdit) {
+        this.settings.limits[limitKey] = {
+          ...this.settings.limits[limitKey],
           visualValue,
           fieldValue,
           fieldId,
@@ -206,6 +219,20 @@ export default class FieldLimitsSettingsPage extends PageModification {
       }
 
       this.renderRows();
+      btnEdit.disabled = true;
+      this.limitKeyOfEditable = undefined;
+    };
+
+    this.addEventListener(btnAdd, 'click', () => {
+      setValuesToTable(null);
+    });
+
+    this.addEventListener(btnEdit, 'click', () => {
+      if (this.limitKeyOfEditable == null) {
+        btnEdit.disabled = true;
+        return;
+      }
+      setValuesToTable(this.limitKeyOfEditable);
     });
   }
 
@@ -231,7 +258,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
       const { limit, columns, swimlanes, fieldId, fieldValue, visualValue, bkgColor } = this.settings.limits[limitKey];
 
       this.renderLimitRow({
-        id: limitKey,
+        limitKey,
         fieldValue,
         visualValue,
         bkgColor,
@@ -242,11 +269,11 @@ export default class FieldLimitsSettingsPage extends PageModification {
       });
     });
 
-    this.handleAddFieldLimitRowClick();
+    this.handleButtonsFieldLimitRowClick();
     this.handleAppliesLimitsToRows();
   }
 
-  renderLimitRow({ id, fieldValue, visualValue, bkgColor, fieldId, limit, columns, swimlanes }) {
+  renderLimitRow({ limitKey, fieldValue, visualValue, bkgColor, fieldId, limit, columns, swimlanes }) {
     const nzFieldIdSettings = this.normalizedFields.byId[fieldId];
 
     const fieldName = nzFieldIdSettings ? nzFieldIdSettings.name : `[${fieldId}]`;
@@ -254,7 +281,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
       document.getElementById(FieldLimitsSettingsPage.ids.popupTableBody),
       'beforeend',
       fieldRowTemplate({
-        id,
+        limitKey,
         fieldValue,
         visualValue,
         bkgColor,
@@ -263,13 +290,22 @@ export default class FieldLimitsSettingsPage extends PageModification {
         limit,
         columns: columns.map(columnId => this.normalizedColumns.byId[columnId] || `column [${fieldId}]`),
         swimlanes: swimlanes.map(swimlaneId => this.normalizedSwimlanes.byId[swimlaneId] || `swimlane [${fieldId}]`),
+        editClassBtn: FieldLimitsSettingsPage.classes.editRowBtn,
         deleteClassBtn: FieldLimitsSettingsPage.classes.deleteRowBtn,
       })
     );
 
-    this.addEventListener(row.querySelector(`.${FieldLimitsSettingsPage.classes.deleteRowBtn}`), 'click', () => {
-      delete this.settings.limits[id];
+    this.addEventListener(row.querySelector(`.${FieldLimitsSettingsPage.classes.editRowBtn}`), 'click', event => {
+      this.setInputValues(limitKey);
+      event.stopPropagation();
+      event.stopPropagation();
+    });
+
+    this.addEventListener(row.querySelector(`.${FieldLimitsSettingsPage.classes.deleteRowBtn}`), 'click', event => {
+      delete this.settings.limits[limitKey];
       row.remove();
+      event.stopPropagation();
+      event.stopPropagation();
     });
   }
 
@@ -287,6 +323,31 @@ export default class FieldLimitsSettingsPage extends PageModification {
       fieldId,
       limit,
     };
+  }
+
+  setInputValues(limitKey) {
+    const { fieldValue, visualValue, limit, fieldId, columns, swimlanes } = this.settings.limits[limitKey];
+
+    this.limitKeyOfEditable = limitKey;
+    document.getElementById(FieldLimitsSettingsPage.ids.popupTableEditLimitRow).disabled = false;
+
+    document.getElementById(FieldLimitsSettingsPage.ids.inputFieldValue).value = fieldValue;
+    document.getElementById(FieldLimitsSettingsPage.ids.visualNameInput).value = visualValue;
+    document.getElementById(FieldLimitsSettingsPage.ids.wipLimitInputId).value = limit;
+    document.getElementById(FieldLimitsSettingsPage.ids.fieldSelectId).value = fieldId;
+    this.setSelectedSwimlanesAndColumnsOptions(columns, swimlanes);
+  }
+
+  setSelectedSwimlanesAndColumnsOptions(columns, swimlanes) {
+    const columnsOptions = document.getElementById(FieldLimitsSettingsPage.ids.columnsSelectId).options;
+    const swimlaneOptions = document.getElementById(FieldLimitsSettingsPage.ids.swimlanesSelectId).options;
+
+    columnsOptions.forEach(option => {
+      option.selected = columns.includes(option.value);
+    });
+    swimlaneOptions.forEach(option => {
+      option.selected = swimlanes.includes(option.value);
+    });
   }
 
   getSelectedSwimlanesAndColumnsOptions() {
