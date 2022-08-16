@@ -21,6 +21,7 @@ const boardPropertiesUrl = boardId => `agile/1.0/board/${boardId}/properties`;
 const boardConfigurationURL = boardId => `agile/1.0/board/${boardId}/configuration`;
 const boardEditDataURL = 'greenhopper/1.0/rapidviewconfig/editmodel.json?rapidViewId=';
 const boardEstimationDataURL = 'greenhopper/1.0/rapidviewconfig/estimation.json?rapidViewId=';
+const detailIssueInfo = issueKey => `api/2/issue/${issueKey}?expand=changelog`;
 
 const invalidatedProperties = {};
 
@@ -178,3 +179,11 @@ export const getUser = query =>
 
       return users[0];
     });
+
+export const getIssueDetailInfo = async (issueKey, params = {}) => {
+  return requestJira({
+    url: detailIssueInfo(issueKey),
+    type: 'json',
+    ...params,
+  });
+};

@@ -18,6 +18,7 @@ import PrintCards from './printcards/PrintCards';
 import { setUpBlurSensitiveOnPage, initBlurSensitive } from './blur-for-sensitive/blurSensitive';
 import PersonLimitsSettings from './person-limits/PersonLimitsSettings';
 import PersonLimits from './person-limits/PersonLimits';
+import LeadTimeOnBoard from './lead-time-on-board/LeadTimeOnBoard';
 
 const domLoaded = () =>
   new Promise(resolve => {
@@ -41,6 +42,7 @@ async function start() {
       MarkFlaggedIssues,
       PersonLimits,
       FieldLimitsBoardPage,
+      LeadTimeOnBoard,
     ],
     [Routes.SETTINGS]: [
       SwimlaneSettingsPopup,
