@@ -6,6 +6,7 @@ export const BOARD_PROPERTIES = {
   TETRIS_PLANNING: 'settingTetrisPlaning',
   PERSON_LIMITS: 'personLimitsSettings',
   FIELD_LIMITS: 'fieldLimitsJH',
+  SLA_INDICATOR: 'SLAIndicator',
 };
 
 export const COLORS = {

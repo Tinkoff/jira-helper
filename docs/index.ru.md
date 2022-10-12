@@ -219,3 +219,15 @@ Your administrators of JIRA can identify requests from jira-helper by the specia
 "browser-plugin: jira-helper/{version}".
 
 ![jira-helper-reques](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jira-helper-request_300px.png)
+
+## Show SLA on card
+
+Эта фича позволяет отображать SLA(с эфектом "старения") или Lead Time на карточке.  
+Для расчете используются данные из поля Issue Jira, указанного в настройках фичи.
+Например можно настроить Jira автоматизацию при переходе в определенный статус заполнять это поле и понему считать SLA.
+
+В настрокайх можно указать целевой SLA для Swimline и Типа задачи.
+
+Настройка "Show SLA indicator on all card" - Показывает индикатор, сколько прошло времени после принятия обязательства, даже если на этот Тип/Свимлайн не распрастроняется SLA. LeadTime без эфекта старения карточки.
+
+Настройка "Show SLA indicator when page will be load" - При загрузки страницы будет сразу показывать индикатор. Если не установлено тогда появляется кнопка при нажатии на которую можно отображать индикацию на доске. 

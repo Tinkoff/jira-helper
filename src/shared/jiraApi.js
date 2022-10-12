@@ -178,3 +178,27 @@ export const getUser = query =>
 
       return users[0];
     });
+
+export const getIssueDataFromServer = (issuesList, part, maxCountOnPart, fields, expand = []) => {
+  const body = {
+    jql: `key in (${issuesList.join(',')})`,
+    maxResults: maxCountOnPart,
+    fields,
+    expand,
+    startAt: part * maxCountOnPart,
+  };
+  return requestJira({
+    url: 'api/2/search',
+    httpMethod: 'POST',
+    payload: body,
+    type: 'json',
+  });
+};
+
+export const getProjectData = id => {
+  return requestJira({
+    url: `api/2/project/${id}`,
+    httpMethod: 'GET',
+    type: 'json',
+  });
+};
