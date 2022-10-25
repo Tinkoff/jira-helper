@@ -1,11 +1,8 @@
 .fieldLimitsList {
     display: inline-flex;
-    margin-left: 20px;
-    padding-left: 10px;
-    position: absolute;
+    position: static;
     border-left: 2px solid #f4f5f7;
     flex-wrap: wrap;
-    margin-right: 200px;
 }
 
 .fieldLimitsItem {

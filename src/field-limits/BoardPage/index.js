@@ -9,6 +9,8 @@ import { settingsJiraDOM as DOM } from '../../swimlane/constants';
 export default class FieldLimitsSettingsPage extends PageModification {
   static jiraSelectors = {
     subnavTitle: '#subnav-title',
+    subnavContainer: '.subnav-container',
+    subnavigatorTitle: '.subnavigator-title',
     extraField: '.ghx-extra-field',
     swimlane: '.ghx-swimlane',
     column: '.ghx-column',
@@ -96,6 +98,11 @@ export default class FieldLimitsSettingsPage extends PageModification {
             .join(''),
         })
       );
+      const subnavContainer = document.querySelector(FieldLimitsSettingsPage.jiraSelectors.subnavContainer);
+      subnavContainer.style.height = 'auto';
+      subnavContainer.style.whiteSpace = 'normal';
+      const subnavigatorTitle = document.querySelector(FieldLimitsSettingsPage.jiraSelectors.subnavigatorTitle);
+      subnavigatorTitle.remove();
     }
 
     this.fieldLimitsList.getElementsByClassName(FieldLimitsSettingsPage.classes.fieldLimitsBlock).forEach(fieldNode => {
