@@ -14,7 +14,9 @@ export default class FieldLimitsSettingsPage extends PageModification {
     extraField: '.ghx-extra-field',
     swimlane: '.ghx-swimlane',
     column: '.ghx-column',
+    ghxHeader: '#ghx-header',
     ghxPool: '#ghx-pool',
+    ghxModesTools: '#ghx-modes-tools',
   };
 
   static classes = {
@@ -73,6 +75,19 @@ export default class FieldLimitsSettingsPage extends PageModification {
     });
   }
 
+  adjustJiraHeaderStyle() {
+    const subnavContainer = document.querySelector(FieldLimitsSettingsPage.jiraSelectors.subnavContainer);
+    subnavContainer.style.height = 'auto';
+    subnavContainer.style.whiteSpace = 'normal';
+    const subnavigatorTitle = document.querySelector(FieldLimitsSettingsPage.jiraSelectors.subnavigatorTitle);
+    subnavigatorTitle.remove();
+    const ghxHeader = document.querySelector(FieldLimitsSettingsPage.jiraSelectors.ghxHeader);
+    ghxHeader.style.padding = '0 0 0 0';
+    ghxHeader.style.marginBottom = '0px';
+    const ghxModesTools = document.querySelector(FieldLimitsSettingsPage.jiraSelectors.ghxModesTools);
+    ghxModesTools.style.flexWrap = 'unset';
+  }
+
   applyLimitsList(limitsStats) {
     if (!this.fieldLimitsList || !document.body.contains(this.fieldLimitsList)) {
       if (!document.querySelector(FieldLimitsSettingsPage.jiraSelectors.subnavTitle)) {
@@ -98,12 +113,9 @@ export default class FieldLimitsSettingsPage extends PageModification {
             .join(''),
         })
       );
-      const subnavContainer = document.querySelector(FieldLimitsSettingsPage.jiraSelectors.subnavContainer);
-      subnavContainer.style.height = 'auto';
-      subnavContainer.style.whiteSpace = 'normal';
-      const subnavigatorTitle = document.querySelector(FieldLimitsSettingsPage.jiraSelectors.subnavigatorTitle);
-      subnavigatorTitle.remove();
     }
+
+    this.adjustJiraHeaderStyle();
 
     this.fieldLimitsList.getElementsByClassName(FieldLimitsSettingsPage.classes.fieldLimitsBlock).forEach(fieldNode => {
       const limitKey = fieldNode.getAttribute('data-field-limit-key');
