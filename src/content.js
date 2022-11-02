@@ -18,6 +18,8 @@ import PrintCards from './printcards/PrintCards';
 import { setUpBlurSensitiveOnPage, initBlurSensitive } from './blur-for-sensitive/blurSensitive';
 import PersonLimitsSettings from './person-limits/PersonLimitsSettings';
 import PersonLimits from './person-limits/PersonLimits';
+import WiplimitOnCells from './wiplimit-on-cells/WipLimitOnCells';
+import WiplimitOnCellsSettings from './wiplimit-on-cells/WiplimitOnCellsSettingsPopup';
 
 const domLoaded = () =>
   new Promise(resolve => {
@@ -41,6 +43,7 @@ async function start() {
       MarkFlaggedIssues,
       PersonLimits,
       FieldLimitsBoardPage,
+      WiplimitOnCells,
     ],
     [Routes.SETTINGS]: [
       SwimlaneSettingsPopup,
@@ -48,6 +51,7 @@ async function start() {
       PersonLimitsSettings,
       TetrisPlanningButton,
       FieldLimitsSettingsPage,
+      WiplimitOnCellsSettings,
     ],
     [Routes.ISSUE]: [MarkFlaggedIssues],
     [Routes.SEARCH]: [MarkFlaggedIssues, PrintCards],

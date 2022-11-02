@@ -219,3 +219,10 @@ Your administrators of JIRA can identify requests from jira-helper by the specia
 "browser-plugin: jira-helper/{version}".
 
 ![jira-helper-reques](https://raw.githubusercontent.com/TinkoffCreditSystems/jira-helper/images/features/jira-helper-request_300px.png)
+
+## Wip limit on cell
+
+Функция позволяет визуализировать ограничения на ячейку / несколько ячеек(не обязательно, смежных).
+Ячейкой считается пересеение колонки и свимлайна. 
+
+Ячейку можно сделать "отключенной". т.е. у ячейки будет изменен фон, для визуализации того, что данная ячейка не используется. 
