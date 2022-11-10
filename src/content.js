@@ -20,6 +20,8 @@ import PersonLimitsSettings from './person-limits/PersonLimitsSettings';
 import PersonLimits from './person-limits/PersonLimits';
 import SLAIndicator from './SLAIndicator/SLAIndicator';
 import SLAIndicatorSettingsPopup from './SLAIndicator/SLAIndicatorSettingsPopup';
+import WiplimitOnCells from './wiplimit-on-cells/WipLimitOnCells';
+import WiplimitOnCellsSettings from './wiplimit-on-cells/WiplimitOnCellsSettingsPopup';
 
 const domLoaded = () =>
   new Promise(resolve => {
@@ -44,6 +46,7 @@ async function start() {
       PersonLimits,
       FieldLimitsBoardPage,
       SLAIndicator,
+      WiplimitOnCells,
     ],
     [Routes.SETTINGS]: [
       SwimlaneSettingsPopup,
@@ -52,6 +55,7 @@ async function start() {
       TetrisPlanningButton,
       FieldLimitsSettingsPage,
       SLAIndicatorSettingsPopup,
+      WiplimitOnCellsSettings,
     ],
     [Routes.ISSUE]: [MarkFlaggedIssues],
     [Routes.SEARCH]: [MarkFlaggedIssues, PrintCards],
