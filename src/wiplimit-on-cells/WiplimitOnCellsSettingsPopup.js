@@ -10,7 +10,7 @@ export default class WipLimitOnCells extends PageModification {
   };
 
   static jiraSelectors = {
-    panelConfig: '#ghx-view-board-admins-edit',
+    panelConfig: '#ghx-swimlane-strategy-config',
   };
 
   getModificationId() {
