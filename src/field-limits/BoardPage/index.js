@@ -17,6 +17,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
     ghxHeader: '#ghx-header',
     ghxPool: '#ghx-pool',
     ghxModesTools: '#ghx-modes-tools',
+    ghxViewSelector: '#ghx-view-selector',
   };
 
   static classes = {
@@ -54,6 +55,11 @@ export default class FieldLimitsSettingsPage extends PageModification {
       childList: true,
       subtree: true,
     });
+
+    this.onDOMChange(FieldLimitsSettingsPage.jiraSelectors.ghxViewSelector, () => this.checkIfLimitsAreApplied(), {
+      childList: true,
+      subtree: true,
+    });
   }
 
   applyLimits() {
@@ -86,6 +92,13 @@ export default class FieldLimitsSettingsPage extends PageModification {
     ghxHeader.style.marginBottom = '0px';
     const ghxModesTools = document.querySelector(FieldLimitsSettingsPage.jiraSelectors.ghxModesTools);
     ghxModesTools.style.flexWrap = 'unset';
+  }
+    
+  checkIfLimitsAreApplied() {
+    if (!document.body.contains(this.fieldLimitsList)) {
+      const limitsStats = this.getLimitsStats();
+      this.applyLimitsList(limitsStats);
+    }
   }
 
   applyLimitsList(limitsStats) {
