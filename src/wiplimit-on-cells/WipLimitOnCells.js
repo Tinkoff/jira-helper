@@ -17,15 +17,16 @@ export default class extends PageModification {
   }
 
   loadData() {
-    return Promise.all([this.getBoardProperty(BOARD_PROPERTIES.WIP_LIMITS_CELLS)]);
+    return Promise.all([this.getBoardEditData(), this.getBoardProperty(BOARD_PROPERTIES.WIP_LIMITS_CELLS)]);
   }
 
-  async apply([WipLimitSetting]) {
+  async apply([editData, WipLimitSetting]) {
     if (!WipLimitSetting) {
       return null;
     }
 
     this.wip = WipLimitSetting;
+    this.counterCssSelector = this.getCssSelectorOfIssues(editData);
     this.renderWipLimitCells();
     this.onDOMChange('#ghx-pool', () => this.renderWipLimitCells());
   }
@@ -41,7 +42,7 @@ export default class extends PageModification {
         const selector = `[swimlane-id='${cell.swimline}'] [data-column-id='${cell.column}']`;
         const [cellsDOM] = document.querySelectorAll(selector);
         if (cellsDOM) {
-          const { length } = cellsDOM.querySelectorAll('.ghx-issue');
+          const { length } = cellsDOM.querySelectorAll(this.counterCssSelector);
           countIssues += length;
           cell.DOM = cellsDOM;
           const XY = this.excludeCells(ArrayOfCells, matrixRange, cellsDOM);
