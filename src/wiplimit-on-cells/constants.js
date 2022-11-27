@@ -3,7 +3,6 @@ export const settingsJiraDOM = {
   swimlineSelect: 'WIPLC_SwimLine',
   columnSelect: 'WIPLC_Column',
   showBadge: 'WIPLC_showBadge',
-  buttonAddCells: 'WIPLC_buttonAddCells',
   table: 'WIP_tableDiv',
   ClearData: 'SLAClearData',
   inputRange: 'WIP_inputRange',
@@ -12,9 +11,9 @@ export const settingsJiraDOM = {
   chooseCheckbox: 'WIP_chooseCheckbox',
 };
 
-export const settingsEditWipLimitOnCells = btnId => `<div style="margin-top: 1rem">
+export const settingsEditWipLimitOnCells = btnId => `
             <button id="${btnId}" class="aui-button" type="button">Edit Wip limits by cells</button>
-        </div>`;
+        `;
 
 export const ClearDataButton = btnId => `<div style="margin-top: 1rem">
             <button id="${btnId}" class="aui-button" type="button">Clear and save all data</button>
@@ -43,7 +42,6 @@ export const cellsAdd = (swimlines, collums) => {
     collumsHTML.push(`<option value=${element.id} >${element.name}</option>`);
   });
   return `
-  <hr/>
     <div style="margin-top: 1rem">
               <form class="aui">
               <div class="field-group">
@@ -64,7 +62,6 @@ export const cellsAdd = (swimlines, collums) => {
     <div class="field-group">
     <label for="${settingsJiraDOM.columnSelect}">show indicator</label>
     <input type="checkbox" class="checkbox select-user-chb" id="${settingsJiraDOM.showBadge}"></input>
-    <button id="${settingsJiraDOM.buttonAddCells}" class="aui-button" type="button">add cell</button>
     </div>
     </form>
     </div >

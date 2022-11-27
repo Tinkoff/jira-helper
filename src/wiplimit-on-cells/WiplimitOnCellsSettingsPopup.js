@@ -1,5 +1,5 @@
 import { PageModification } from '../shared/PageModification';
-import { BOARD_PROPERTIES } from '../shared/constants';
+import { BOARD_PROPERTIES, btnGroupIdForColumnsSettingsPage } from '../shared/constants';
 import { Popup } from '../shared/getPopup';
 import { cellsAdd, ClearDataButton, RangeName, settingsEditWipLimitOnCells, settingsJiraDOM } from './constants';
 import { TableRangeWipLimit } from './table';
@@ -10,7 +10,7 @@ export default class WipLimitOnCells extends PageModification {
   };
 
   static jiraSelectors = {
-    panelConfig: '#ghx-swimlane-strategy-config',
+    panelConfig: '#jh-group-of-btns-setting-page',
   };
 
   getModificationId() {
@@ -34,8 +34,11 @@ export default class WipLimitOnCells extends PageModification {
     this.boardData = boardData;
     this.swimline = this.boardData?.swimlanesConfig?.swimlanes;
     this.column = this.boardData?.rapidListConfig?.mappedColumns;
-
     this.renderEditButton();
+    this.onDOMChange('#columns', () => {
+      this.renderEditButton();
+    });
+
     [this.data] = settings;
     const handleGetNameLabel = (swimlaneId, columnid) => {
       const swimline = this.swimline.find(element => element.id.toString() === swimlaneId.toString());
@@ -60,9 +63,9 @@ export default class WipLimitOnCells extends PageModification {
   }
 
   renderEditButton() {
-    this.insertHTML(
-      document.querySelector(WipLimitOnCells.jiraSelectors.panelConfig),
-      'beforebegin',
+    const editBtn = this.insertHTML(
+      document.getElementById(btnGroupIdForColumnsSettingsPage),
+      'beforeend',
       settingsEditWipLimitOnCells(WipLimitOnCells.ids.editLimitsBtn)
     );
 
@@ -73,8 +76,7 @@ export default class WipLimitOnCells extends PageModification {
       okButtonText: 'Save',
     });
 
-    this.editBtn = document.getElementById(WipLimitOnCells.ids.editLimitsBtn);
-    this.addEventListener(this.editBtn, 'click', this.handleEditClick);
+    this.addEventListener(editBtn, 'click', this.handleEditClick);
   }
 
   handleEditClick = async () => {
@@ -89,35 +91,58 @@ export default class WipLimitOnCells extends PageModification {
     this.editBtn = document.getElementById(settingsJiraDOM.buttonRange);
     this.addEventListener(this.editBtn, 'click', this.handleOnClickAddRange);
 
-    this.addcCellBtn = document.getElementById(settingsJiraDOM.buttonAddCells);
-    this.addEventListener(this.addcCellBtn, 'click', this.handleOnClickAddCells);
-
     const clearBtn = document.getElementById(settingsJiraDOM.ClearData);
     this.addEventListener(clearBtn, 'click', this.handleClearSettings);
+
+    this.input = document.getElementById(settingsJiraDOM.inputRange);
+    this.addEventListener(this.input, 'input', this.handleOnChangeRange);
 
     await this.table.setDiv(document.getElementById(settingsJiraDOM.table));
     await this.table.render();
   };
 
-  handleOnClickAddCells = () => {
-    const { value: swimline } = document.getElementById(`${settingsJiraDOM.swimlineSelect}`).selectedOptions[0];
-    const { value: column } = document.getElementById(`${settingsJiraDOM.columnSelect}`).selectedOptions[0];
-    const { checked: showBadge } = document.getElementById(`${settingsJiraDOM.showBadge}`);
-    if (swimline === '-' || column === '-') {
-      return '';
+  handleOnChangeRange = () => {
+    const { value: name } = document.getElementById(settingsJiraDOM.inputRange);
+    const haveRange = this.table.findRange(name);
+    if (haveRange) {
+      this.editBtn.innerText = 'Add cell';
+      this.input.dataset.range = name;
+    } else {
+      this.editBtn.innerText = 'Add range';
+      delete this.input.dataset.range;
     }
-
-    const cells = {
-      swimline,
-      column,
-      showBadge,
-    };
-    this.table.addCells(cells);
   };
 
   handleOnClickAddRange = () => {
-    const { value: name } = document.getElementById(settingsJiraDOM.inputRange);
-    this.table.addRange(name);
+    const { value: name, dataset } = document.getElementById(settingsJiraDOM.inputRange);
+    const { value: swimline } = document.getElementById(`${settingsJiraDOM.swimlineSelect}`).selectedOptions[0];
+    const { value: column } = document.getElementById(`${settingsJiraDOM.columnSelect}`).selectedOptions[0];
+    const { checked: showBadge } = document.getElementById(`${settingsJiraDOM.showBadge}`);
+
+    if (swimline === '-' || column === '-') {
+      alert('need choose swimline and column and try again.');
+      return;
+    }
+
+    if (dataset.range && this.table.findRange(dataset.range)) {
+      const cells = {
+        swimline,
+        column,
+        showBadge,
+      };
+      this.table.addCells(name, cells);
+    } else {
+      const addRangeResult = this.table.addRange(name);
+      if (addRangeResult) {
+        const cells = {
+          swimline,
+          column,
+          showBadge,
+        };
+        this.table.addCells(name, cells);
+      }
+      this.handleOnChangeRange();
+    }
   };
 
   handleClearSettings = () => {

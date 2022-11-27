@@ -1,3 +1,5 @@
+import { settingsJiraDOM } from './constants';
+
 export class TableRangeWipLimit {
   constructor(props) {
     this.tableDOM = props.dom;
@@ -55,16 +57,18 @@ export class TableRangeWipLimit {
       tr.id = id;
 
       let td = document.createElement('td');
-      const inputCheckBox = document.createElement('input');
-      inputCheckBox.type = 'checkbox';
-      inputCheckBox.id = `WIP_${id}_limitChoose`;
-      inputCheckBox.checked = element.choose;
-      inputCheckBox.addEventListener('input', () => {
-        const { checked } = document.getElementById(`WIP_${id}_limitChoose`);
-        this.changeField(element.name, 'choose', checked);
+      const spanchouse = document.createElement('span');
+      spanchouse.id = `WIP_${id}_limitChoose`;
+      spanchouse.addEventListener('click', () => {
+        const input = document.getElementById(settingsJiraDOM.inputRange);
+        input.value = id;
+        input.dataset.range = id;
       });
+      spanchouse.insertAdjacentHTML(
+        'beforeend',
+        '<svg fill="#000000" xmlns="http://www.w3.org/2000/svg" class="WipLimitHover" viewBox="0 0 24 24" width="16px" height="16px"><path d="M18.414,4.414l1.172,1.172L6.172,19H5v-1.172L18.414,4.414 M18.414,2c-0.256,0-0.512,0.098-0.707,0.293L3,17v4h4L21.707,6.293c0.391-0.391,0.391-1.024,0-1.414l-2.586-2.586C18.926,2.098,18.67,2,18.414,2L18.414,2z"/><path fill="none" stroke="#000000" stroke-miterlimit="10" stroke-width="2" d="M15 5L18.5 8.5"/></svg>'
+      );
 
-      td.appendChild(inputCheckBox);
       tr.appendChild(td);
 
       // Name
@@ -73,6 +77,7 @@ export class TableRangeWipLimit {
       input.value = id;
       input.id = `Input_${id}`;
       input.type = 'text';
+      input.style.maxWidth = '150px';
       input.addEventListener('blur', () => {
         const { value } = document.getElementById(`Input_${id}`);
         this.changeField(element.name, 'name', value);
@@ -87,6 +92,7 @@ export class TableRangeWipLimit {
       span.addEventListener('click', () => {
         this.deleteRange(id);
       });
+      td.appendChild(spanchouse);
       td.appendChild(span);
       tr.appendChild(td);
 
@@ -163,23 +169,35 @@ export class TableRangeWipLimit {
     this.refresh();
   }
 
+  findRange(name) {
+    const searchDouble = this.data.filter(element => element.name.toLowerCase() === name.toLowerCase());
+    if (searchDouble.length > 0) {
+      return true;
+    }
+
+    return false;
+  }
+
   addRange(name) {
     if (name === '') {
       alert('Enter range name');
-      return;
+      return false;
     }
-
     const searchDouble = this.data.filter(element => element.name === name);
     if (searchDouble.length > 0) {
       alert('Enter unique range name');
       return;
     }
+
     this.data.push({
       name,
       wipLimit: 0,
       cells: [],
     });
+
     this.refresh();
+
+    return true;
   }
 
   deleteCells(id, swimline, column) {
@@ -203,20 +221,25 @@ export class TableRangeWipLimit {
     return newData;
   }
 
-  addCells(cell) {
-    this.data.forEach(elem => {
-      if (elem.choose) {
-        let unique = true;
-        for (const cellData of elem.cells) {
-          if (cell.swimline === cellData.swimline && cell.column === cellData.column) {
-            unique = false;
-          }
-        }
-        if (unique) {
-          elem.cells.push({ ...cell });
-        }
+  addCells(rangeName, cell) {
+    const searchDouble = this.data.filter(element => element.name.toLowerCase() === rangeName.toLowerCase());
+    if (searchDouble.length !== 1) {
+      alert('Error two or more ranges have this name. Please delete one range');
+      return;
+    }
+
+    let unique = true;
+    const range = searchDouble[0];
+    for (const cellData of range.cells) {
+      if (cell.swimline === cellData.swimline && cell.column === cellData.column) {
+        unique = false;
       }
-    });
+    }
+
+    if (unique) {
+      range.cells.push({ ...cell });
+    }
+
     this.refresh();
   }
 
