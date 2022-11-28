@@ -13,6 +13,7 @@ export default class FieldLimitsSettingsPage extends PageModification {
     swimlane: '.ghx-swimlane',
     column: '.ghx-column',
     ghxPool: '#ghx-pool',
+    ghxViewSelector: '#ghx-view-selector',
   };
 
   static classes = {
@@ -50,6 +51,11 @@ export default class FieldLimitsSettingsPage extends PageModification {
       childList: true,
       subtree: true,
     });
+
+    this.onDOMChange(FieldLimitsSettingsPage.jiraSelectors.ghxViewSelector, () => this.checkIfLimitsAreApplied(), {
+      childList: true,
+      subtree: true,
+    });
   }
 
   applyLimits() {
@@ -69,6 +75,13 @@ export default class FieldLimitsSettingsPage extends PageModification {
           issue.style.backgroundColor = COLORS.OVER_WIP_LIMITS;
         });
     });
+  }
+
+  checkIfLimitsAreApplied() {
+    if (!document.body.contains(this.fieldLimitsList)) {
+      const limitsStats = this.getLimitsStats();
+      this.applyLimitsList(limitsStats);
+    }
   }
 
   applyLimitsList(limitsStats) {
