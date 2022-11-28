@@ -1,11 +1,10 @@
 {
   "name": "jira-helper",
-  "version": "2.15.0",
+  "version": "2.16.0",
   "description": "jira-helper: Elements for vizualizations, tetris-planing with sprints, button template, swimline-viz",
   "repository": "https://github.com/Tinkoff/jira-helper.git",
   "license": "ISC",
-  "contributors": [
-    {
+  "contributors": [{
       "name": "Pavel Akhmetchanov",
       "url": "https://github.com/pavelpower",
       "email:": "pavel.power@gmail.com"
