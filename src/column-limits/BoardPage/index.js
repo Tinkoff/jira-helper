@@ -125,11 +125,24 @@ export default class extends PageModification {
         return;
       }
 
+      let colorClass;
+      switch (Math.sign(groupLimit - amountOfGroupTasks)) {
+        case -1:
+          colorClass = styles.limitColumnBadge_over_wip_limit;
+          break;
+        case 0:
+          colorClass = styles.limitColumnBadge_on_the_limit;
+          break;
+        default:
+          colorClass = styles.limitColumnBadge_below_the_limit;
+          break;
+      }
+
       this.insertHTML(
         document.querySelector(`.ghx-column[data-id="${leftTailColumnId}"]`),
         'beforeend',
         `
-          <span class="${styles.limitColumnBadge}">
+          <span class="${styles.limitColumnBadge} ${colorClass}">
               ${amountOfGroupTasks}/${groupLimit}
               <span class="${styles.limitColumnBadge__hint}">Issues per group / Max number of issues per group</span>
           </span>`
