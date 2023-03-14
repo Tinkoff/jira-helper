@@ -7,6 +7,17 @@
   font-size: 0.8rem;
   margin: 0 10px;
   color: white;
+}
+
+.limitColumnBadge_over_wip_limit {
+  background-color: #ff5630;
+}
+
+.limitColumnBadge_on_the_limit {
+  background-color: #ffd700;
+}
+
+.limitColumnBadge_below_the_limit {
   background-color: #1b855c;
 }
 
